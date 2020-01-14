@@ -27,12 +27,12 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * Trida objektu Validator
+ * Trida objektu Manager
  */
 
 @Entity
-@Table(name = "validators")
-public class Validator extends Person {
+@Table(name = "managers")
+public class Manager extends Person {
 
     @Column(name = "hire_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -53,31 +53,21 @@ public class Validator extends Person {
 
     @ManyToOne
     @JoinColumn(name = "team_id")
-    private Team team;
-
-    // TODO tady se musí dodělat list
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "Validator")
-    private Set<Contractor> contractors;
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-
+    private Team teamLeading;
 
     // constructors
-    public Validator() {}
+    public Manager() {}
 
-    public Validator(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Set<Contractor> contractors, Post post) {
+    public Manager(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Team teamLeading) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.contractors = contractors;
-        this.post = post;
+        this.teamLeading = teamLeading;
     }
 
     @Transient
+
     public LocalDate getHireDate() {
         return hireDate;
     }
@@ -110,19 +100,11 @@ public class Validator extends Person {
         this.telephone = telephone;
     }
 
-    public Set<Contractor> getContractors() {
-        return contractors;
+    public Team getTeamLeading() {
+        return teamLeading;
     }
 
-    public void setContractors(Set<Contractor> contractors) {
-        this.contractors = contractors;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
+    public void setTeamLeading(Team teamLeading) {
+        this.teamLeading = teamLeading;
     }
 }

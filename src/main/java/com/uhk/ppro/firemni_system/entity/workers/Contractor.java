@@ -16,8 +16,9 @@
 package com.uhk.ppro.firemni_system.entity.workers;
 
 import com.uhk.ppro.firemni_system.entity.Person;
+import com.uhk.ppro.firemni_system.entity.SwimlaneType;
+import com.uhk.ppro.firemni_system.entity.Team;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.administraceproject.visit.Visit;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -54,13 +55,15 @@ public class Contractor extends Person {
     private Validator mentor;
 
     @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    @ManyToOne
     @JoinColumn(name = "swimlade_id")
     private SwimlaneType swimlane;
 
-    @Transient
 
     // constructors
-
     public Contractor() {
     }
 
@@ -72,7 +75,7 @@ public class Contractor extends Person {
         this.mentor = mentor;
         this.swimlane = swimlane;
     }
-
+    @Transient
     public LocalDate getHireDate() {
         return hireDate;
     }
