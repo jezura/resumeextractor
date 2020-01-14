@@ -8,6 +8,7 @@ public class FiremniSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FiremniSystemApplication.class, args);
+
     }
 
 }
