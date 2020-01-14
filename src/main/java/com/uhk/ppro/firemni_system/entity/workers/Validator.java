@@ -56,7 +56,7 @@ public class Validator extends Person {
     private Team team;
 
     // TODO tady se musí dodělat list
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "Validator")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "validator")
     private Set<Contractor> contractors;
 
     @ManyToOne

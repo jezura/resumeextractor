@@ -59,7 +59,7 @@ public class Contractor extends Person {
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "swimlade_id")
+    @JoinColumn(name = "swimlane_id")
     private SwimlaneType swimlane;
 
 

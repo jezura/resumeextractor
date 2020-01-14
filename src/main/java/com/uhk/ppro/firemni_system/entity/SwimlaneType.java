@@ -22,7 +22,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "types")
+@Table(name = "swimlanes")
 public class SwimlaneType extends NamedEntity {
 
 }

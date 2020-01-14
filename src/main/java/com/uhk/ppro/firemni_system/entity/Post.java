@@ -22,7 +22,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "types")
+@Table(name = "posts")
 public class Post extends NamedEntity {
 
 }

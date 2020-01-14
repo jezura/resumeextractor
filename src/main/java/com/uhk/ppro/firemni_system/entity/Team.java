@@ -26,7 +26,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "types")
+@Table(name = "teams")
 public class Team extends NamedEntity {
 
     @ManyToOne
