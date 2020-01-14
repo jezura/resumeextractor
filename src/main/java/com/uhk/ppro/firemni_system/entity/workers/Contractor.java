@@ -25,7 +25,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 /**
- * Třída objektu Contractor
+ * Trida objektu Contractor
  */
 
 @Entity
