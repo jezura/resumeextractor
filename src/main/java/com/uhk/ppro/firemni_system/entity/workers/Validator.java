@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * Třída objektu Validator
+ * Trida objektu Validator
  */
 
 @Entity
