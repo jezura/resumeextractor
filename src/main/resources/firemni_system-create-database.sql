@@ -64,3 +64,7 @@ create table swimlanes
 	id int auto_increment
 		primary key
 );
+
+
+INSERT INTO contractors (hire_date, first_name, last_name,address, city, telephone)
+VALUES (2000-11-22, 123412, 123412,123412, 123412, 1111111);

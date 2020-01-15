@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.uhk.ppro.firemni_system.entity.workers;
+package firemni_system.workers;
 
-import com.uhk.ppro.firemni_system.entity.Person;
-import com.uhk.ppro.firemni_system.entity.Post;
-import com.uhk.ppro.firemni_system.entity.Team;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -27,12 +24,12 @@ import java.time.LocalDate;
 import java.util.Set;
 
 /**
- * Trida objektu Manager
+ * Trida objektu Validator
  */
 
 @Entity
-@Table(name = "managers")
-public class Manager extends Person {
+@Table(name = "validators")
+public class Validator extends Person {
 
     @Column(name = "hire_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -53,21 +50,31 @@ public class Manager extends Person {
 
     @ManyToOne
     @JoinColumn(name = "team_id")
-    private Team teamLeading;
+    private Team team;
+
+    // TODO tady se musí dodělat list
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Contractor> contractors;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+
 
     // constructors
-    public Manager() {}
+    public Validator() {}
 
-    public Manager(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Team teamLeading) {
+    public Validator(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Set<Contractor> contractors, Post post) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.teamLeading = teamLeading;
+        this.contractors = contractors;
+        this.post = post;
     }
 
     @Transient
-
     public LocalDate getHireDate() {
         return hireDate;
     }
@@ -100,11 +107,19 @@ public class Manager extends Person {
         this.telephone = telephone;
     }
 
-    public Team getTeamLeading() {
-        return teamLeading;
+    public Set<Contractor> getContractors() {
+        return contractors;
     }
 
-    public void setTeamLeading(Team teamLeading) {
-        this.teamLeading = teamLeading;
+    public void setContractors(Set<Contractor> contractors) {
+        this.contractors = contractors;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }
