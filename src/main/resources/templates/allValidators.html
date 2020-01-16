@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>All validators</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <ul class="navbar-nav">
+    <li class="nav-item active">
+      <h5 class="nav-link">Firemní systém</h5>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/">Homepage</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/allContractors">All contractors</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/newContractor">Add contractor</a>
+    </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="/allValidators">All validators</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/newValidator">Add validator</a>
+    </li>
+  </ul>
+</nav>
+<p></p>
+  <h2 class="text-center">Validators</h2>
+<p></p>
+<div class="container">
+  <table id="contractors" class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>City</th>
+      <th>Address</th>
+      <th>Phone</th>
+      <th>Hire date</th>
+      <th>Delete?</th>
+      <th>Edit?</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="validator : ${validatorsList}">
+      <td th:text="${validator.firstName + ' ' + validator.lastName}"></td>
+      <td th:text="${validator.city}"></td>
+      <td th:text="${validator.address}"></td>
+      <td th:text="${validator.telephone}"></td>
+      <td th:text="${validator.hireDate}"></td>
+      <td>
+        <a th:href="@{'/deleteValidator/' + ${validator.id}}">Delete</a>
+      </td>
+      <td>
+        <a th:href="@{'/editValidator/' + ${validator.id}}">Edit</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

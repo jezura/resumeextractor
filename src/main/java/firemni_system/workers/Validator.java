@@ -60,8 +60,6 @@ public class Validator extends Person {
     @JoinColumn(name = "post_id")
     private Post post;
 
-
-
     // constructors
     public Validator() {}
 
