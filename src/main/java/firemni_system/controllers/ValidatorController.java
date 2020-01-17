@@ -1,9 +1,10 @@
 package firemni_system.controllers;
 
 import firemni_system.services.PersonService;
-import firemni_system.workers.Contractor;
-import firemni_system.workers.Validator;
+import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,10 @@ public class ValidatorController {
 
     @GetMapping(value = "/allValidators")
     public String showAllValidators(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<Validator> validators = personService.findAllValidators();
         model.addAttribute("validatorsList", validators);
+        model.addAttribute("login", authentication);
         return "allValidators";
     }
 

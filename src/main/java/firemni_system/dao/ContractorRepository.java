@@ -1,6 +1,6 @@
 package firemni_system.dao;
 
-import firemni_system.workers.Contractor;
+import firemni_system.models.Contractor;
 
 import org.springframework.data.repository.CrudRepository;
 

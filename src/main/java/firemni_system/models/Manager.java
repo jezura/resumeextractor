@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package firemni_system.workers;
+package firemni_system.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -51,6 +51,8 @@ public class Manager extends Person {
     @JoinColumn(name = "team_id")
     private Team teamLeading;
 
+
+
     // constructors
     public Manager() {}
 
@@ -60,6 +62,7 @@ public class Manager extends Person {
         this.city = city;
         this.telephone = telephone;
         this.teamLeading = teamLeading;
+
     }
 
     @Transient
@@ -103,4 +106,5 @@ public class Manager extends Person {
     public void setTeamLeading(Team teamLeading) {
         this.teamLeading = teamLeading;
     }
+
 }

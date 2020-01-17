@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package firemni_system.workers;
+package firemni_system.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

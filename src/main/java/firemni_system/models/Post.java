@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package firemni_system.workers;
+package firemni_system.models;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
  *
  */
 @Entity
-@Table(name = "teams")
-public class Team extends NamedEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Manager manager;
+@Table(name = "posts")
+public class Post extends NamedEntity {
 
 }

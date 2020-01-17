@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package firemni_system.workers;
+package firemni_system.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,14 +21,15 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
- * Trida objektu Contractor
+ * Trida objektu Validator
  */
 
 @Entity
-@Table(name = "contractors")
-public class Contractor extends Person {
+@Table(name = "validators")
+public class Validator extends Person {
 
     @Column(name = "hire_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -48,30 +49,31 @@ public class Contractor extends Person {
     private String telephone;
 
     @ManyToOne
-    @JoinColumn(name = "validator_id")
-    private Validator mentor;
-
-    @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne
-    @JoinColumn(name = "swimlane_id")
-    private SwimlaneType swimlane;
+    // TODO tady se musí dodělat list
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Contractor> contractors;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     // constructors
-    public Contractor() {
-    }
+    public Validator() {}
 
-    public Contractor(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Validator mentor, SwimlaneType swimlane) {
+    public Validator(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Set<Contractor> contractors, Post post) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.mentor = mentor;
-        this.swimlane = swimlane;
+        this.contractors = contractors;
+        this.post = post;
+
     }
+
+
     @Transient
     public LocalDate getHireDate() {
         return hireDate;
@@ -105,19 +107,28 @@ public class Contractor extends Person {
         this.telephone = telephone;
     }
 
-    public Validator getMentor() {
-        return mentor;
+    public Set<Contractor> getContractors() {
+        return contractors;
     }
 
-    public void setMentor(Validator mentor) {
-        this.mentor = mentor;
+    public void setContractors(Set<Contractor> contractors) {
+        this.contractors = contractors;
     }
 
-    public SwimlaneType getSwimlane() {
-        return swimlane;
+    public Post getPost() {
+        return post;
     }
 
-    public void setSwimlane(SwimlaneType swimlane) {
-        this.swimlane = swimlane;
+    public void setPost(Post post) {
+        this.post = post;
     }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
 }

@@ -3,14 +3,15 @@ package firemni_system.services;
 
 import firemni_system.dao.ContractorRepository;
 import firemni_system.dao.ValidatorRepository;
-import firemni_system.workers.Contractor;
-import firemni_system.workers.Validator;
+import firemni_system.models.Contractor;
+import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -35,6 +36,15 @@ public class PersonService {
             validators.add(validator);
         }
         return validators;
+    }
+
+
+    public Validator findValidatorByLogin(String login){
+
+        Validator validator = validatorRepository.findValidatorByLogin(login);
+
+        return validator;
+
     }
 
     public void deleteContractor(int id){
