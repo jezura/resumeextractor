@@ -3,11 +3,11 @@ create schema `database`;
 create table managers
 (
 	hire_date date null,
-	first_name linestring not null,
-	last_name linestring not null,
-	address linestring not null,
-	city linestring not null,
-	telephone linestring not null,
+	first_name text not null,
+	last_name text not null,
+	address text not null,
+	city text not null,
+	telephone text not null,
 	team_id int null,
 	id int auto_increment
 		primary key
@@ -16,11 +16,11 @@ create table managers
 create table validators
 (
 	hire_date date null,
-	first_name linestring not null,
-	last_name linestring not null,
-	address linestring not null,
-	city linestring not null,
-	telephone linestring not null,
+	first_name text not null,
+	last_name text not null,
+	address text not null,
+	city text not null,
+	telephone text not null,
 	team_id int null,
 	post int null,
 	contractors int null,
@@ -31,11 +31,11 @@ create table validators
 create table contractors
 (
 	hire_date date null,
-	first_name linestring not null,
-	last_name linestring not null,
-	address linestring not null,
-	city linestring not null,
-	telephone linestring not null,
+	first_name text not null,
+	last_name text not null,
+	address text not null,
+	city text not null,
+	telephone text not null,
 	team_id int null,
 	validator_id int null,
 	swimlane_id int null,
@@ -45,7 +45,7 @@ create table contractors
 
 create table teams
 (
-	name linestring not null,
+	name text not null,
 	manager_id int null,
 	id int auto_increment
 		primary key
@@ -53,14 +53,14 @@ create table teams
 
 create table posts
 (
-	name linestring not null,
+	name text not null,
 	id int auto_increment
 		primary key
 );
 
 create table swimlanes
 (
-	name linestring not null,
+	name text not null,
 	id int auto_increment
 		primary key
 );

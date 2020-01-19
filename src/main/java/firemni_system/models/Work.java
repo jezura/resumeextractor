@@ -1,43 +1,57 @@
 package firemni_system.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "works")
 public class Work extends BaseEntity {
 
     @ManyToOne
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "workType_id")
     private WorkType workType;
 
+    @NotNull
     @Column(name = "hoursWorked")
-    @NotEmpty
-    private double hoursWorked;
+    private float hoursWorked;
 
     @Column(name = "info")
     private String info;
 
     @ManyToOne
-    @NotEmpty
+    @NotNull
     @JoinColumn(name = "contractor_id")
     private Contractor contractor;
 
-    @OneToOne
-    @NotEmpty
+    @ManyToOne
     @JoinColumn(name = "domain_id")
     private Domain domain;
+
+    @Column(name = "work_date")
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate workDate;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     public Work() {
     }
 
-    public Work(@NotEmpty WorkType workType, @NotEmpty double hoursWorked, String info, @NotEmpty Contractor contractor, Domain domain) {
+    public Work(   @NotNull WorkType workType, @NotNull  float hoursWorked, String info,     @NotNull Contractor contractor, Domain domain,     @NotNull LocalDate workDate, Team team) {
         this.workType = workType;
         this.hoursWorked = hoursWorked;
         this.info = info;
         this.contractor = contractor;
         this.domain = domain;
+        this.workDate = workDate;
+        this.team = team;
     }
 
     public WorkType getWorkType() {
@@ -48,11 +62,11 @@ public class Work extends BaseEntity {
         this.workType = workType;
     }
 
-    public double getHoursWorked() {
+    public float getHoursWorked() {
         return hoursWorked;
     }
 
-    public void setHoursWorked(double hoursWorked) {
+    public void setHoursWorked(float hoursWorked) {
         this.hoursWorked = hoursWorked;
     }
 
@@ -78,5 +92,21 @@ public class Work extends BaseEntity {
 
     public void setDomain(Domain domain) {
         this.domain = domain;
+    }
+
+    public LocalDate getWorkDate() {
+        return workDate;
+    }
+
+    public void setWorkDate(LocalDate workDate) {
+        this.workDate = workDate;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

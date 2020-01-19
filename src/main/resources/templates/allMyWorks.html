@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html  layout:decorate="~{main_layout}"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>Add new validator</title>
+</head>
+<body>
+<div layout:fragment="content">
+<p></p>
+  <h2 class="text-center">Domains</h2>
+<p></p>
+<div class="container">
+  <table id="contractors" class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Hours worked</th>
+      <th>Work type</th>
+      <th>Domain</th>
+      <th>Team</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="work : ${works}">
+      <td th:text="${work.workDate}"></td>
+      <td th:text="${work.hoursWorked}"></td>
+      <td th:text="${work.workType}"></td>
+      <td th:text="${work.domain}"></td>
+      <td th:text="${work.team}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</body>
+</html>

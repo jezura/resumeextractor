@@ -26,12 +26,6 @@
       <td th:text="${domain.validator} ? ${domain.validator.firstName} +' '+${domain.validator.lastName} : 'NEURČENO'" /></td>
       <td th:text="${domain.contractor} ? ${domain.contractor.firstName} +' '+${domain.contractor.lastName}: 'NEURČENO'"></td>
       <td th:text="${domain.dueDate}"></td>
-      <td>
-        <a th:href="@{'/deleteDomain/' + ${domain.id}}">Delete</a>
-      </td>
-      <td>
-        <a th:href="@{'/editDomain/' + ${domain.id}}">Edit</a>
-      </td>
     </tr>
     </tbody>
   </table>

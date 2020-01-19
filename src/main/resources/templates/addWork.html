@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html  layout:decorate="~{main_layout}"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>Add new validator</title>
+</head>
+<body>
+<div layout:fragment="content">
+<p></p>
+  <h2 class="text-center">Add hours worked</h2>
+<p></p>
+
+<div class="container">
+<form action="#" th:action="@{/saveWork}" th:object="${work}" method="post">
+  <div class="form-group">
+    <label >Work date:</label>
+    <input type="date" th:field="*{workDate}" class="form-control" placeholder="Set date" >
+  </div>
+  <div class="form-group">
+    <label >Hours worked:</label>
+    <input type="number" step="0.25" min="1" max="16" th:field="*{hoursWorked}" class="form-control" placeholder="Enter number of hours worked" >
+  </div>
+
+  <div class="form-group blu-margin">
+    <select class="form-control" th:field="*{workType}"  id="dropOperator">
+      <option value="0">Select type of work</option>
+      <option th:each="workType : ${workTypes}" th:value="${workType.id}" th:text="${workType.name}"></option>
+    </select>
+  </div>
+
+  <div class="form-group blu-margin">
+    <select class="form-control" th:field="*{domain}"  id="dropOperator2">
+      <option value="0">Select domain</option>
+      <option th:each="domain : ${domains}" th:value="${domain.id}" th:text="${domain.name}"></option>
+    </select>
+  </div>
+
+  <div class="form-group blu-margin">
+    <select class="form-control" th:field="*{team}"  id="dropOperator3">
+      <option value="0">Select type of work</option>
+      <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add new domain</button>
+</form>
+</div>
+<p></p>
+</div>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package firemni_system.services;
 
+import firemni_system.models.Contractor;
+import firemni_system.models.Manager;
 import firemni_system.models.Validator;
 import firemni_system.security.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +19,20 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     PersonService personService;
-
-
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
       Optional <Validator> optionalValidator = Optional.ofNullable(personService.findValidatorByLogin(userName));
-
         if(optionalValidator.isPresent()) {
-            return new  MyUser(optionalValidator.get().getLogin(), optionalValidator.get().getPassword());
-        } else {
-            return null;
+            return new  MyUser(optionalValidator.get().getLogin(), optionalValidator.get().getPassword(), optionalValidator.get().getId());
         }
+        Optional <Contractor> optionalContractor = Optional.ofNullable(personService.findContractorByLogin(userName));
+        if(optionalContractor.isPresent()) {
+            return new  MyUser(optionalContractor.get().getLogin(), optionalContractor.get().getPassword(), optionalContractor.get().getId());
+        }
+        Optional <Manager> optionalManager = Optional.ofNullable(personService.findManagerByLogin(userName));
+        if(optionalManager.isPresent()) {
+            return new  MyUser(optionalManager.get().getLogin(), optionalManager.get().getPassword(), optionalManager.get().getId());
+        }
+        return null;
     }
 }

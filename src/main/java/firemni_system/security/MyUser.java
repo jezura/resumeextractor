@@ -13,13 +13,15 @@ public class MyUser extends Person implements UserDetails {
 
     private String userName;
     private String password;
+    private int id;
     private boolean active;
     private List<GrantedAuthority> authorities;
 
 
-    public MyUser(String userName, String password){
+    public MyUser(String userName, String password, int id){
         this.userName = userName;
         this.password = password;
+        this.id = id;
     }
     public MyUser(){
     }
@@ -38,6 +40,10 @@ public class MyUser extends Person implements UserDetails {
     @Override
     public String getUsername() {
         return userName;
+    }
+
+    public int getUserId() {
+        return id;
     }
 
     @Override
