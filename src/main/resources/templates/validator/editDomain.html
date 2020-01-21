@@ -3,7 +3,7 @@
        xmlns:th="https://www.thymeleaf.org"
        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Add new validator</title>
+  <title>Edit domain</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -12,7 +12,7 @@
 <p></p>
 
 <div class="container">
-<form action="#" th:action="@{/saveDomain}" th:object="${domain}" method="post">
+<form action="#" th:action="@{validator/saveDomain}" th:object="${domain}" method="post">
   <div class="form-group">
     <label >Domain ID to edit:</label>
     <input type="text" th:field="*{id}" class="form-control" readonly="readonly" >

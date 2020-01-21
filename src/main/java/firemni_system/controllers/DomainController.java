@@ -6,7 +6,6 @@ import firemni_system.security.MyUser;
 import firemni_system.services.DomainService;
 import firemni_system.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,15 +21,25 @@ public class DomainController {
     @Autowired
     private PersonService personService;
 
-    @GetMapping(value = "/allDomains")
+    @GetMapping(value = "/validator/allDomains")
     public String showAllDomains(Model model){
         Collection<Domain> domains = domainService.findAllDomains();
         model.addAttribute("domainsList", domains);
-        return "allDomains";
+        return "validator/allDomains";
+    }
+
+    @GetMapping(value = "/validator/allValidatorDomains")
+    public String showMyDomainsValidator(Model model){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser userDetails = MyUser.class.cast(principal);
+        int id = userDetails.getUserId();
+        Collection<Domain> domains = domainService.findDomainsForValidatorId(id);
+        model.addAttribute("domainsList", domains);
+        return "validator/allValidatorDomains";
     }
 
     @GetMapping(value = "/allMyDomains")
-    public String showMyDomains(Model model){
+    public String showMyDomainsContractor(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
@@ -39,30 +48,30 @@ public class DomainController {
         return "allMyDomains";
     }
 
-    @GetMapping(value = "/newDomain")
+    @GetMapping(value = "/validator/newDomain")
     public String showAddDomainForm(Model model){
         Domain domain = new Domain();
         model.addAttribute("domain", domain);
         Collection<Validator> validators = personService.findAllValidators();
         model.addAttribute("validators", validators);
-        return "addDomain";
+        return "validator/addDomain";
     }
 
-    @RequestMapping(value = "/saveDomain", method = RequestMethod.POST)
+    @RequestMapping(value = "/validator/saveDomain", method = RequestMethod.POST)
     public String saveDomain(@ModelAttribute("domain") Domain domain) {
         domainService.saveDomain(domain);
-        return "redirect:/allDomains";
+        return "redirect:/validator/allDomains";
     }
 
-    @RequestMapping(value = "/deleteDomain/{id}")
+    @RequestMapping(value = "/validator/deleteDomain/{id}")
     public String deleteDomain(@PathVariable(name = "id") int id) {
         domainService.deleteDomain(id);
-        return "redirect:/allDomains";
+        return "redirect:/validator/allDomains";
     }
 
-    @RequestMapping(value = "/editDomain/{id}")
+    @RequestMapping(value = "/validator/editDomain/{id}")
     public ModelAndView showEditDomainForm(@PathVariable(name = "id") int id) {
-        ModelAndView mav = new ModelAndView("editDomain");
+        ModelAndView mav = new ModelAndView("validator/editDomain");
         Collection<Validator> validators = personService.findAllValidators();
         mav.addObject("validators", validators);
         Collection<Contractor> contractors = personService.findAllContractors();

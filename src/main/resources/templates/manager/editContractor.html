@@ -3,7 +3,7 @@
        xmlns:th="https://www.thymeleaf.org"
        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Add new validator</title>
+  <title>Edit contractor</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -12,7 +12,7 @@
 <p></p>
 
 <div class="container">
-<form action="#" th:action="@{/saveContractor}" th:object="${contractor}" method="post">
+<form action="#" th:action="@{/manager/saveContractor}" th:object="${contractor}" method="post">
   <div class="form-group">
     <label >Contractor ID to edit:</label>
     <input type="text" th:field="*{id}" class="form-control" readonly="readonly" >

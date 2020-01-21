@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "logins")
-public class Login extends  NamedEntity{
+public class Login extends NamedEntity{
 
     @Column(name = "password")
     @NotEmpty

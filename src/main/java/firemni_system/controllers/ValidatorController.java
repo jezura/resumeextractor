@@ -18,37 +18,37 @@ public class ValidatorController {
     private PersonService personService;
 
 
-    @GetMapping(value = "/allValidators")
+    @GetMapping(value = "/validator/allValidators")
     public String showAllValidators(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<Validator> validators = personService.findAllValidators();
         model.addAttribute("validatorsList", validators);
         model.addAttribute("login", authentication);
-        return "allValidators";
+        return "validator/allValidators";
     }
 
-    @GetMapping(value = "/newValidator")
+    @GetMapping(value = "/manager/newValidator")
     public String showAddValidatorForm(Model model){
         Validator validator = new Validator();
         model.addAttribute("validator", validator);
-        return "addValidator";
+        return "manager/addValidator";
     }
 
-    @RequestMapping(value = "/saveValidator", method = RequestMethod.POST)
+    @RequestMapping(value = "/manager/saveValidator", method = RequestMethod.POST)
     public String saveValidator(@ModelAttribute("validator") Validator validator) {
         personService.saveValidator(validator);
-        return "redirect:/allValidators";
+        return "redirect:/validator/allValidators";
     }
 
-    @RequestMapping(value = "/deleteValidator/{id}")
+    @RequestMapping(value = "/manager/deleteValidator/{id}")
     public String deleteValidator(@PathVariable(name = "id") int id) {
         personService.deleteValidator(id);
-        return "redirect:/allValidators";
+        return "redirect:/validator/allValidators";
     }
 
-    @RequestMapping(value = "/editValidator/{id}")
+    @RequestMapping(value = "/manager/editValidator/{id}")
     public ModelAndView showEditValidatorForm(@PathVariable(name = "id") int id) {
-        ModelAndView mav = new ModelAndView("editValidator");
+        ModelAndView mav = new ModelAndView("manager/editValidator");
         Validator validator = personService.getValidator(id);
         mav.addObject("validator", validator);
         return mav;

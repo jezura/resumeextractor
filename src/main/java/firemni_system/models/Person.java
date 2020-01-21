@@ -44,6 +44,10 @@ public class Person extends BaseEntity {
     @NotEmpty
     private String password;
 
+    @Column(name = "role")
+    @NotEmpty
+    private String role;
+
 
     public String getFirstName() {
         return this.firstName;
@@ -75,5 +79,13 @@ public class Person extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -3,7 +3,7 @@
        xmlns:th="https://www.thymeleaf.org"
        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Add new validator</title>
+  <title>Add new work</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -38,7 +38,7 @@
 
   <div class="form-group blu-margin">
     <select class="form-control" th:field="*{team}"  id="dropOperator3">
-      <option value="0">Select type of work</option>
+      <option value="0">Select your team</option>
       <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
     </select>
   </div>

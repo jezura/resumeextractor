@@ -23,15 +23,15 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
       Optional <Validator> optionalValidator = Optional.ofNullable(personService.findValidatorByLogin(userName));
         if(optionalValidator.isPresent()) {
-            return new  MyUser(optionalValidator.get().getLogin(), optionalValidator.get().getPassword(), optionalValidator.get().getId());
+            return new  MyUser(optionalValidator.get().getLogin(), optionalValidator.get().getPassword(), optionalValidator.get().getRole(), optionalValidator.get().getId());
         }
         Optional <Contractor> optionalContractor = Optional.ofNullable(personService.findContractorByLogin(userName));
         if(optionalContractor.isPresent()) {
-            return new  MyUser(optionalContractor.get().getLogin(), optionalContractor.get().getPassword(), optionalContractor.get().getId());
+            return new  MyUser(optionalContractor.get().getLogin(), optionalContractor.get().getPassword(), optionalContractor.get().getRole() ,optionalContractor.get().getId());
         }
         Optional <Manager> optionalManager = Optional.ofNullable(personService.findManagerByLogin(userName));
         if(optionalManager.isPresent()) {
-            return new  MyUser(optionalManager.get().getLogin(), optionalManager.get().getPassword(), optionalManager.get().getId());
+            return new  MyUser(optionalManager.get().getLogin(), optionalManager.get().getPassword(), optionalManager.get().getRole() ,optionalManager.get().getId());
         }
         return null;
     }

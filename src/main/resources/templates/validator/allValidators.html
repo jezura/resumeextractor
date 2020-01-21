@@ -3,15 +3,15 @@
        xmlns:th="https://www.thymeleaf.org"
        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Add new validator</title>
+  <title>All validators</title>
 </head>
 <body>
 <div layout:fragment="content">
 <p></p>
-  <h2 class="text-center">Validators</h2>
+  <h2 class="text-center">All validators</h2>
 <p></p>
 <div class="container">
-  <table id="contractors" class="table table-bordered">
+  <table id="contractors" class="table table-striped">
     <thead>
     <tr>
       <th>Name</th>
@@ -31,10 +31,10 @@
       <td th:text="${validator.telephone}"></td>
       <td th:text="${validator.hireDate}"></td>
       <td>
-        <a th:href="@{'/deleteValidator/' + ${validator.id}}">Delete</a>
+        <a th:href="@{'/manager/deleteValidator/' + ${validator.id}}">Delete</a>
       </td>
       <td>
-        <a th:href="@{'/editValidator/' + ${validator.id}}">Edit</a>
+        <a th:href="@{'/manager/editValidator/' + ${validator.id}}">Edit</a>
       </td>
     </tr>
     </tbody>

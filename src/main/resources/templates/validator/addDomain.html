@@ -3,16 +3,16 @@
        xmlns:th="https://www.thymeleaf.org"
        xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Add new validator</title>
+  <title>Add new domain</title>
 </head>
 <body>
 <div layout:fragment="content">
 <p></p>
-  <h2 class="text-center">Add new Contractor</h2>
+  <h2 class="text-center">Add new domain</h2>
 <p></p>
 
 <div class="container">
-<form action="#" th:action="@{/saveDomain}" th:object="${domain}" method="post">
+<form action="#" th:action="@{/validator/saveDomain}" th:object="${domain}" method="post">
   <div class="form-group">
     <label >Name:</label>
     <input type="text" th:field="*{name}" class="form-control" placeholder="Enter domain name" >

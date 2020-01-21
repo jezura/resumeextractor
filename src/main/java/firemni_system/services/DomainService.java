@@ -43,7 +43,7 @@ public class DomainService {
         {
             domains.add(domain);
         }
-return domains;
+        return domains;
     }
 
     public Collection<Domain> findDomainsForValidatorId(int id){

@@ -2,51 +2,41 @@ package firemni_system.controllers;
 
 import firemni_system.models.*;
 import firemni_system.security.MyUser;
-import firemni_system.services.CiselnikyService;
-import firemni_system.services.DomainService;
-import firemni_system.services.PersonService;
-import firemni_system.services.WorksService;
+import firemni_system.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
-public class WorksController {
-
+public class FeedbackController {
     @Autowired
-    private DomainService domainService;
-    @Autowired
-    private WorksService worksService;
+    private FeedbackService feedbackService;
 
-    @Autowired
-    private PersonService personService;
-    @Autowired
-    private CiselnikyService ciselnikyService;
-
-
-    @GetMapping(value = "/allWorks")
-    public String showAllWorks(Model model){
-        Collection<Work> works = worksService.findAllWorks();
-        model.addAttribute("worksList", works);
-        return "allWorks";
+    @GetMapping(value = "/manager/allFeedbacks")
+    public String showAllFeedbacks(Model model){
+        Collection<Feedback> feedbacks = feedbackService.findAllFeedbacks();
+        model.addAttribute("feedbacksList", feedbacks);
+        return "manager/allFeedbacks";
     }
 
-    @GetMapping(value = "/allMyWorks")
-    public String showMyDomains(Model model){
+    @GetMapping(value = "/allMyFeedbacks")
+    public String showMyFeedBacks(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
-        Collection<Work> works = worksService.findWorksForContractor(id);
-        double hoursMonthly = worksService.hoursSum(works);
-        model.addAttribute("works", works);
-        return "allMyWorks";
+        Collection<Feedback> feedbacks = feedbackService.findFeedbacksForContractor(id);
+        model.addAttribute("feedbacksList", feedbacks);
+        return "allMyFeedbacks";
     }
 
+    /*
     @GetMapping(value = "/newWork")
     public String showAddWorkForm(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -78,6 +68,6 @@ public class WorksController {
     public String deleteWork(@PathVariable(name = "id") int id) {
         worksService.deleteWork(id);
         return "redirect:/allMyWorks";
-    }
+    }*/
 
 }

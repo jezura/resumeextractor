@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html  layout:decorate="~{main_layout}"
        xmlns:th="https://www.thymeleaf.org"
-       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <title>Add new validator</title>
 </head>
 <body>
 <div layout:fragment="content">
 <p></p>
-  <h2 class="text-center">Edit Validator</h2>
+  <h2 class="text-center">Add new Validator</h2>
 <p></p>
 
 <div class="container">
-<form action="#" th:action="@{/saveValidator}" th:object="${validator}" method="post">
+<form action="#" th:action="@{/manager/saveValidator}" th:object="${validator}" method="post">
   <div class="form-group">
-    <label >Contractor ID to edit:</label>
-    <input type="text" th:field="*{id}" class="form-control" readonly="readonly" >
+    <label >Login:</label>
+    <input type="text" th:field="*{login}" class="form-control" placeholder="Enter unique login" >
   </div>
+  <div class="form-group">
+    <label >Password:</label>
+    <input type="text" th:field="*{password}" class="form-control" placeholder="Enter password" >
+  </div>
+
   <div class="form-group">
     <label >First name:</label>
     <input type="text" th:field="*{firstName}" class="form-control" placeholder="Enter first name" >
@@ -42,10 +47,11 @@
     <input type="date" th:field="*{hireDate}" class="form-control" placeholder="Enter hire date" >
   </div>
 
-  <button type="submit" class="btn btn-primary">Update changes</button>
+  <button type="submit" class="btn btn-primary">Add new validator</button>
 </form>
 </div>
 <p></p>
 </div>
+
 </body>
 </html>

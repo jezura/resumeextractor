@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -13,23 +14,31 @@ public class MyUser extends Person implements UserDetails {
 
     private String userName;
     private String password;
+    private String role;
     private int id;
     private boolean active;
     private List<GrantedAuthority> authorities;
 
 
-    public MyUser(String userName, String password, int id){
+    public MyUser(String userName, String password, String role, int id){
         this.userName = userName;
         this.password = password;
+        this.role = role;
         this.id = id;
     }
+
     public MyUser(){
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        getRoleList().forEach(p -> {GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + p);
+        authorities.add(authority);
+        });
+
+        return authorities;
     }
 
     @Override
@@ -40,6 +49,10 @@ public class MyUser extends Person implements UserDetails {
     @Override
     public String getUsername() {
         return userName;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public int getUserId() {
@@ -64,5 +77,12 @@ public class MyUser extends Person implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<String> getRoleList(){
+        if(this.role.length() > 0) {
+            return Arrays.asList(this.role.split(","));
+        }
+        return new ArrayList<>();
     }
 }
