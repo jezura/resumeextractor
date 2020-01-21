@@ -17,6 +17,9 @@ package firemni_system.models;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -30,6 +33,8 @@ import javax.persistence.MappedSuperclass;
 public class NamedEntity extends BaseEntity {
 
     @Column(name = "name")
+    @NotEmpty(message = "Set name")
+    @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     private String name;
 
     public String getName() {

@@ -1,14 +1,19 @@
 package firemni_system.controllers;
 
+import firemni_system.models.*;
+import firemni_system.security.MyUser;
+import firemni_system.services.CiselnikyService;
 import firemni_system.services.PersonService;
-import firemni_system.models.Contractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
@@ -17,9 +22,18 @@ public class ContractorController {
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private CiselnikyService ciselnikyService;
+
+
+
 
     @GetMapping(value = "/")
-    public String init(){
+    public String init(Model model){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser userDetails = MyUser.class.cast(principal);
+        String name = userDetails.getUsername();
+        model.addAttribute("name", name);
         return "index";
     }
 
@@ -32,13 +46,22 @@ public class ContractorController {
 
     @GetMapping(value = "/manager/newContractor")
     public String showAddContractorForm(Model model){
+
+        populateWithData(model);
         Contractor contractor = new Contractor();
         model.addAttribute("contractor", contractor);
         return "manager/addContractor";
     }
 
     @RequestMapping(value = "/manager/saveContractor", method = RequestMethod.POST)
-    public String saveContractor(@ModelAttribute("contractor") Contractor contractor) {
+    public String saveContractor(@Valid @ModelAttribute("contractor") Contractor contractor, BindingResult bindingResult, Model model) {
+
+        bindingResult.getErrorCount();
+        if (bindingResult.hasErrors()) {
+            populateWithData(model);
+            return "manager/addContractor";
+        }
+        contractor.setRole("CONTRACTOR");
         personService.saveContractor(contractor);
         return "redirect:/validator/allContractors";
     }
@@ -55,5 +78,14 @@ public class ContractorController {
         Contractor contractor = personService.getContractor(id);
         mav.addObject("contractor", contractor);
         return mav;
+    }
+
+    private void populateWithData(Model model){
+        Collection<Validator> validators = personService.findAllValidators();
+        Collection<Team> teams = ciselnikyService.findAllTeams();
+        Collection<SwimlaneType> swimlanes = ciselnikyService.findAllSwimlanes();
+        model.addAttribute("teams",teams);
+        model.addAttribute("swimlanes", swimlanes);
+        model.addAttribute("validators", validators);
     }
 }

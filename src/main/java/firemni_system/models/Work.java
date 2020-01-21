@@ -3,6 +3,8 @@ package firemni_system.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -12,12 +14,14 @@ import java.time.LocalDate;
 public class Work extends BaseEntity {
 
     @ManyToOne
-    @NotNull
-    @JoinColumn(name = "workType_id")
+    @NotNull(message = "Choose work type")
+    @JoinColumn(name = "work_type_id")
     private WorkType workType;
 
     @NotNull
-    @Column(name = "hoursWorked")
+    @Min(value = 1, message = "You must work at least 1 hour")
+    @Max(value = 16, message = "I am pretty sure you haven't work for more than 16 hours")
+    @Column(name = "hours_worked")
     private float hoursWorked;
 
     @Column(name = "info")
@@ -33,7 +37,7 @@ public class Work extends BaseEntity {
     private Domain domain;
 
     @Column(name = "work_date")
-    @NotNull
+    @NotNull(message = "Set date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate workDate;
 

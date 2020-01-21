@@ -16,20 +16,26 @@
   <div class="form-group">
     <label >Work date:</label>
     <input type="date" th:field="*{workDate}" class="form-control" placeholder="Set date" >
+    <p  th:if="${#fields.hasErrors('workDate')}" th:errors="*{workDate}" class="alert alert-danger" role="alert">Date of work</p>
+
   </div>
   <div class="form-group">
     <label >Hours worked:</label>
     <input type="number" step="0.25" min="1" max="16" th:field="*{hoursWorked}" class="form-control" placeholder="Enter number of hours worked" >
+    <p th:if="${#fields.hasErrors('hoursWorked')}" th:errors="*{hoursWorked}" class="alert alert-danger" role="alert">Wrongly set hours</p>
   </div>
 
   <div class="form-group blu-margin">
+    <label >Type of work:</label>
     <select class="form-control" th:field="*{workType}"  id="dropOperator">
       <option value="0">Select type of work</option>
       <option th:each="workType : ${workTypes}" th:value="${workType.id}" th:text="${workType.name}"></option>
     </select>
+    <p th:if="${#fields.hasErrors('workType')}" th:errors="*{workType}" class="alert alert-danger" role="alert">Set type of work</p>
   </div>
 
   <div class="form-group blu-margin">
+    <label >Domain:</label>
     <select class="form-control" th:field="*{domain}"  id="dropOperator2">
       <option value="0">Select domain</option>
       <option th:each="domain : ${domains}" th:value="${domain.id}" th:text="${domain.name}"></option>
@@ -37,13 +43,14 @@
   </div>
 
   <div class="form-group blu-margin">
+    <label >Team:</label>
     <select class="form-control" th:field="*{team}"  id="dropOperator3">
       <option value="0">Select your team</option>
       <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
     </select>
   </div>
 
-  <button type="submit" class="btn btn-primary">Add new domain</button>
+  <button type="submit" class="btn btn-primary">Add hours</button>
 </form>
 </div>
 <p></p>

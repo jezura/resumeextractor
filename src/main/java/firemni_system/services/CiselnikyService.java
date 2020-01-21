@@ -1,8 +1,10 @@
 package firemni_system.services;
 
+import firemni_system.dao.SwimlaneRepository;
 import firemni_system.dao.TeamsRepository;
 import firemni_system.dao.WorksRepository;
 import firemni_system.dao.WorktypeRepository;
+import firemni_system.models.SwimlaneType;
 import firemni_system.models.Team;
 import firemni_system.models.Work;
 import firemni_system.models.WorkType;
@@ -21,6 +23,9 @@ public class CiselnikyService {
     @Autowired
     private TeamsRepository teamsRepository;
 
+    @Autowired
+    private SwimlaneRepository swimlaneRepository;
+
     public Collection<WorkType> findAllWorkTypes(){
         List<WorkType> workTypes = new ArrayList<WorkType>();
         for (WorkType workType :worktypeRepository.findAll())
@@ -37,6 +42,15 @@ public class CiselnikyService {
             teams.add(team);
         }
         return teams;
+    }
+
+    public Collection<SwimlaneType> findAllSwimlanes(){
+        List<SwimlaneType> swimlanes = new ArrayList<SwimlaneType>();
+        for (SwimlaneType swimlane :swimlaneRepository.findAll())
+        {
+            swimlanes.add(swimlane);
+        }
+        return swimlanes;
     }
 
 

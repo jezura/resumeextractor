@@ -16,6 +16,7 @@
   <div class="form-group">
     <label >Name:</label>
     <input type="text" th:field="*{name}" class="form-control" placeholder="Enter domain name" >
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger" role="alert">Name was not set</p>
   </div>
 
   <div class="form-group blu-margin">

@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
@@ -52,24 +54,24 @@ public class WorksController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
+
         Work work = new Work();
-        Collection<Domain> domains = domainService.findDomainsForContractorId(id);
-        Collection<Team> teams = ciselnikyService.findAllTeams();
-        Collection<WorkType> workTypes = ciselnikyService.findAllWorkTypes();
-        model.addAttribute("teams",teams);
-        model.addAttribute("workTypes", workTypes);
-        model.addAttribute("domains", domains);
         model.addAttribute("work", work);
+        popluateWithData(id, model);
         return "addWork";
     }
 
     @RequestMapping(value = "/saveWork", method = RequestMethod.POST)
-    public String saveWork(@ModelAttribute("work") Work work) {
+    public String saveWork(@Valid @ModelAttribute("work") Work work, BindingResult bindingResult, Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
         Contractor contractor = personService.getContractor(id);
         work.setContractor(contractor);
+        if (bindingResult.getErrorCount()>1) {
+                popluateWithData(id, model);
+                return "addWork";
+        }
         worksService.saveWork(work);
         return "redirect:/allMyWorks";
     }
@@ -79,5 +81,15 @@ public class WorksController {
         worksService.deleteWork(id);
         return "redirect:/allMyWorks";
     }
+
+    private void popluateWithData(int id, Model model){
+        Collection<Domain> domains = domainService.findDomainsForContractorId(id);
+        Collection<Team> teams = ciselnikyService.findAllTeams();
+        Collection<WorkType> workTypes = ciselnikyService.findAllWorkTypes();
+        model.addAttribute("teams",teams);
+        model.addAttribute("workTypes", workTypes);
+        model.addAttribute("domains", domains);
+    }
+
 
 }

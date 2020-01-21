@@ -18,8 +18,7 @@ package firemni_system.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 /**
@@ -35,34 +34,32 @@ public class Manager extends Person {
     private LocalDate hireDate;
 
     @Column(name = "address")
-    @NotEmpty
+    @NotNull(message = "Set contractors address")
     private String address;
 
     @Column(name = "city")
-    @NotEmpty
+    @NotNull(message = "Set contractors address")
     private String city;
 
     @Column(name = "telephone")
-    @NotEmpty
-    @Digits(fraction = 0, integer = 10)
+    @NotNull
+    @Min(value = 100000000, message = "Set real phone number")
+    @Max(value = 999999999, message = "Set real phone number")
     private String telephone;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team teamLeading;
 
-
-
     // constructors
     public Manager() {}
 
-    public Manager(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Team teamLeading) {
+    public Manager(LocalDate hireDate, @NotNull(message = "Set contractors address") String address, @NotNull(message = "Set contractors address") String city, @NotNull @Min(value = 100000000, message = "Set real phone number") @Max(value = 999999999, message = "Set real phone number") String telephone, Team teamLeading) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
         this.teamLeading = teamLeading;
-
     }
 
     @Transient

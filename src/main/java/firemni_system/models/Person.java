@@ -19,6 +19,8 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -29,23 +31,22 @@ import javax.validation.constraints.NotEmpty;
 public class Person extends BaseEntity {
 
     @Column(name = "first_name")
-    @NotEmpty
+    @Pattern(regexp="^[a-zA-Z]{3,20}",message="Invalid name type")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotEmpty
+    @Pattern(regexp="^[a-zA-Z]{3,20}",message="Invalid name type")
     private String lastName;
 
     @Column(name = "login")
-    @NotEmpty
+    @Pattern(regexp="^[a-zA-Z0-9]{3,20}",message="Invalid name type")
     private String login;
 
     @Column(name = "password")
-    @NotEmpty
+    @Pattern(regexp="^[a-zA-Z0-9]{5,20}",message="Consider password that you will remember later ;)")
     private String password;
 
     @Column(name = "role")
-    @NotEmpty
     private String role;
 
 

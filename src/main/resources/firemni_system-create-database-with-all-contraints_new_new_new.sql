@@ -4,13 +4,13 @@ create table contractors
 (
 	id int auto_increment
 		primary key,
-	first_name varchar(255) null,
-	last_name varchar(255) null,
-	login varchar(255) null,
-	password varchar(255) null,
-	role varchar(255) null,
-	address varchar(255) null,
-	city varchar(255) null,
+	first_name varchar(255) not null,
+	last_name varchar(255) not null,
+	login varchar(255) not null,
+	password varchar(255) not null,
+	role varchar(255) not null,
+	address varchar(255) not null,
+	city varchar(255) not null,
 	hire_date date null,
 	telephone varchar(255) null,
 	validator_id int null,
@@ -32,7 +32,7 @@ create table domains
 (
 	id int auto_increment
 		primary key,
-	name varchar(255) null,
+	name varchar(255) not null,
 	due_date date null,
 	info varchar(255) null,
 	contractor_id int null,
@@ -46,6 +46,8 @@ create index FK8t41l0g4kxelu8v4d2ubjjqfc
 create index FKlnxyqky6oqhr59ibjqfj1ge54
 	on domains (validator_id);
 
+
+set @@foreign_key_checks=0;
 create table feedbacks
 (
 	id int not null
@@ -71,15 +73,15 @@ create table managers
 (
 	id int auto_increment
 		primary key,
-	first_name varchar(255) null,
-	last_name varchar(255) null,
-	login varchar(255) null,
-	password varchar(255) null,
-	role varchar(255) null,
-	address varchar(255) null,
-	city varchar(255) null,
+	first_name varchar(255) not null,
+	last_name varchar(255) not null,
+	login varchar(255) not null,
+	password varchar(255) not null,
+	role varchar(255) not null,
+	address varchar(255) not null,
+	city varchar(255) not null,
 	hire_date date null,
-	telephone varchar(255) null,
+	telephone varchar(255) not null,
 	team_id int null
 )
 engine=MyISAM;
@@ -162,16 +164,16 @@ create table validators
 (
 	id int auto_increment
 		primary key,
-	first_name varchar(255) null,
-	last_name varchar(255) null,
-	login varchar(255) null,
-	password varchar(255) null,
+	first_name varchar(255) not null,
+	last_name varchar(255) not null,
+	login varchar(255) not null,
+	password varchar(255) not null,
 	role varchar(255) null,
-	address varchar(255) null,
-	city varchar(255) null,
+	address varchar(255) not null,
+	city varchar(255) not null,
 	hire_date date null,
 	telephone varchar(255) null,
-	post_id int null,
+	post_id int not null,
 	team_id int null
 )
 engine=MyISAM;

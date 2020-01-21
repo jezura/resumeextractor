@@ -18,8 +18,7 @@ package firemni_system.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -32,29 +31,27 @@ import java.util.Set;
 public class Validator extends Person {
 
     @Column(name = "hire_date")
+    @NotNull(message = "Set hire date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate;
 
     @Column(name = "address")
-    @NotEmpty
+    @NotEmpty(message = "Set contractors address")
     private String address;
 
     @Column(name = "city")
-    @NotEmpty
+    @NotEmpty(message = "Set contractors address")
     private String city;
 
     @Column(name = "telephone")
-    @NotEmpty
-    @Digits(fraction = 0, integer = 10)
+    @Min(value = 100000000, message = "Set real phone number")
+    @Max(value = 999999999, message = "Set real phone number")
     private String telephone;
 
     @ManyToOne
+    @NotNull(message =  "Set team")
     @JoinColumn(name = "team_id")
     private Team team;
-
-    // TODO tady se musí dodělat list
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Contractor> contractors;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -63,16 +60,14 @@ public class Validator extends Person {
     // constructors
     public Validator() {}
 
-    public Validator(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Set<Contractor> contractors, Post post) {
+    public Validator(@NotNull(message = "Set hire date") LocalDate hireDate, @NotEmpty(message = "Set contractors address") String address, @NotEmpty(message = "Set contractors address") String city,  @Min(value = 100000000, message = "Set real phone number") @Max(value = 999999999, message = "Set real phone number") String telephone, @NotNull(message = "Set team") Team team, Post post) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.contractors = contractors;
+        this.team = team;
         this.post = post;
-
     }
-
 
     @Transient
     public LocalDate getHireDate() {
@@ -105,14 +100,6 @@ public class Validator extends Person {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public Set<Contractor> getContractors() {
-        return contractors;
-    }
-
-    public void setContractors(Set<Contractor> contractors) {
-        this.contractors = contractors;
     }
 
     public Post getPost() {

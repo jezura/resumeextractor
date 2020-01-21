@@ -18,8 +18,7 @@ package firemni_system.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 /**
@@ -31,48 +30,53 @@ import java.time.LocalDate;
 public class Contractor extends Person {
 
     @Column(name = "hire_date")
+    @NotNull(message = "Set hire date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate hireDate;
 
     @Column(name = "address")
-    @NotEmpty
+    @NotEmpty(message = "Set contractors address")
     private String address;
 
     @Column(name = "city")
-    @NotEmpty
+    @NotEmpty(message = "Set contractors address")
     private String city;
 
     @Column(name = "telephone")
     @NotEmpty
-    @Digits(fraction = 0, integer = 10)
+    @Min(value = 100000000, message = "Set real phone number")
+    @Max(value = 999999999, message = "Set real phone number")
     private String telephone;
 
     @ManyToOne
+    @NotNull(message = "Choose validator")
     @JoinColumn(name = "validator_id")
     private Validator mentor;
 
     @ManyToOne
+    @NotNull(message = "Choose team")
     @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
+    @NotNull(message = "Choose swimlane")
     @JoinColumn(name = "swimlane_id")
     private SwimlaneType swimlane;
-
 
     // constructors
     public Contractor() {
     }
 
-    public Contractor(LocalDate hireDate, @NotEmpty String address, @NotEmpty String city, @NotEmpty @Digits(fraction = 0, integer = 10) String telephone, Validator mentor, SwimlaneType swimlane) {
+    public Contractor(@NotNull LocalDate hireDate, @NotEmpty(message = "Set contractors address") String address, @NotEmpty(message = "Set contractors address") String city, @Min(value = 100000000, message = "Set real phone number") @Max(value = 999999999, message = "Set real phone number") String telephone, @NotNull(message = "Choose validator") Validator mentor, @NotNull(message = "Choose team") Team team, @NotNull(message = "Choose swimlane") SwimlaneType swimlane) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
         this.mentor = mentor;
+        this.team = team;
         this.swimlane = swimlane;
-
     }
+
     @Transient
     public LocalDate getHireDate() {
         return hireDate;

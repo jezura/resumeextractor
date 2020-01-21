@@ -1,5 +1,8 @@
 package firemni_system.controllers;
 
+import firemni_system.models.SwimlaneType;
+import firemni_system.models.Team;
+import firemni_system.services.CiselnikyService;
 import firemni_system.services.PersonService;
 import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +10,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
 public class ValidatorController {
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private CiselnikyService ciselnikyService;
 
 
     @GetMapping(value = "/validator/allValidators")
@@ -29,13 +37,20 @@ public class ValidatorController {
 
     @GetMapping(value = "/manager/newValidator")
     public String showAddValidatorForm(Model model){
+        populateWithData(model);
         Validator validator = new Validator();
         model.addAttribute("validator", validator);
         return "manager/addValidator";
     }
 
     @RequestMapping(value = "/manager/saveValidator", method = RequestMethod.POST)
-    public String saveValidator(@ModelAttribute("validator") Validator validator) {
+    public String saveValidator(@Valid @ModelAttribute("validator") Validator validator, BindingResult bindingResult, Model model) {
+        bindingResult.getErrorCount();
+        if (bindingResult.hasErrors()) {
+            populateWithData(model);
+            return "manager/addValidator";
+        }
+        validator.setRole("VALIDATOR");
         personService.saveValidator(validator);
         return "redirect:/validator/allValidators";
     }
@@ -52,5 +67,11 @@ public class ValidatorController {
         Validator validator = personService.getValidator(id);
         mav.addObject("validator", validator);
         return mav;
+    }
+
+
+    private void populateWithData(Model model){
+        Collection<Team> teams = ciselnikyService.findAllTeams();
+        model.addAttribute("teams",teams);
     }
 }
