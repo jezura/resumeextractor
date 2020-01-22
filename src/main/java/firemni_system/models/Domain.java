@@ -2,7 +2,10 @@ package firemni_system.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -21,17 +24,20 @@ public class Domain extends NamedEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
-    @Column(name = "info")
-    private String info;
+    @Column(name = "priority")
+    @NotNull
+    @Min(value = 1, message = "Priority must be between 1 and 10")
+    @Max(value = 10, message = "Priority must be between 1 and 10")
+    private int priority;
 
     public Domain() {
     }
 
-    public Domain(Validator validator,  Contractor contractor, LocalDate dueDate, String info) {
+    public Domain(Validator validator,  Contractor contractor, LocalDate dueDate, int priority) {
         this.validator = validator;
         this.contractor = contractor;
         this.dueDate = dueDate;
-        this.info = info;
+        this.priority = priority;
     }
 
     public Validator getValidator() {
@@ -58,11 +64,11 @@ public class Domain extends NamedEntity {
         this.dueDate = dueDate;
     }
 
-    public String getInfo() {
-        return info;
+    public int getPriority() {
+        return priority;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

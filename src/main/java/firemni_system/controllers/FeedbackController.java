@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,6 +20,9 @@ import java.util.List;
 public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    private DomainService domainService;
+
 
     @GetMapping(value = "/manager/allFeedbacks")
     public String showAllFeedbacks(Model model){
@@ -27,7 +32,7 @@ public class FeedbackController {
     }
 
     @GetMapping(value = "/allMyFeedbacks")
-    public String showMyFeedBacks(Model model){
+    public String showMyFeedbacks(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
@@ -36,38 +41,37 @@ public class FeedbackController {
         return "allMyFeedbacks";
     }
 
-    /*
-    @GetMapping(value = "/newWork")
-    public String showAddWorkForm(Model model){
+    @GetMapping(value = "/validator/allValidatorFeedbacks")
+    public String showAllValidatorFeedbacks(Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
-        Work work = new Work();
-        Collection<Domain> domains = domainService.findDomainsForContractorId(id);
-        Collection<Team> teams = ciselnikyService.findAllTeams();
-        Collection<WorkType> workTypes = ciselnikyService.findAllWorkTypes();
-        model.addAttribute("teams",teams);
-        model.addAttribute("workTypes", workTypes);
+        Collection<Feedback> feedbacks = feedbackService.findFeedbacksForValidator(id);
+        model.addAttribute("feedbacksList", feedbacks);
+        return "validator/allValidatorFeedbacks";
+    }
+
+    @GetMapping(value = "/validator/newFeedback")
+    public String showAddFeedbackForm(Model model){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser userDetails = MyUser.class.cast(principal);
+        int id = userDetails.getUserId();
+        Collection<Domain> domains = domainService.findDomainsForValidatorId(id);
         model.addAttribute("domains", domains);
-        model.addAttribute("work", work);
-        return "addWork";
+        Feedback feedback = new Feedback();
+        model.addAttribute("feedback", feedback);
+        return "validator/addFeedback";
     }
 
-    @RequestMapping(value = "/saveWork", method = RequestMethod.POST)
-    public String saveWork(@ModelAttribute("work") Work work) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        MyUser userDetails = MyUser.class.cast(principal);
-        int id = userDetails.getUserId();
-        Contractor contractor = personService.getContractor(id);
-        work.setContractor(contractor);
-        worksService.saveWork(work);
-        return "redirect:/allMyWorks";
+    @RequestMapping(value = "/validator/saveFeedback", method = RequestMethod.POST)
+    public String saveFeedback(@Valid @ModelAttribute("feedback") Feedback feedback, BindingResult bindingResult) {
+        bindingResult.getErrorCount();
+        if (bindingResult.hasErrors()) {
+            return "validator/addFeedback";
+        }
+        feedbackService.saveFeedback(feedback);
+        return "redirect:/validator/allValidatorFeedbacks";
     }
 
-    @RequestMapping(value = "/deleteWork/{id}")
-    public String deleteWork(@PathVariable(name = "id") int id) {
-        worksService.deleteWork(id);
-        return "redirect:/allMyWorks";
-    }*/
 
 }

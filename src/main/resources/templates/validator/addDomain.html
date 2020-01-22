@@ -20,11 +20,25 @@
   </div>
 
   <div class="form-group blu-margin">
-    <select class="form-control" th:field="*{validator}"  id="dropOperator">
-      <option value="0">Select validator</option>
+    <select class="form-control" th:field="*{validator}">
+      <option value="0">Select validator to assign</option>
       <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}"></option>
     </select>
   </div>
+
+  <div class="form-group blu-margin">
+    <select class="form-control" th:field="*{contractor}">
+      <option value="0">Select contractor to assign</option>
+      <option th:each="contractor : ${contractors}" th:value="${contractor.id}" th:text="${contractor.firstName} +' '+${contractor.lastName}"></option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label >Priority:</label>
+    <input type="number" step="1" min="1" max="10" th:field="*{priority}" class="form-control" placeholder="Enter priority" >
+    <p th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}" class="alert alert-danger" role="alert">Wrongly set priority</p>
+  </div>
+
   <div class="form-group">
     <label >Due date:</label>
     <input type="date" th:field="*{dueDate}" class="form-control" placeholder="Set date" >

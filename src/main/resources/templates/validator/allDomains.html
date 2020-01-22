@@ -17,6 +17,7 @@
       <th>Name</th>
       <th>Validator</th>
       <th>Contractor</th>
+      <th>Priority</th>
       <th>Due date</th>
       <th>Delete</th>
       <th>Edit</th>
@@ -27,12 +28,13 @@
       <td th:text="${domain.name}"></td>
       <td th:text="${domain.validator} ? ${domain.validator.firstName} +' '+${domain.validator.lastName} : 'NEURČENO'" /></td>
       <td th:text="${domain.contractor} ? ${domain.contractor.firstName} +' '+${domain.contractor.lastName}: 'NEURČENO'"></td>
+      <td th:text="${domain.priority}"></td>
       <td th:text="${domain.dueDate}"></td>
       <td>
-        <a th:href="@{'/deleteDomain/' + ${domain.id}}">Delete</a>
+        <a th:href="@{'/validator/deleteDomain/' + ${domain.id}}"><i class="fas fa-trash-alt" style="color:red"></i></a>
       </td>
       <td>
-        <a th:href="@{'/editDomain/' + ${domain.id}}">Edit</a>
+        <a th:href="@{'/validator/editDomain/' + ${domain.id}}"><i class="fas fa-edit" style="color:green"></i></a>
       </td>
     </tr>
     </tbody>

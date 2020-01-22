@@ -56,7 +56,7 @@
     <div class="form-group blu-margin">
       <label >Team:</label>
       <select class="form-control" th:field="*{team}"  id="dropOperator2">
-        <option value="0">Select validator</option>
+        <option value="0">Select team to assign</option>
         <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
       </select>
       <p th:if="${#fields.hasErrors('team')}" th:errors="*{team}" class="alert alert-danger" role="alert">Set team</p>

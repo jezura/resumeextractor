@@ -16,6 +16,9 @@
 package firemni_system.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
   Working plan object - stores hours working plan info for 31 days of one month
@@ -25,104 +28,201 @@ import javax.persistence.*;
 public class Plan extends BaseEntity {
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "contractor_id")
     private Contractor contractor;
 
     @Column(name = "month_number")
+    @NotNull
+    @Min(value = 1, message = "Minimum is 1")
+    @Max(value = 12, message = "Maximum is 12")
     private int monthNumber;
 
     @Column(name = "day1")
-    private int day1;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day1;
 
     @Column(name = "day2")
-    private int day2;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day2;
 
     @Column(name = "day3")
-    private int day3;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day3;
 
     @Column(name = "day4")
-    private int day4;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day4;
 
     @Column(name = "day5")
-    private int day5;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day5;
 
     @Column(name = "day6")
-    private int day6;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day6;
 
     @Column(name = "day7")
-    private int day7;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day7;
 
     @Column(name = "day8")
-    private int day8;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day8;
 
     @Column(name = "day9")
-    private int day9;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day9;
 
     @Column(name = "day10")
-    private int day10;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day10;
 
     @Column(name = "day11")
-    private int day11;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day11;
 
     @Column(name = "day12")
-    private int day12;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day12;
 
     @Column(name = "day13")
-    private int day13;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day13;
 
     @Column(name = "day14")
-    private int day14;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day14;
 
     @Column(name = "day15")
-    private int day15;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day15;
 
     @Column(name = "day16")
-    private int day16;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day16;
 
     @Column(name = "day17")
-    private int day17;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day17;
 
     @Column(name = "day18")
-    private int day18;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day18;
 
     @Column(name = "day19")
-    private int day19;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day19;
 
     @Column(name = "day20")
-    private int day20;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day20;
 
     @Column(name = "day21")
-    private int day21;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day21;
 
     @Column(name = "day22")
-    private int day22;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day22;
 
     @Column(name = "day23")
-    private int day23;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day23;
 
     @Column(name = "day24")
-    private int day24;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day24;
 
     @Column(name = "day25")
-    private int day25;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day25;
 
     @Column(name = "day26")
-    private int day26;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day26;
 
     @Column(name = "day27")
-    private int day27;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day27;
 
     @Column(name = "day28")
-    private int day28;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day28;
 
     @Column(name = "day29")
-    private int day29;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day29;
 
     @Column(name = "day30")
-    private int day30;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day30;
 
     @Column(name = "day31")
-    private int day31;
+    @NotNull
+    @Min(value = 0, message = "Nemůžete pracovat méně než 0 hodin")
+    @Max(value = 16, message = "Nelze pracovat více než 16 hodin denně")
+private int day31;
 
     public Plan() {
     }

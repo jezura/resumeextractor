@@ -44,8 +44,8 @@ public class Validator extends Person {
     private String city;
 
     @Column(name = "telephone")
-    @Min(value = 100000000, message = "Set real phone number")
-    @Max(value = 999999999, message = "Set real phone number")
+    @Min(value = 100000000, message = "Set real phone number, format: xxxxxxxxx")
+    @Max(value = 999999999)
     private String telephone;
 
     @ManyToOne

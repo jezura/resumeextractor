@@ -19,6 +19,8 @@
       <th>Address</th>
       <th>Phone</th>
       <th>Hire date</th>
+      <th>Delete</th>
+      <th>Edit</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +30,12 @@
       <td th:text="${validator.address}"></td>
       <td th:text="${validator.telephone}"></td>
       <td th:text="${validator.hireDate}"></td>
+      <td>
+        <a th:href="@{'/manager/deleteValidator/' + ${validator.id}}"><i class="fas fa-user-minus" style="color:red"></i></a>
+      </td>
+      <td>
+        <a th:href="@{'/manager/editValidator/' + ${validator.id}}"><i class="fas fa-user-edit" style="color:green"></i></a>
+      </td>
     </tr>
     </tbody>
   </table>

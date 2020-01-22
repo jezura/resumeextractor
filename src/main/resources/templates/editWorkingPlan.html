@@ -14,154 +14,153 @@
 <div class="container">
 <form action="#" th:action="@{/saveWorkingPlan}" th:object="${plan}" method="post">
   <div class="form-group">
-    <label >Plan ID to edit:</label>
-    <input type="text" th:field="*{id}" class="form-control" readonly="readonly" >
+    <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly" >
   </div>
   <div class="form-group">
-    <label >Contractor ID:</label>
-    <input type="text" th:field="*{contractor}" class="form-control" readonly="readonly" >
+    <input type="hidden" th:field="*{contractor}" class="form-control" readonly="readonly" >
   </div>
   <div class="form-group">
     <label >Number of month:</label>
-    <input type="text" th:field="*{monthNumber}" class="form-control" placeholder="Enter month number" >
+    <input type="number" step="1" min="1" max="12" th:field="*{monthNumber}" class="form-control" placeholder="Enter month number" >
+    <p th:if="${#fields.hasErrors('monthNumber')}" th:errors="*{monthNumber}" class="alert alert-danger" role="alert">Month numer was not set</p>
   </div>
 
   <div class="row">
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">1st</label>
-      <input type="number" th:field="*{day1}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day1}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">2nd</label>
-      <input type="number" th:field="*{day2}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day2}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">3rd</label>
-      <input type="number" th:field="*{day3}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day3}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">4th</label>
-      <input type="number" th:field="*{day4}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day4}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">5th</label>
-      <input type="number" th:field="*{day5}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day5}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">6th</label>
-      <input type="number" th:field="*{day6}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day6}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">7th</label>
-      <input type="number" th:field="*{day7}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day7}" class="form-control" placeholder="Day1" >
     </div>
   </div>
 
   <div class="row">
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">8th</label>
-      <input type="number" th:field="*{day8}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day8}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">9th</label>
-      <input type="number" th:field="*{day9}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day9}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">10th</label>
-      <input type="number" th:field="*{day10}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day10}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">11th</label>
-      <input type="number" th:field="*{day11}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day11}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">12th</label>
-      <input type="number" th:field="*{day12}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day12}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">13th</label>
-      <input type="number" th:field="*{day13}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day13}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">14th</label>
-      <input type="number" th:field="*{day14}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day14}" class="form-control" placeholder="Day1" >
     </div>
   </div>
 
   <div class="row">
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">15th</label>
-      <input type="number" th:field="*{day15}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day15}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">16th</label>
-      <input type="number" th:field="*{day16}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day16}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">17th</label>
-      <input type="number" th:field="*{day17}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day17}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">18th</label>
-      <input type="number" th:field="*{day18}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day18}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">19th</label>
-      <input type="number" th:field="*{day19}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day19}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">20th</label>
-      <input type="number" th:field="*{day20}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day20}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">21th</label>
-      <input type="number" th:field="*{day21}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day21}" class="form-control" placeholder="Day1" >
     </div>
   </div>
 
   <div class="row">
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">22th</label>
-      <input type="number" th:field="*{day22}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day22}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">23th</label>
-      <input type="number" th:field="*{day23}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day23}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">24th</label>
-      <input type="number" th:field="*{day24}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day24}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">25th</label>
-      <input type="number" th:field="*{day25}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day25}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">26th</label>
-      <input type="number" th:field="*{day26}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day26}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">27th</label>
-      <input type="number" th:field="*{day27}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day27}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">28th</label>
-      <input type="number" th:field="*{day28}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day28}" class="form-control" placeholder="Day1" >
     </div>
   </div>
 
   <div class="row">
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">29th</label>
-      <input type="number" th:field="*{day29}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day29}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">30th</label>
-      <input type="number" th:field="*{day30}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day30}" class="form-control" placeholder="Day1" >
     </div>
     <div class="form-group bg-secondary" style="width:10%; margin:5px">
       <label style="color:white">31th</label>
-      <input type="number" th:field="*{day31}" class="form-control" placeholder="Day1" >
+      <input type="number" step="0.5" min="0" max="16" th:field="*{day31}" class="form-control" placeholder="Day1" >
     </div>
   </div>
   <p></p>

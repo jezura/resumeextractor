@@ -16,6 +16,10 @@
 package firemni_system.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
   Working plan object - stores hours working plan info for 31 days of one month
@@ -25,16 +29,22 @@ import javax.persistence.*;
 public class Feedback extends BaseEntity {
 
     @ManyToOne
+    @NotNull(message = "Choose verified domain assigned to you")
     @JoinColumn(name = "domain_id")
     private Domain domain;
 
     @Column(name = "feedback_text")
+    @NotEmpty(message = "Write short feedback about work quality")
     private String feedbackText;
 
     @Column(name = "reworks")
+    @NotNull
+    @Min(value = 0, message = "It is not realy possible to have negative number of reworks")
+    @Max(value = 10, message = "I am pretty sure you cannot do more than 10 reworks for one domain")
     private int reworks;
 
     @Column(name = "quality")
+    @NotEmpty(message = "Select quality marker")
     private String quality;
 
     public Feedback() {

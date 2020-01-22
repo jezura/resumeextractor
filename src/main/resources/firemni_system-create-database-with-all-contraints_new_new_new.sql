@@ -34,7 +34,7 @@ create table domains
 		primary key,
 	name varchar(255) not null,
 	due_date date null,
-	info varchar(255) null,
+	priority int null,
 	contractor_id int null,
 	validator_id int null
 )
@@ -59,15 +59,6 @@ create table feedbacks
 	constraint feedbacks_domains_id_fk
 		foreign key (domain_id) references domains (id)
 );
-
-create table logins
-(
-	id int auto_increment
-		primary key,
-	name varchar(255) null,
-	password varchar(255) null
-)
-engine=MyISAM;
 
 create table managers
 (

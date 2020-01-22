@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html  layout:decorate="~{main_layout}"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>Add new feedback</title>
+</head>
+<body>
+<div layout:fragment="content">
+<p></p>
+  <h2 class="text-center">Add new feedback</h2>
+<p></p>
+
+<div class="container">
+<form action="#" th:action="@{/validator/saveFeedback}" th:object="${feedback}" method="post">
+
+  <div class="form-group blu-margin">
+    <label >Domain:</label>
+    <select class="form-control" th:field="*{domain}"  id="dropOperator2">
+      <option value="0">Select verified domain</option>
+      <option th:each="domain : ${domains}" th:value="${domain.id}" th:text="${domain.name}"></option>
+    </select>
+    <p th:if="${#fields.hasErrors('domain')}" th:errors="*{domain}" class="alert alert-danger" role="alert">Choose verified domain assigned to you</p>
+  </div>
+
+  <div class="form-group">
+    <label >Short feedback:</label>
+    <input type="text" th:field="*{feedbackText}" class="form-control" placeholder="Enter short feedback" >
+    <p th:if="${#fields.hasErrors('feedbackText')}" th:errors="*{feedbackText}" class="alert alert-danger" role="alert">Feedback was not written yet</p>
+  </div>
+
+  <div class="form-group">
+    <label >Number of reworks:</label>
+    <input type="number" step="1" min="0" max="10" th:field="*{reworks}" class="form-control" placeholder="Enter number of reworks" >
+    <p th:if="${#fields.hasErrors('reworks')}" th:errors="*{reworks}" class="alert alert-danger" role="alert">Wrongly set number</p>
+  </div>
+
+  <div class="form-group blu-margin">
+    <label >Select quality marker:</label>
+    <select class="form-control" th:field="*{quality}"  id="dropOperator">
+      <option value="">Select quality marker</option>
+      <option value="Minus">Minus</option>
+      <option value="Standard">Standard</option>
+      <option value="Plus">Plus</option>
+    </select>
+    <p th:if="${#fields.hasErrors('quality')}" th:errors="*{quality}" class="alert alert-danger" role="alert">Set quality marker</p>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add feedback for verified domain</button>
+</form>
+</div>
+<p></p>
+</div>
+</body>
+</html>

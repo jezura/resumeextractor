@@ -56,17 +56,27 @@ public class DomainController {
         model.addAttribute("domain", domain);
         Collection<Validator> validators = personService.findAllValidators();
         model.addAttribute("validators", validators);
+        Collection<Contractor> contractors = personService.findAllContractors();
+        model.addAttribute("contractors", contractors);
         return "validator/addDomain";
     }
 
     @RequestMapping(value = "/validator/saveDomain", method = RequestMethod.POST)
     public String saveDomain(@Valid @ModelAttribute("domain") Domain domain, BindingResult bindingResult) {
-
         bindingResult.getErrorCount();
         if (bindingResult.hasErrors()) {
             return "validator/addDomain";
         }
+        domainService.saveDomain(domain);
+        return "redirect:/validator/allDomains";
+    }
 
+    @RequestMapping(value = "/validator/updateDomain", method = RequestMethod.POST)
+    public String updateDomain(@Valid @ModelAttribute("domain") Domain domain, BindingResult bindingResult) {
+        bindingResult.getErrorCount();
+        if (bindingResult.hasErrors()) {
+            return "validator/editDomain";
+        }
         domainService.saveDomain(domain);
         return "redirect:/validator/allDomains";
     }

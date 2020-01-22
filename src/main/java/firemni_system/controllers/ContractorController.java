@@ -18,14 +18,10 @@ import java.util.Collection;
 
 @Controller
 public class ContractorController {
-
     @Autowired
     private PersonService personService;
-
     @Autowired
     private CiselnikyService ciselnikyService;
-
-
 
 
     @GetMapping(value = "/")
@@ -44,6 +40,13 @@ public class ContractorController {
         return "validator/allContractors";
     }
 
+    @GetMapping(value = "/manager/allContractors")
+    public String showAllContractorsForManager(Model model){
+        Collection<Contractor> contractors = personService.findAllContractors();
+        model.addAttribute("contractorsList", contractors);
+        return "manager/allContractors";
+    }
+
     @GetMapping(value = "/manager/newContractor")
     public String showAddContractorForm(Model model){
 
@@ -55,7 +58,6 @@ public class ContractorController {
 
     @RequestMapping(value = "/manager/saveContractor", method = RequestMethod.POST)
     public String saveContractor(@Valid @ModelAttribute("contractor") Contractor contractor, BindingResult bindingResult, Model model) {
-
         bindingResult.getErrorCount();
         if (bindingResult.hasErrors()) {
             populateWithData(model);
@@ -63,18 +65,32 @@ public class ContractorController {
         }
         contractor.setRole("CONTRACTOR");
         personService.saveContractor(contractor);
-        return "redirect:/validator/allContractors";
+        return "redirect:/manager/allContractorsForManager";
+    }
+
+    @RequestMapping(value = "/manager/updateContractor", method = RequestMethod.POST)
+    public String updateContractor(@Valid @ModelAttribute("contractor") Contractor contractor, BindingResult bindingResult, Model model) {
+
+        bindingResult.getErrorCount();
+        if (bindingResult.hasErrors()) {
+            populateWithData(model);
+            return "manager/editContractor";
+        }
+        contractor.setRole("CONTRACTOR");
+        personService.saveContractor(contractor);
+        return "redirect:/manager/allContractors";
     }
 
     @RequestMapping(value = "/manager/deleteContractor/{id}")
     public String deleteContractor(@PathVariable(name = "id") int id) {
         personService.deleteContractor(id);
-        return "redirect:/validator/allContractors";
+        return "redirect:/manager/allContractors";
     }
 
     @RequestMapping(value = "/manager/editContractor/{id}")
     public ModelAndView showEditContractorForm(@PathVariable(name = "id") int id) {
         ModelAndView mav = new ModelAndView("manager/editContractor");
+        populateWithDataEdit(mav);
         Contractor contractor = personService.getContractor(id);
         mav.addObject("contractor", contractor);
         return mav;
@@ -87,5 +103,14 @@ public class ContractorController {
         model.addAttribute("teams",teams);
         model.addAttribute("swimlanes", swimlanes);
         model.addAttribute("validators", validators);
+    }
+
+    private void populateWithDataEdit(ModelAndView mav){
+        Collection<Validator> validators = personService.findAllValidators();
+        Collection<Team> teams = ciselnikyService.findAllTeams();
+        Collection<SwimlaneType> swimlanes = ciselnikyService.findAllSwimlanes();
+        mav.addObject("teams",teams);
+        mav.addObject("swimlanes", swimlanes);
+        mav.addObject("validators", validators);
     }
 }

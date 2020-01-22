@@ -56,7 +56,7 @@
   <div class="form-group blu-margin">
     <label >Mentor:</label>
     <select class="form-control" th:field="*{mentor}"  id="dropOperator">
-      <option value="0">Select validator</option>
+      <option value="0">Select mentor (validator)</option>
       <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}"></option>
     </select>
     <p th:if="${#fields.hasErrors('mentor')}" th:errors="*{mentor}" class="alert alert-danger" role="alert">Set mentor</p>
@@ -64,7 +64,7 @@
   <div class="form-group blu-margin">
     <label >Team:</label>
     <select class="form-control" th:field="*{team}"  id="dropOperator2">
-      <option value="0">Select validator</option>
+      <option value="0">Select team to assign</option>
       <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
     </select>
     <p th:if="${#fields.hasErrors('team')}" th:errors="*{team}" class="alert alert-danger" role="alert">Set team</p>
@@ -72,7 +72,7 @@
   <div class="form-group blu-margin">
     <label >Swimlane:</label>
     <select class="form-control" th:field="*{swimlane}"  id="dropOperator3">
-      <option value="0">Select validator</option>
+      <option value="0">Select swimlane</option>
       <option th:each="swimlane : ${swimlanes}" th:value="${swimlane.id}" th:text="${swimlane.name}"></option>
     </select>
     <p th:if="${#fields.hasErrors('swimlane')}" th:errors="*{swimlane}" class="alert alert-danger" role="alert">Set swimlane</p>

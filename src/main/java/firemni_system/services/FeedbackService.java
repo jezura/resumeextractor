@@ -15,8 +15,7 @@ import java.util.List;
 public class FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
-    @Autowired
-    private FeedbackRepository contractorRepository;
+
     @Autowired
     private DomainRepository domainRepository;
 
@@ -46,6 +45,20 @@ public class FeedbackService {
         List<Domain> domains = new ArrayList<Domain>();
         List<Feedback> feedbacks = new ArrayList<Feedback>();
         for (Domain domain : domainRepository.findDomainsByContractor_id(id))
+        {
+            for (Feedback feedback : feedbackRepository.findFeedbackByDomain_Id(domain.getId()))
+            {
+                feedbacks.add(feedback);
+            }
+        }
+        return feedbacks;
+    }
+
+    public Collection<Feedback> findFeedbacksForValidator(int id){
+
+        List<Domain> domains = new ArrayList<Domain>();
+        List<Feedback> feedbacks = new ArrayList<Feedback>();
+        for (Domain domain : domainRepository.findDomainsByValidator_id(id))
         {
             for (Feedback feedback : feedbackRepository.findFeedbackByDomain_Id(domain.getId()))
             {

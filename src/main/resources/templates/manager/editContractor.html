@@ -12,38 +12,77 @@
 <p></p>
 
 <div class="container">
-<form action="#" th:action="@{/manager/saveContractor}" th:object="${contractor}" method="post">
-  <div class="form-group">
-    <label >Contractor ID to edit:</label>
-    <input type="text" th:field="*{id}" class="form-control" readonly="readonly" >
-  </div>
-  <div class="form-group">
-    <label >First name:</label>
-    <input type="text" th:field="*{firstName}" class="form-control" placeholder="Enter first name" >
-  </div>
-  <div class="form-group">
-    <label >Last name:</label>
-    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter last name" >
-  </div>
-  <div class="form-group">
-    <label >City:</label>
-    <input type="text" th:field="*{city}" class="form-control" placeholder="Enter city" >
-  </div>
-  <div class="form-group">
-    <label >Address:</label>
-    <input type="text" th:field="*{address}" class="form-control" placeholder="Enter address" >
-  </div>
-  <div class="form-group">
-    <label >Phone:</label>
-    <input type="text" th:field="*{telephone}" class="form-control" placeholder="Enter phone number" >
-  </div>
-  <div class="form-group">
-    <label >Hire date:</label>
-    <input type="date" th:field="*{hireDate}" class="form-control" placeholder="Enter hire date" >
-  </div>
+  <form action="#" th:action="@{/manager/updateContractor}" th:object="${contractor}" method="post">
+    <div class="form-group">
+      <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly" >
+    </div>
+    <div class="form-group">
+      <label >Login:</label>
+      <input type="text" th:field="*{login}" class="form-control" placeholder="Enter unique login" >
+      <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="alert alert-danger" role="alert">Login was not set</p>
+    </div>
+    <div class="form-group">
+      <label >Password:</label>
+      <input type="text" th:field="*{password}" class="form-control" placeholder="Enter password" >
+      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger" role="alert">Password was not set</p>
+    </div>
+    <div class="form-group">
+      <label >First name:</label>
+      <input type="text" th:field="*{firstName}" class="form-control" placeholder="Enter first name" >
+      <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="alert alert-danger" role="alert">First name was not set</p>
+    </div>
+    <div class="form-group">
+      <label >Last name:</label>
+      <input type="text" th:field="*{lastName}" class="form-control" placeholder="Enter last name" >
+      <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="alert alert-danger" role="alert">Lastname was not set</p>
+    </div>
+    <div class="form-group">
+      <label >City:</label>
+      <input type="text" th:field="*{city}" class="form-control" placeholder="Enter city" >
+      <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="alert alert-danger" role="alert">City was not set</p>
+    </div>
+    <div class="form-group">
+      <label >Address:</label>
+      <input type="text" th:field="*{address}" class="form-control" placeholder="Enter address" >
+      <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="alert alert-danger" role="alert">Address was not set</p>
+    </div>
+    <div class="form-group">
+      <label >Phone:</label>
+      <input type="text" th:field="*{telephone}" class="form-control" placeholder="Enter phone number" >
+      <p th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" class="alert alert-danger" role="alert">Telephone was not set</p>
+    </div>
+    <div class="form-group">
+      <label >Hire date:</label>
+      <input type="date" th:field="*{hireDate}" class="form-control" placeholder="Enter hire date" >
+      <p th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}" class="alert alert-danger" role="alert">Hiredate was not set</p>
+    </div>
+    <div class="form-group blu-margin">
+      <label >Mentor:</label>
+      <select class="form-control" th:field="*{mentor}"  id="dropOperator">
+        <option value="0">Select mentor (validator)</option>
+        <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}"></option>
+      </select>
+      <p th:if="${#fields.hasErrors('mentor')}" th:errors="*{mentor}" class="alert alert-danger" role="alert">Set mentor</p>
+    </div>
+    <div class="form-group blu-margin">
+      <label >Team:</label>
+      <select class="form-control" th:field="*{team}"  id="dropOperator2">
+        <option value="0">Select team to assign</option>
+        <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+      </select>
+      <p th:if="${#fields.hasErrors('team')}" th:errors="*{team}" class="alert alert-danger" role="alert">Set team</p>
+    </div>
+    <div class="form-group blu-margin">
+      <label >Swimlane:</label>
+      <select class="form-control" th:field="*{swimlane}"  id="dropOperator3">
+        <option value="0">Select swimlane</option>
+        <option th:each="swimlane : ${swimlanes}" th:value="${swimlane.id}" th:text="${swimlane.name}"></option>
+      </select>
+      <p th:if="${#fields.hasErrors('swimlane')}" th:errors="*{swimlane}" class="alert alert-danger" role="alert">Set swimlane</p>
+    </div>
 
-  <button type="submit" class="btn btn-primary">Update changes</button>
-</form>
+    <button type="submit" class="btn btn-primary">Update changes</button>
+  </form>
 </div>
 <p></p>
 </div>
