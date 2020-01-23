@@ -7,6 +7,7 @@ import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ public class ValidatorController {
 
     @Autowired
     private CiselnikyService ciselnikyService;
+
 
     @GetMapping(value = "/validator/allValidators")
     public String showAllValidators(Model model){
@@ -58,6 +60,8 @@ public class ValidatorController {
             return "manager/addValidator";
         }
         validator.setRole("VALIDATOR");
+        String encodedPassword = new BCryptPasswordEncoder().encode(validator.getPassword());
+        validator.setPassword(encodedPassword);
         personService.saveValidator(validator);
         return "redirect:/manager/allValidators";
     }
@@ -70,6 +74,8 @@ public class ValidatorController {
             return "manager/editValidator";
         }
         validator.setRole("VALIDATOR");
+        String encodedPassword = new BCryptPasswordEncoder().encode(validator.getPassword());
+        validator.setPassword(encodedPassword);
         personService.saveValidator(validator);
         return "redirect:/manager/allValidators";
     }
@@ -85,6 +91,7 @@ public class ValidatorController {
         ModelAndView mav = new ModelAndView("manager/editValidator");
         populateWithDataEdit(mav);
         Validator validator = personService.getValidator(id);
+        validator.setPassword("");
         mav.addObject("validator", validator);
         return mav;
     }

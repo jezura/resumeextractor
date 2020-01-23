@@ -17,21 +17,21 @@ INSERT INTO swimlanes VALUES (2,'intermediate');
 INSERT INTO swimlanes VALUES (3,'skilled');
 
 
-INSERT INTO validators VALUES (1, 'Ladislav', 'Vysmech','login','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
-INSERT INTO validators VALUES (2, 'Helen', 'Leary','login1','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
-INSERT INTO validators VALUES (3, 'Linda', 'Douglas','login2','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
-INSERT INTO validators VALUES (4, 'Rafael', 'Ortega','login3','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
-INSERT INTO validators VALUES (5, 'Henry', 'Stevens','login4','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
-INSERT INTO validators VALUES (6, 'Sharon', 'Jenkins','login5','heslo','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (1, 'Ladislav', 'Vysmech','login','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (2, 'Helen', 'Leary','login1','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (3, 'Linda', 'Douglas','login2','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (4, 'Rafael', 'Ortega','login3','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (5, 'Henry', 'Stevens','login4','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
+INSERT INTO validators VALUES (6, 'Sharon', 'Jenkins','login5','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','VALIDATOR','bydliste 10','bydliste','2020-01-17',122, null, 1);
 
-INSERT INTO contractors VALUES (1, 'Jan', 'Novak','login6','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
-INSERT INTO contractors VALUES (2, 'Tomas', 'Novak','login7','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
-INSERT INTO contractors VALUES (3, 'Lukas', 'Novak','login8','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
-INSERT INTO contractors VALUES (4, 'Filip', 'Novak','login9','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
-INSERT INTO contractors VALUES (5, 'Jiri', 'Novak','login10','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
-INSERT INTO contractors VALUES (6, 'Jakub', 'Novak','login11','heslo','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (1, 'Jan', 'Novak','login6','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (2, 'Tomas', 'Novak','login7','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (3, 'Lukas', 'Novak','login8','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (4, 'Filip', 'Novak','login9','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (5, 'Jiri', 'Novak','login10','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
+INSERT INTO contractors VALUES (6, 'Jakub', 'Novak','login11','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','CONTRACTOR','bydliste 10','bydliste','2020-01-17',122, 1, 1,1);
 
-INSERT INTO managers VALUES (1, 'Manager', 'Manager','manager','heslo','MANAGER','bydliste 10','bydliste','2020-01-17',122, null);
+INSERT INTO managers VALUES (1, 'Manager', 'Manager','manager','$2y$12$ijoJJ2D8ad24fl3l8.JTB.VAMSKDrz0B/3TElZN8hTpNorSgg/oPG','MANAGER','bydliste 10','bydliste','2020-01-17',122, null);
 
 INSERT INTO domains VALUES (1,'seznam.cz','2020-01-15',1,2,2);
 INSERT INTO domains VALUES (2,'google.cz','2020-01-15',2,2,2);

@@ -7,6 +7,7 @@ import firemni_system.services.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,8 +65,10 @@ public class ContractorController {
             return "manager/addContractor";
         }
         contractor.setRole("CONTRACTOR");
+        String encodedPassword = new BCryptPasswordEncoder().encode(contractor.getPassword());
+        contractor.setPassword(encodedPassword);
         personService.saveContractor(contractor);
-        return "redirect:/manager/allContractorsForManager";
+        return "redirect:/manager/allContractors";
     }
 
     @RequestMapping(value = "/manager/updateContractor", method = RequestMethod.POST)
@@ -77,6 +80,8 @@ public class ContractorController {
             return "manager/editContractor";
         }
         contractor.setRole("CONTRACTOR");
+        String encodedPassword = new BCryptPasswordEncoder().encode(contractor.getPassword());
+        contractor.setPassword(encodedPassword);
         personService.saveContractor(contractor);
         return "redirect:/manager/allContractors";
     }
@@ -92,6 +97,7 @@ public class ContractorController {
         ModelAndView mav = new ModelAndView("manager/editContractor");
         populateWithDataEdit(mav);
         Contractor contractor = personService.getContractor(id);
+        contractor.setPassword("");
         mav.addObject("contractor", contractor);
         return mav;
     }

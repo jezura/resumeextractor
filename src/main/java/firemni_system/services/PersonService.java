@@ -8,6 +8,7 @@ import firemni_system.models.Contractor;
 import firemni_system.models.Manager;
 import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -15,6 +15,9 @@
  */
 package firemni_system.models;
 
+import firemni_system.security.SecurityConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
@@ -43,7 +46,6 @@ public class Person extends BaseEntity {
     private String login;
 
     @Column(name = "password")
-    @Pattern(regexp="^[a-zA-Z0-9]{5,20}",message="Consider password that you will remember later ;)")
     private String password;
 
     @Column(name = "role")
