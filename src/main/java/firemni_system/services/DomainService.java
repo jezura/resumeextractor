@@ -48,12 +48,19 @@ public class DomainService {
     }
     public void setDomainsForContractorNull(int id){
 
-        List<Domain> domains = new ArrayList<Domain>();
+
         for (Domain domain :domainRepository.findDomainsByContractor_id(id))
         {
            domain.setContractor(null);
         }
 
+    }
+
+    public void setDomainsForValidatorNull(int id){
+        for (Domain domain :domainRepository.findDomainsByValidator_id(id))
+        {
+            domain.setValidator(null);
+        }
     }
 
 

@@ -3,6 +3,7 @@ package firemni_system.controllers;
 import firemni_system.models.Contractor;
 import firemni_system.models.Team;
 import firemni_system.services.CiselnikyService;
+import firemni_system.services.DomainService;
 import firemni_system.services.PersonService;
 import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class ValidatorController {
 
     @Autowired
     private CiselnikyService ciselnikyService;
+
+    @Autowired
+    private DomainService domainService;
 
 
     @GetMapping(value = "/validator/allValidators")
@@ -95,11 +99,13 @@ public class ValidatorController {
     @RequestMapping(value = "/manager/deleteValidator/{id}")
     public String deleteValidator(@PathVariable(name = "id") int id, Model model) {
         if(personService.findContractorsByMentor(id).size() > 0){
+
             Collection<Validator> validators = personService.findAllValidators();
             model.addAttribute("validators", validators);
             model.addAttribute("error", "Selected validator is mentor and thus cannot be deleted");
             return "manager/allValidators";
         }
+        domainService.setDomainsForValidatorNull(id);
         personService.deleteValidator(id);
         return "redirect:/manager/allValidators";
     }
