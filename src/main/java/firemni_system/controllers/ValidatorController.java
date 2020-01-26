@@ -1,5 +1,6 @@
 package firemni_system.controllers;
 
+import firemni_system.models.Contractor;
 import firemni_system.models.Team;
 import firemni_system.services.CiselnikyService;
 import firemni_system.services.PersonService;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,21 +30,25 @@ public class ValidatorController {
 
     @GetMapping(value = "/validator/allValidators")
     public String showAllValidators(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<Validator> validators = personService.findAllValidators();
-        model.addAttribute("validatorsList", validators);
-        model.addAttribute("login", authentication);
+        model.addAttribute("validators", validators);
         return "validator/allValidators";
     }
 
     @GetMapping(value = "/manager/allValidators")
     public String showAllValidatorsForManager(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<Validator> validators = personService.findAllValidators();
-        model.addAttribute("validatorsList", validators);
-        model.addAttribute("login", authentication);
+        model.addAttribute("validators", validators);
         return "manager/allValidators";
     }
+
+    @RequestMapping(value = "/SearchValidators")
+    public String showFilteredValidators(Model model, @RequestParam(name = "name", required = false)  String name){
+        Collection<Validator> validators = personService.findValidatorsByFirstNameLastName(name);
+        model.addAttribute("validators", validators);
+        return "manager/allValidators";
+    }
+
 
     @GetMapping(value = "/manager/newValidator")
     public String showAddValidatorForm(Model model){
@@ -54,7 +60,13 @@ public class ValidatorController {
 
     @RequestMapping(value = "/manager/saveValidator", method = RequestMethod.POST)
     public String saveValidator(@Valid @ModelAttribute("validator") Validator validator, BindingResult bindingResult, Model model) {
-        bindingResult.getErrorCount();
+
+        if(!personService.isUnique(validator.getLogin())){
+            FieldError error = new FieldError("validator", "login",
+                    "User with this login already exists");
+            bindingResult.addError(error);
+        }
+
         if (bindingResult.hasErrors()) {
             populateWithData(model);
             return "manager/addValidator";
@@ -68,7 +80,7 @@ public class ValidatorController {
 
     @RequestMapping(value = "/manager/updateValidator", method = RequestMethod.POST)
     public String updateValidator(@Valid @ModelAttribute("validator") Validator validator, BindingResult bindingResult, Model model) {
-        bindingResult.getErrorCount();
+
         if (bindingResult.hasErrors()) {
             populateWithData(model);
             return "manager/editValidator";
@@ -81,7 +93,13 @@ public class ValidatorController {
     }
 
     @RequestMapping(value = "/manager/deleteValidator/{id}")
-    public String deleteValidator(@PathVariable(name = "id") int id) {
+    public String deleteValidator(@PathVariable(name = "id") int id, Model model) {
+        if(personService.findContractorsByMentor(id).size() > 0){
+            Collection<Validator> validators = personService.findAllValidators();
+            model.addAttribute("validators", validators);
+            model.addAttribute("error", "Selected validator is mentor and thus cannot be deleted");
+            return "manager/allValidators";
+        }
         personService.deleteValidator(id);
         return "redirect:/manager/allValidators";
     }

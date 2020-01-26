@@ -33,7 +33,6 @@ import javax.validation.constraints.Size;
 public class NamedEntity extends BaseEntity {
 
     @Column(name = "name")
-    @NotEmpty(message = "Set name")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     private String name;
 

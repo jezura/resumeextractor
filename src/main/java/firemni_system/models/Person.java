@@ -24,6 +24,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * Simple JavaBean domain object representing an person.
@@ -45,6 +46,7 @@ public class Person extends BaseEntity {
     @Pattern(regexp="^[a-zA-Z0-9]{3,20}",message="Invalid name type")
     private String login;
 
+    @Size(min = 5, message = "Password must be at least 5 characters long")
     @Column(name = "password")
     private String password;
 

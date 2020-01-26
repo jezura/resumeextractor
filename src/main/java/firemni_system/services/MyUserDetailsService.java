@@ -1,5 +1,6 @@
 package firemni_system.services;
 
+
 import firemni_system.models.Contractor;
 import firemni_system.models.Manager;
 import firemni_system.models.Validator;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -19,6 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     PersonService personService;
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
       Optional <Validator> optionalValidator = Optional.ofNullable(personService.findValidatorByLogin(userName));

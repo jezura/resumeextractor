@@ -22,12 +22,14 @@
     <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger" role="alert">Name was not set</p>
   </div>
   <div class="form-group blu-margin">
+    <label >Select validator:</label>
     <select class="form-control" th:field="*{validator}"  id="dropOperator">
       <option value="0">Select validator to assign</option>
       <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}"></option>
     </select>
   </div>
   <div class="form-group blu-margin">
+    <label >Select contractor:</label>
     <select class="form-control" th:field="*{contractor}"  id="dropOperator2">
       <option value="0">Select contractor to assign</option>
       <option th:each="contractor : ${contractors}" th:value="${contractor.id}" th:text="${contractor.firstName} +' '+${contractor.lastName}"></option>

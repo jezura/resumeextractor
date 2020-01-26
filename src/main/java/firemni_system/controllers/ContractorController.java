@@ -2,8 +2,7 @@ package firemni_system.controllers;
 
 import firemni_system.models.*;
 import firemni_system.security.MyUser;
-import firemni_system.services.CiselnikyService;
-import firemni_system.services.PersonService;
+import firemni_system.services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,10 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Controller
@@ -23,6 +24,15 @@ public class ContractorController {
     private PersonService personService;
     @Autowired
     private CiselnikyService ciselnikyService;
+
+    @Autowired
+    private WorksService worksService;
+
+    @Autowired
+    private PlanService planService;
+
+    @Autowired
+    private DomainService domainService;
 
 
     @GetMapping(value = "/")
@@ -37,14 +47,21 @@ public class ContractorController {
     @GetMapping(value = "/validator/allContractors")
     public String showAllContractors(Model model){
         Collection<Contractor> contractors = personService.findAllContractors();
-        model.addAttribute("contractorsList", contractors);
+        model.addAttribute("contractors", contractors);
         return "validator/allContractors";
     }
 
     @GetMapping(value = "/manager/allContractors")
     public String showAllContractorsForManager(Model model){
         Collection<Contractor> contractors = personService.findAllContractors();
-        model.addAttribute("contractorsList", contractors);
+        model.addAttribute("contractors", contractors);
+        return "manager/allContractors";
+    }
+
+    @RequestMapping(value = "/SearchContractors")
+    public String showFilteredContractors(Model model, @RequestParam(name = "name", required = false)  String name){
+        Collection<Contractor> contractors = personService.findContractorsByFirstNameLastName(name);
+        model.addAttribute("contractors", contractors);
         return "manager/allContractors";
     }
 
@@ -59,6 +76,12 @@ public class ContractorController {
 
     @RequestMapping(value = "/manager/saveContractor", method = RequestMethod.POST)
     public String saveContractor(@Valid @ModelAttribute("contractor") Contractor contractor, BindingResult bindingResult, Model model) {
+
+        if(!personService.isUnique(contractor.getLogin())){
+            FieldError error = new FieldError("contractor", "login",
+                    "User with this login already exists");
+            bindingResult.addError(error);
+        }
         bindingResult.getErrorCount();
         if (bindingResult.hasErrors()) {
             populateWithData(model);
@@ -88,6 +111,9 @@ public class ContractorController {
 
     @RequestMapping(value = "/manager/deleteContractor/{id}")
     public String deleteContractor(@PathVariable(name = "id") int id) {
+        worksService.deleteAllContractorsWorks(id);
+        domainService.setDomainsForContractorNull(id);
+        planService.deleteContractorsPlan(id);
         personService.deleteContractor(id);
         return "redirect:/manager/allContractors";
     }

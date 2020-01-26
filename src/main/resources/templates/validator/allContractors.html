@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="contractor : ${contractorsList}">
+    <tr th:each="contractor : ${contractors}">
       <td th:text="${contractor.firstName + ' ' + contractor.lastName}"></td>
       <td th:text="${contractor.city}"></td>
       <td th:text="${contractor.address}"></td>

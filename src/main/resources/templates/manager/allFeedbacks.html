@@ -24,7 +24,7 @@
     </thead>
     <tbody>
     <tr th:each="feedback : ${feedbacksList}">
-      <td th:text="${feedback.getDomain().getName()}"></td>
+      <td th:text="${feedback?.getDomain()?.getName()}"></td>
       <td th:text="${feedback.domain.validator} ? ${feedback.domain.validator.firstName} +' '+${feedback.domain.validator.lastName} : 'NEURČENO'" /></td>
       <td th:text="${feedback.domain.contractor} ? ${feedback.domain.contractor.firstName} +' '+${feedback.domain.contractor.lastName}: 'NEURČENO'"></td>
       <td th:text="${feedback.feedbackText}"></td>

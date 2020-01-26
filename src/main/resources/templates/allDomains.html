@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html  layout:decorate="~{main_layout}"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>All domains</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+  <script>
+    $(document).ready(function () {
+      $('select').selectize({
+        sortField: 'text'
+      });
+    });
+  </script>
+</head>
+<body>
+<div layout:fragment="content">
+<p></p>
+  <h2 class="text-center">All domains</h2>
+<p></p>
+<div class="container">
+  <form action="#" th:action="@{/SearchDomains}"  method="post">
+    <label >Name:</label>
+    <input type="text" name="name" id="name" class="form-control" placeholder="Enter domain name"  th:attrappend="value=${searchedDomain}?${searchedDomain}">
+    <select sec:authorize="hasRole('ROLE_MANAGER')" class="form-control" name = "validator_id" id="validator_id">
+      <option value="0">All validators</option>
+      <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}" th:attr="selected=${validator.id} == ${selectedValidator}   ? ${selectedValidator}: 0"></option>
+    </select>
+    <select sec:authorize="!hasRole('ROLE_CONTRACTOR')" class="form-control" name = "contractor_id" id="contractor_id">
+      <option value="0">All contractors</option>
+      <option th:each="contractor : ${contractors}" th:value="${contractor.id}" th:text="${contractor.firstName} +' '+${contractor.lastName}" th:attr="selected=${contractor.id} == ${selectedContractor}   ? ${selectedContractor}: 0"></option>
+    </select>
+    <button>Search</button>
+  </form>
+
+
+  <table id="contractors" class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th sec:authorize="hasRole('ROLE_MANAGER')">Validator</th>
+      <th sec:authorize="!hasRole('ROLE_CONTRACTOR')">Contractor</th>
+      <th>Priority</th>
+      <th>Due date</th>
+      <th sec:authorize="!hasRole('ROLE_CONTRACTOR')">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="domain : ${domains}">
+      <td th:text="${domain.name}"></td>
+      <td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${domain.validator} ? ${domain.validator.firstName} +' '+${domain.validator.lastName} : 'NEURČENO'" /></td>
+      <td sec:authorize="!hasRole('ROLE_CONTRACTOR')" th:text="${domain.contractor} ? ${domain.contractor.firstName} +' '+${domain.contractor.lastName}: 'NEURČENO'"></td>
+      <td th:text="${domain.priority}"></td>
+      <td th:text="${domain.dueDate}"></td>
+      <td sec:authorize="!hasRole('ROLE_CONTRACTOR')">
+        <a th:href="@{'/validator/editDomain/' + ${domain.id}}"><i class="fas fa-edit" style="color:green"></i></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</body>
+</html>

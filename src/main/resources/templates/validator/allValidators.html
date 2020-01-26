@@ -22,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="validator : ${validatorsList}">
+    <tr th:each="validator : ${validators}">
       <td th:text="${validator.firstName + ' ' + validator.lastName}"></td>
       <td th:text="${validator.city}"></td>
       <td th:text="${validator.address}"></td>

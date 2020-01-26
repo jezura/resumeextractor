@@ -11,6 +11,14 @@
   <h2 class="text-center">All validators</h2>
 <p></p>
 <div class="container">
+
+  <p th:if="${error}" class="alert alert-danger" role="alert">Selected validator is mentor, cannot be deleted</p>
+
+  <form action="#" th:action="@{/SearchValidators}"  method="post">
+    <label >Name:</label>
+    <input type="text" name="name" id="name" class="form-control" placeholder="Enter validators name" >
+    <button>Search</button>
+  </form>
   <table id="contractors" class="table table-striped">
     <thead>
     <tr>
@@ -24,14 +32,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="validator : ${validatorsList}">
+    <tr th:each="validator : ${validators}">
       <td th:text="${validator.firstName + ' ' + validator.lastName}"></td>
       <td th:text="${validator.city}"></td>
       <td th:text="${validator.address}"></td>
       <td th:text="${validator.telephone}"></td>
       <td th:text="${validator.hireDate}"></td>
       <td>
-        <a th:href="@{'/manager/deleteValidator/' + ${validator.id}}"><i class="fas fa-user-minus" style="color:red"></i></a>
+        <a th:href="@{'/manager/deleteValidator/' + ${validator.id}}" onclick="return confirm('Are you sure about that?')"><i class="fas fa-user-minus" style="color:red"></i></a>
       </td>
       <td>
         <a th:href="@{'/manager/editValidator/' + ${validator.id}}"><i class="fas fa-user-edit" style="color:green"></i></a>

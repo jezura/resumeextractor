@@ -8,7 +8,7 @@
 <body>
 <div layout:fragment="content">
 <p></p>
-  <h2 class="text-center">Edit contractor</h2>
+  <h2 class="text-center" th:text="'Edit Contractor: ' + ${contractor.login}"></h2>
 <p></p>
 
 <div class="container">
@@ -16,14 +16,13 @@
     <div class="form-group">
       <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly" >
     </div>
-    <div class="form-group">
+    <div class="form-group" style="display: none">
       <label >Login:</label>
-      <input type="text" th:field="*{login}" class="form-control" placeholder="Enter unique login" >
-      <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="alert alert-danger" role="alert">Login was not set</p>
+      <input type="hidden" th:field="*{login}" class="form-control" placeholder="Enter unique login" >
     </div>
     <div class="form-group">
       <label >Password:</label>
-      <input type="text" th:field="*{password}" class="form-control" placeholder="Enter password" >
+      <input type="password" th:field="*{password}" class="form-control" placeholder="Enter password" >
       <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger" role="alert">Password was not set</p>
     </div>
     <div class="form-group">

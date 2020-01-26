@@ -4,6 +4,7 @@ import firemni_system.dao.DomainRepository;
 import firemni_system.dao.PlanRepository;
 import firemni_system.models.Domain;
 import firemni_system.models.Plan;
+import firemni_system.models.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +41,11 @@ public class PlanService {
     public Plan findPlanForContractorId(int id){
         return planRepository.findPlanByContractor_id(id);
     }
+    public void deleteContractorsPlan(int id ){
+        if(findPlanForContractorId(id) != null) {
+            int planId = findPlanForContractorId(id).getId();
+            planRepository.deleteById(planId);
+        }
+    }
+
 }

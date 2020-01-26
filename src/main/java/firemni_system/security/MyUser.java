@@ -16,9 +16,6 @@ public class MyUser extends Person implements UserDetails {
     private String password;
     private String role;
     private int id;
-    private boolean active;
-    private List<GrantedAuthority> authorities;
-
 
     public MyUser(String userName, String password, String role, int id){
         this.userName = userName;

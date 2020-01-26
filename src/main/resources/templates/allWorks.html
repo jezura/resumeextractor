@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html  layout:decorate="~{main_layout}"
+       xmlns:th="https://www.thymeleaf.org"
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout",
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>My works</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+  <script>
+    $(document).ready(function () {
+      $('select').selectize({
+        sortField: 'text'
+      });
+    });
+  </script>
+</head>
+<body>
+<div layout:fragment="content">
+<p></p>
+  <h2 class="text-center" >All hours</h2>
+<p></p>
+
+
+    <p></p>
+    <h3 th:text="'Hours worked in: '+ ${year}+ '/' +${month}+ ': ' + ${hours_monthly}"></h3>
+    <p></p>
+
+
+<div class="container">
+  <form action="#" th:action="@{/SearchWorks}"  method="post">
+    <input type="month" name="date" id="date"
+           min="2019-11"  th:attr="max=${localDate.year} + '-'+ ${localDate.month.value}, value=${year}+ '-'+${month} " >
+   <select sec:authorize="!hasRole('ROLE_CONTRACTOR')" class="form-control" name = "contractor_id" id="contractor_id">
+      <option value="0">All contractors</option>
+      <option th:each="contractor : ${contractors}" th:value="${contractor.id}" th:text="${contractor.firstName} +' '+${contractor.lastName}" th:attr="selected=${contractor.id} == ${selectedContractor}   ? ${selectedContractor}: 0"></option>
+    </select>
+    <button>Search</button>
+  </form>
+
+  <table id="contractors" class="table table-striped">
+    <thead>
+    <tr>
+      <th sec:authorize="!hasRole('ROLE_CONTRACTOR')">Contractor</th>
+      <th>Date</th>
+      <th>Hours worked</th>
+      <th>Work type</th>
+      <th>Domain</th>
+      <th>Team</th>
+        <th sec:authorize="!hasRole('ROLE_CONTRACTOR')">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="work : ${works}">
+      <td sec:authorize="!hasRole('ROLE_CONTRACTOR')" th:text="${work.contractor.firstName +' '+ work.contractor.lastName }"></td>
+      <td th:text="${work.workDate}"></td>
+      <td th:text="${work.hoursWorked}"></td>
+      <td th:text="${work.workType}"></td>
+      <td th:text="${work.domain}"></td>
+      <td th:text="${work.team}"></td>
+        <td sec:authorize="!hasRole('ROLE_CONTRACTOR')">
+        <a th:href="@{'/validator/deleteWork/' + ${work.id}}"><i class="fas fa-trash-alt" style="color:red"></i></a>
+    </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</body>
+</html>

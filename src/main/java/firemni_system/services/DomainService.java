@@ -3,6 +3,7 @@ package firemni_system.services;
 import firemni_system.dao.DomainRepository;
 import firemni_system.models.Domain;
 import firemni_system.models.Validator;
+import firemni_system.models.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,26 @@ public class DomainService {
         }
         return domains;
     }
+    public void setDomainsForContractorNull(int id){
+
+        List<Domain> domains = new ArrayList<Domain>();
+        for (Domain domain :domainRepository.findDomainsByContractor_id(id))
+        {
+           domain.setContractor(null);
+        }
+
+    }
+
+
+    public Collection<Domain> findDomainsByName(String string){
+
+        List<Domain> domains = new ArrayList<Domain>();
+        for (Domain domain :domainRepository.findDomainsByNameIsLike(string))
+        {
+            domains.add(domain);
+        }
+        return domains;
+    }
 
     public Collection<Domain> findDomainsForValidatorId(int id){
         List<Domain> domains = new ArrayList<Domain>();
@@ -53,6 +74,33 @@ public class DomainService {
             domains.add(domain);
         }
         return domains;
+    }
+
+    public Collection<Domain> filterByContractorID(int id, Collection<Domain> filteredDomains){
+        List<Domain> domains = new ArrayList<Domain>();
+        for (Domain domain :filteredDomains)
+        {
+            if(domain.getContractor().getId() == id)
+                domains.add(domain);
+        }
+        return domains;
+    }
+
+    public Collection<Domain> filterByValidatorID(int id, Collection<Domain> filteredDomains){
+        List<Domain> domains = new ArrayList<Domain>();
+        for (Domain domain :filteredDomains)
+        {
+            if(domain.getValidator().getId() == id)
+                domains.add(domain);
+        }
+        return domains;
+    }
+
+    public boolean isUnique(String name){
+        boolean unique = true;
+    if(!domainRepository.findDomainsByName(name).isEmpty())
+        unique = false;
+        return unique;
     }
 
 

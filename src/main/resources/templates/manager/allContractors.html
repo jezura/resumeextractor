@@ -11,10 +11,17 @@
   <h2 class="text-center">All contractors</h2>
 <p></p>
 <div class="container">
+  <form action="#" th:action="@{/SearchContractors}"  method="post">
+    <label >Name:</label>
+    <input type="text" name="name" id="name" class="form-control" placeholder="Enter contractors name" >
+    <button>Search</button>
+  </form>
+
   <table id="contractors" class="table table-striped">
     <thead>
     <tr>
       <th>Name</th>
+      <th>Mentor</th>
       <th>City</th>
       <th>Address</th>
       <th>Phone</th>
@@ -24,14 +31,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="contractor : ${contractorsList}">
+    <tr th:each="contractor : ${contractors}">
       <td th:text="${contractor.firstName + ' ' + contractor.lastName}"></td>
+      <td th:text="${contractor.mentor.firstName + ' ' + contractor.mentor.lastName}"></td>
       <td th:text="${contractor.city}"></td>
       <td th:text="${contractor.address}"></td>
       <td th:text="${contractor.telephone}"></td>
       <td th:text="${contractor.hireDate}"></td>
       <td>
-        <a th:href="@{'/manager/deleteContractor/' + ${contractor.id}}"><i class="fas fa-user-minus" style="color:red"></i></a>
+        <a th:href="@{'/manager/deleteContractor/' + ${contractor.id}}" onclick="return confirm('Are you sure about that?')"><i class="fas fa-user-minus" style="color:red"></i></a>
       </td>
       <td>
         <a th:href="@{'/manager/editContractor/' + ${contractor.id}}"><i class="fas fa-user-edit" style="color:green"></i></a>

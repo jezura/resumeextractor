@@ -12,9 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Collection;
 
 @Controller
@@ -24,30 +25,86 @@ public class WorksController {
     private DomainService domainService;
     @Autowired
     private WorksService worksService;
-
     @Autowired
     private PersonService personService;
     @Autowired
     private CiselnikyService ciselnikyService;
 
-
     @GetMapping(value = "/allWorks")
-    public String showAllWorks(Model model){
-        Collection<Work> works = worksService.findAllWorks();
-        model.addAttribute("worksList", works);
-        return "allWorks";
-    }
-
-    @GetMapping(value = "/allMyWorks")
-    public String showMyDomains(Model model){
+    public String showMyWorks(Model model){
+        Collection<Contractor> contractors = personService.findAllContractors();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
-        Collection<Work> works = worksService.findWorksForContractor(id);
-        double hoursMonthly = worksService.hoursSum(works);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        Collection<Work> works = worksService.findAllWorks();
+        if(userDetails.getRole().equals("CONTRACTOR")) {
+            works = worksService.findWorksForContractor(id);
+        }
+        if(userDetails.getRole().equals("VALIDATOR")) {
+            contractors = personService.findContractorsByMentor(id);
+            works = worksService.filterByMentorId(id, works);
+        }
+        double hoursMonthly = worksService.hoursByYearAndMonth(works,year, month);
         model.addAttribute("works", works);
-        return "allMyWorks";
+        model.addAttribute("contractors", contractors);
+        model.addAttribute("year", year);
+        model.addAttribute("month", String.format("%02d", month));
+        model.addAttribute("localDate", LocalDate.now());
+        model.addAttribute("role", userDetails.getRole());
+        model.addAttribute("hours_monthly", hoursMonthly);
+        return "allWorks";
     }
+
+    @RequestMapping(value = "/SearchWorks")
+    public String showFilteredWorks(Model model,
+                                    @RequestParam(name = "date", required = false)  String date,
+                                    @RequestParam(name = "contractor_id", required = false)  Integer contractorId){
+        Collection<Contractor> contractors = personService.findAllContractors();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUser userDetails = MyUser.class.cast(principal);
+        Collection<Work> works;
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+
+        if(contractorId == null) contractorId = 0;
+
+        if(!date.isBlank()) {
+            String[] parts = date.split("-");
+            year=Integer.parseInt(parts[0]);
+            month=Integer.parseInt(parts[1]);
+            works =worksService.filtrateWorksByYearAndMonth(year, month);
+        }
+        else{
+            works =worksService.findAllWorks();
+        }
+
+            if (contractorId != 0) {
+                works = worksService.filterByUserID(contractorId, works);
+                model.addAttribute("selectedContractor",contractorId);
+            }
+
+        if(userDetails.getRole().equals("CONTRACTOR")){
+
+            works = worksService.filterByUserID(userDetails.getUserId(), works);
+        }
+        if(userDetails.getRole().equals("VALIDATOR")) {
+            contractors = personService.findContractorsByMentor(userDetails.getUserId());
+            works = worksService.filterByMentorId(userDetails.getUserId(), works);
+        }
+
+        double hoursMonthly = worksService.hoursByYearAndMonth(works,year, month);
+        model.addAttribute("works", works);
+        model.addAttribute("contractors", contractors);
+        model.addAttribute("year", year);
+        model.addAttribute("month", String.format("%02d", month));
+        model.addAttribute("localDate", LocalDate.now());
+        model.addAttribute("role", userDetails.getRole());
+        model.addAttribute("hours_monthly", hoursMonthly);
+        return "allWorks";
+    }
+
 
     @GetMapping(value = "/newWork")
     public String showAddWorkForm(Model model){
@@ -73,13 +130,13 @@ public class WorksController {
                 return "addWork";
         }
         worksService.saveWork(work);
-        return "redirect:/allMyWorks";
+        return "redirect:/allWorks";
     }
 
     @RequestMapping(value = "/deleteWork/{id}")
     public String deleteWork(@PathVariable(name = "id") int id) {
         worksService.deleteWork(id);
-        return "redirect:/allMyWorks";
+        return "redirect:/allWorks";
     }
 
     private void popluateWithData(int id, Model model){
