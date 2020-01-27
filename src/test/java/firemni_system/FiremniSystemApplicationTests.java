@@ -46,7 +46,6 @@ public class FiremniSystemApplicationTests {
     private DomainRepository domainRepository;
 
 
-
     // otestuje korektni vytvoreni novych instanci všech kontrolleru systemu
     @Test
     public void controllersLoads() throws Exception {
