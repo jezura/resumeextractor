@@ -10,9 +10,43 @@
 
 <body>
 <div layout:fragment="content">
+    <img style="max-width: 100%; height: auto" class="img-responsive" src="../static/resources/images/icon.jpg" th:src="@{/resources/images/icon.jpg}"/>
 <p></p>
-<h2 class="text-center">Aplikace firemní systém</h2>
+<h2 class="text-center">Vítejte v aplikaci firemní systém</h2>
 <p></p>
+    <p class="text-center" id="datetime"></p>
+    <script>
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date+' '+time;
+        document.getElementById("datetime").innerHTML = "Dnes je: " + dateTime;
+    </script>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><p><i style="color:blue" class="far fa-user"></i> Správa zaměstnaneckých účtů</p></div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><i style="color:blue" class="far fa-calendar-alt"></i> Přehled o pracovních plánech</div>
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><p><i style="color:blue" class="far fa-plus-square"></i> Management a přidělování domén</p></div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><i style="color:blue" class="fas fa-star-half-alt"></i> Management hodnocení dokončené práce</div>
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><p><i style="color:blue" class="fas fa-business-time"></i> Vedení pracovních výkazů</p></div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3"><i style="color:blue" class="fab fa-font-awesome-flag"></i> Správa a management priorit</div>
+        <div class="col-sm-2"></div>
+    </div>
 </div>
+
+
+
+
 </body>
 </html>

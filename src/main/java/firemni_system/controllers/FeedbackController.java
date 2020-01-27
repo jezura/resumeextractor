@@ -9,20 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 public class FeedbackController {
+    private String message_notification = "";
     @Autowired
     private FeedbackService feedbackService;
     @Autowired
     private DomainService domainService;
-
 
     @GetMapping(value = "/manager/allFeedbacks")
     public String showAllFeedbacks(Model model){
@@ -48,6 +44,8 @@ public class FeedbackController {
         int id = userDetails.getUserId();
         Collection<Feedback> feedbacks = feedbackService.findFeedbacksForValidator(id);
         model.addAttribute("feedbacksList", feedbacks);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "validator/allValidatorFeedbacks";
     }
 
@@ -70,8 +68,7 @@ public class FeedbackController {
             return "validator/addFeedback";
         }
         feedbackService.saveFeedback(feedback);
+        message_notification = "Feedback byl úspěšně uložen";
         return "redirect:/validator/allValidatorFeedbacks";
     }
-
-
 }

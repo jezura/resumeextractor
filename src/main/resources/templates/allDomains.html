@@ -18,24 +18,27 @@
 </head>
 <body>
 <div layout:fragment="content">
+  <div th:if="${message_notification !=''}" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <i class="fas fa-check-circle" style="color:green"></i><strong th:text="' ' + ${message_notification}"></strong>
+  </div>
 <p></p>
   <h2 class="text-center">All domains</h2>
 <p></p>
 <div class="container">
-  <form action="#" th:action="@{/SearchDomains}"  method="post">
-    <label >Name:</label>
-    <input type="text" name="name" id="name" class="form-control" placeholder="Enter domain name"  th:attrappend="value=${searchedDomain}?${searchedDomain}">
-    <select sec:authorize="hasRole('ROLE_MANAGER')" class="form-control" name = "validator_id" id="validator_id">
+  <form class="form-inline" style="padding: 25px" action="#" th:action="@{/SearchDomains}"  method="post">
+    <label>Search & filters:</label>
+    <input style="margin: 8px" type="text" name="name" id="name" class="form-control" placeholder="Enter domain name"  th:attrappend="value=${searchedDomain}?${searchedDomain}">
+    <select style="width: 20%" sec:authorize="hasRole('ROLE_MANAGER')" class="form-control" name="validator_id" id="validator_id">
       <option value="0">All validators</option>
-      <option th:each="validator : ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}" th:attr="selected=${validator.id} == ${selectedValidator}   ? ${selectedValidator}: 0"></option>
+      <option th:each="validator: ${validators}" th:value="${validator.id}" th:text="${validator.firstName} +' '+${validator.lastName}" th:attr="selected=${validator.id} == ${selectedValidator}   ? ${selectedValidator}: 0"></option>
     </select>
-    <select sec:authorize="!hasRole('ROLE_CONTRACTOR')" class="form-control" name = "contractor_id" id="contractor_id">
+    <select style="width: 20%" sec:authorize="!hasRole('ROLE_CONTRACTOR')" class="form-control" name="contractor_id" id="contractor_id">
       <option value="0">All contractors</option>
       <option th:each="contractor : ${contractors}" th:value="${contractor.id}" th:text="${contractor.firstName} +' '+${contractor.lastName}" th:attr="selected=${contractor.id} == ${selectedContractor}   ? ${selectedContractor}: 0"></option>
     </select>
-    <button>Search</button>
+    <button class="btn btn-success" style="margin-left: 15px">Search</button>
   </form>
-
 
   <table id="contractors" class="table table-striped">
     <thead>

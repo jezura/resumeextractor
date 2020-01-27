@@ -1,14 +1,11 @@
 package firemni_system.controllers;
 
-import firemni_system.models.Contractor;
 import firemni_system.models.Team;
 import firemni_system.services.CiselnikyService;
 import firemni_system.services.DomainService;
 import firemni_system.services.PersonService;
 import firemni_system.models.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,7 @@ import java.util.Collection;
 
 @Controller
 public class ValidatorController {
+    private String message_notification = "";
     @Autowired
     private PersonService personService;
 
@@ -31,28 +29,22 @@ public class ValidatorController {
     @Autowired
     private DomainService domainService;
 
-
     @GetMapping(value = "/validator/allValidators")
     public String showAllValidators(Model model){
         Collection<Validator> validators = personService.findAllValidators();
         model.addAttribute("validators", validators);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "validator/allValidators";
-    }
-
-    @GetMapping(value = "/manager/allValidators")
-    public String showAllValidatorsForManager(Model model){
-        Collection<Validator> validators = personService.findAllValidators();
-        model.addAttribute("validators", validators);
-        return "manager/allValidators";
     }
 
     @RequestMapping(value = "/SearchValidators")
     public String showFilteredValidators(Model model, @RequestParam(name = "name", required = false)  String name){
         Collection<Validator> validators = personService.findValidatorsByFirstNameLastName(name);
         model.addAttribute("validators", validators);
-        return "manager/allValidators";
+        model.addAttribute("message_notification", "");
+        return "validator/allValidators";
     }
-
 
     @GetMapping(value = "/manager/newValidator")
     public String showAddValidatorForm(Model model){
@@ -79,7 +71,8 @@ public class ValidatorController {
         String encodedPassword = new BCryptPasswordEncoder().encode(validator.getPassword());
         validator.setPassword(encodedPassword);
         personService.saveValidator(validator);
-        return "redirect:/manager/allValidators";
+        message_notification = "Nový validátor byl úspěšně přidán";
+        return "redirect:/validator/allValidators";
     }
 
     @RequestMapping(value = "/manager/updateValidator", method = RequestMethod.POST)
@@ -93,7 +86,8 @@ public class ValidatorController {
         String encodedPassword = new BCryptPasswordEncoder().encode(validator.getPassword());
         validator.setPassword(encodedPassword);
         personService.saveValidator(validator);
-        return "redirect:/manager/allValidators";
+        message_notification = "Validátor byl úspěšně aktualizován";
+        return "redirect:/validator/allValidators";
     }
 
     @RequestMapping(value = "/manager/deleteValidator/{id}")
@@ -103,11 +97,12 @@ public class ValidatorController {
             Collection<Validator> validators = personService.findAllValidators();
             model.addAttribute("validators", validators);
             model.addAttribute("error", "Selected validator is mentor and thus cannot be deleted");
-            return "manager/allValidators";
+            return "validator/allValidators";
         }
         domainService.setDomainsForValidatorNull(id);
         personService.deleteValidator(id);
-        return "redirect:/manager/allValidators";
+        message_notification = "Validátor byl úspěšně smazán";
+        return "redirect:/validator/allValidators";
     }
 
     @RequestMapping(value = "/manager/editValidator/{id}")

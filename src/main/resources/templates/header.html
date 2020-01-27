@@ -50,18 +50,21 @@
             <li class="nav-item-active active">
                 <a class="nav-link" href="/">Homepage</a>
             </li>
-            <li class="nav-item-active">
-                <a class="nav-link" href="/allWorks">Hours of my contractors</a>
-            </li>
-            <li class="nav-item-active">
-                <a class="nav-link" href="/validator/allContractors">All contractors</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    Contractors
+                </a>
+                <div class="dropdown-menu">
+                    <a class="nav-link" style="color:green" href="/validator/allContractors">All contractors</a>
+                    <a class="nav-link" style="color:green" href="/allWorks">Hours of my contractors</a>
+                </div>
             </li>
             <li class="nav-item-active">
                 <a class="nav-link" href="/validator/allValidators">All validators</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                    Domain management
+                    Domains
                 </a>
                 <div class="dropdown-menu">
                     <a class="nav-link" style="color:green" href="/allDomains">All domains</a>
@@ -70,7 +73,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                    Feedback management
+                    Feedbacks
                 </a>
                 <div class="dropdown-menu">
                     <a class="nav-link" style="color:green" href="/validator/allValidatorFeedbacks">Feedbacks posted by me</a>
@@ -105,36 +108,36 @@
             <li class="nav-item-active active">
                 <a class="nav-link" href="/allWorks">All works</a>
             </li>
+            <li class="nav-item-active">
+                <a class="nav-link" href="/manager/allFeedbacks">All Feedbacks</a>
+            </li>
 
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                Contractors management
+                Contractors
             </a>
             <div class="dropdown-menu">
-                <a class="nav-link" style="color:green" href="/manager/allContractors">All contractors</a>
+                <a class="nav-link" style="color:green" href="/validator/allContractors">All contractors</a>
                 <a class="nav-link" style="color:green" href="/manager/newContractor">Add contractor</a>
             </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                    Validators management
+                    Validators
                 </a>
                 <div class="dropdown-menu">
-                    <a class="nav-link" style="color:green" href="/manager/allValidators">All validators</a>
+                    <a class="nav-link" style="color:green" href="/validator/allValidators">All validators</a>
                     <a class="nav-link" style="color:green" href="/manager/newValidator">Add validator</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                    Domain management
+                    Domains
                 </a>
                 <div class="dropdown-menu">
                     <a class="nav-link" style="color:green" href="/allDomains">All domains</a>
                     <a class="nav-link" style="color:green" href="/validator/newDomain">Add domain</a>
                 </div>
-            </li>
-            <li class="nav-item-active">
-                <a class="nav-link" href="/manager/allFeedbacks">All Feedbacks</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">

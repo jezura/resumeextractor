@@ -12,15 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Collection;
 
 @Controller
 public class WorksController {
-
+    private String message_notification = "";
     @Autowired
     private DomainService domainService;
     @Autowired
@@ -54,6 +52,8 @@ public class WorksController {
         model.addAttribute("localDate", LocalDate.now());
         model.addAttribute("role", userDetails.getRole());
         model.addAttribute("hours_monthly", hoursMonthly);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "allWorks";
     }
 
@@ -102,9 +102,9 @@ public class WorksController {
         model.addAttribute("localDate", LocalDate.now());
         model.addAttribute("role", userDetails.getRole());
         model.addAttribute("hours_monthly", hoursMonthly);
+        model.addAttribute("message_notification", "");
         return "allWorks";
     }
-
 
     @GetMapping(value = "/newWork")
     public String showAddWorkForm(Model model){
@@ -130,12 +130,14 @@ public class WorksController {
                 return "addWork";
         }
         worksService.saveWork(work);
+        message_notification = "Záznam o práci byl úspěšně uložen";
         return "redirect:/allWorks";
     }
 
-    @RequestMapping(value = "/deleteWork/{id}")
+    @RequestMapping(value = "/manager/deleteWork/{id}")
     public String deleteWork(@PathVariable(name = "id") int id) {
         worksService.deleteWork(id);
+        message_notification = "Záznam o práci byl úspěšně smazán";
         return "redirect:/allWorks";
     }
 
@@ -147,6 +149,4 @@ public class WorksController {
         model.addAttribute("workTypes", workTypes);
         model.addAttribute("domains", domains);
     }
-
-
 }

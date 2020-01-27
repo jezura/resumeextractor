@@ -11,12 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
 public class DomainController {
+    private String message_notification = "";
     @Autowired
     private DomainService domainService;
     @Autowired
@@ -27,8 +27,8 @@ public class DomainController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
-        Collection<Domain>   domains = domainService.findAllDomains();
-        Collection<Contractor>  contractors = personService.findAllContractors();
+        Collection<Domain> domains = domainService.findAllDomains();
+        Collection<Contractor> contractors = personService.findAllContractors();
         Collection<Validator> validators = personService.findAllValidators();
 
         if(userDetails.getRole().equals("VALIDATOR")){
@@ -42,6 +42,8 @@ public class DomainController {
         model.addAttribute("validators", validators);
         model.addAttribute("contractors", contractors);
         model.addAttribute("domains", domains);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "allDomains";
     }
 
@@ -83,6 +85,7 @@ public class DomainController {
         model.addAttribute("validators", validators);
         model.addAttribute("contractors", contractors);
         model.addAttribute("domains", domains);
+        model.addAttribute("message_notification", "");
         return "allDomains";
     }
 
@@ -108,6 +111,7 @@ public class DomainController {
         }
 
         domainService.saveDomain(domain);
+        message_notification = "Nová doména byla úspěšně přidána";
         return "redirect:/allDomains";
     }
 
@@ -119,12 +123,14 @@ public class DomainController {
             return "validator/editDomain";
         }
         domainService.saveDomain(domain);
+        message_notification = "Doména byla úspěšně aktualizována";
         return "redirect:/allDomains";
     }
 
     @RequestMapping(value = "/validator/deleteDomain/{id}")
     public String deleteDomain(@PathVariable(name = "id") int id) {
         domainService.deleteDomain(id);
+        message_notification = "Nová doména byla úspěšně smazána";
         return "redirect:/allDomains";
     }
 
@@ -151,5 +157,4 @@ public class DomainController {
         mav.addObject("contractors", contractors);
         mav.addObject("validators", validators);
     }
-
 }

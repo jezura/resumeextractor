@@ -50,7 +50,7 @@ public class WorksService {
         {
             works.add(work);
         }
-return works;
+        return works;
     }
 
     public Collection<Work> filtrateWorksByYearAndMonth(int year, int month){

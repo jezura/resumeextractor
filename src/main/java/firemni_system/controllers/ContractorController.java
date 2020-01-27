@@ -3,7 +3,6 @@ package firemni_system.controllers;
 import firemni_system.models.*;
 import firemni_system.security.MyUser;
 import firemni_system.services.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,27 +12,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
 
 @Controller
 public class ContractorController {
+    private String message_notification = "";
     @Autowired
     private PersonService personService;
     @Autowired
     private CiselnikyService ciselnikyService;
-
     @Autowired
     private WorksService worksService;
-
     @Autowired
     private PlanService planService;
-
     @Autowired
     private DomainService domainService;
-
 
     @GetMapping(value = "/")
     public String init(Model model){
@@ -48,29 +42,24 @@ public class ContractorController {
     public String showAllContractors(Model model){
         Collection<Contractor> contractors = personService.findAllContractors();
         model.addAttribute("contractors", contractors);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "validator/allContractors";
-    }
-
-    @GetMapping(value = "/manager/allContractors")
-    public String showAllContractorsForManager(Model model){
-        Collection<Contractor> contractors = personService.findAllContractors();
-        model.addAttribute("contractors", contractors);
-        return "manager/allContractors";
     }
 
     @RequestMapping(value = "/SearchContractors")
     public String showFilteredContractors(Model model, @RequestParam(name = "name", required = false)  String name){
         Collection<Contractor> contractors = personService.findContractorsByFirstNameLastName(name);
         model.addAttribute("contractors", contractors);
-        return "manager/allContractors";
+        return "validator/allContractors";
     }
 
     @GetMapping(value = "/manager/newContractor")
     public String showAddContractorForm(Model model){
-
         populateWithData(model);
         Contractor contractor = new Contractor();
         model.addAttribute("contractor", contractor);
+        model.addAttribute("message_notification", "");
         return "manager/addContractor";
     }
 
@@ -91,7 +80,8 @@ public class ContractorController {
         String encodedPassword = new BCryptPasswordEncoder().encode(contractor.getPassword());
         contractor.setPassword(encodedPassword);
         personService.saveContractor(contractor);
-        return "redirect:/manager/allContractors";
+        message_notification = "Nový kontraktor byl úspěšně přidán";
+        return "redirect:/validator/allContractors";
     }
 
     @RequestMapping(value = "/manager/updateContractor", method = RequestMethod.POST)
@@ -106,7 +96,8 @@ public class ContractorController {
         String encodedPassword = new BCryptPasswordEncoder().encode(contractor.getPassword());
         contractor.setPassword(encodedPassword);
         personService.saveContractor(contractor);
-        return "redirect:/manager/allContractors";
+        message_notification = "Kontraktor byl úspěšně aktualizován";
+        return "redirect:/validator/allContractors";
     }
 
     @RequestMapping(value = "/manager/deleteContractor/{id}")
@@ -115,7 +106,8 @@ public class ContractorController {
         domainService.setDomainsForContractorNull(id);
         planService.deleteContractorsPlan(id);
         personService.deleteContractor(id);
-        return "redirect:/manager/allContractors";
+        message_notification = "Kontraktor byl úspěšně smazán";
+        return "redirect:/validator/allContractors";
     }
 
     @RequestMapping(value = "/manager/editContractor/{id}")

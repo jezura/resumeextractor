@@ -1,10 +1,6 @@
 package firemni_system.controllers;
-import firemni_system.models.Contractor;
-import firemni_system.models.Domain;
 import firemni_system.models.Plan;
-import firemni_system.models.Validator;
 import firemni_system.security.MyUser;
-import firemni_system.services.DomainService;
 import firemni_system.services.PersonService;
 import firemni_system.services.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +15,7 @@ import java.util.Collection;
 
 @Controller
 public class PlanController {
+    private String message_notification = "";
     @Autowired
     private PlanService planService;
     @Autowired
@@ -38,6 +35,8 @@ public class PlanController {
         int id = userDetails.getUserId();
         Plan plan = planService.findPlanForContractorId(id);
         model.addAttribute("plan", plan);
+        model.addAttribute("message_notification", message_notification);
+        message_notification = "";
         return "myWorkingPlan";
     }
 
@@ -47,6 +46,7 @@ public class PlanController {
             return "editWorkingPlan";
         }
         planService.savePlan(plan);
+        message_notification = "Pracovní plán byl úspěšně aktualizován";
         return "redirect:/myWorkingPlan";
     }
 
