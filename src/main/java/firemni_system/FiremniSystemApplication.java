@@ -23,7 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Dave Syer
  *
  */
-@SpringBootApplication(proxyBeanMethods = false)
+@SpringBootApplication
 public class FiremniSystemApplication {
 
     public static void main(String[] args) {
