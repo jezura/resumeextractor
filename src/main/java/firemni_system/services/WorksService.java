@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class WorksService {
@@ -20,6 +18,7 @@ public class WorksService {
 
     @Autowired
     private PersonService personService;
+
 
     public Collection<Work> findAllWorks(){
         List<Work> works = new ArrayList<Work>();
@@ -30,6 +29,16 @@ public class WorksService {
         }
         return works;
     }
+    public Collection<Work> sortWorksByDate( Collection<Work> worksToSort){
+        List works = new ArrayList(worksToSort);
+        Collections.sort(works, new Comparator<Work>() {
+            public int compare(Work d1, Work d2) {
+                return d2.getWorkDate().compareTo(d1.getWorkDate());
+            }
+        });
+        return works;
+    }
+
 
     public void deleteWork(int id){
         worksRepository.deleteById(id);

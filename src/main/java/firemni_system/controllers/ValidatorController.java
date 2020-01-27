@@ -97,6 +97,7 @@ public class ValidatorController {
             Collection<Validator> validators = personService.findAllValidators();
             model.addAttribute("validators", validators);
             model.addAttribute("error", "Selected validator is mentor and thus cannot be deleted");
+            message_notification = "";
             return "validator/allValidators";
         }
         domainService.setDomainsForValidatorNull(id);

@@ -39,6 +39,8 @@ public class DomainController {
             domains = domainService.findDomainsForContractorId(id);
         }
 
+        domains = domainService.sortDomainsByDate(domains);
+
         model.addAttribute("validators", validators);
         model.addAttribute("contractors", contractors);
         model.addAttribute("domains", domains);
@@ -81,6 +83,8 @@ public class DomainController {
             domains = domainService.filterByValidatorID(validatorId, domains);
             model.addAttribute("selectedValidator",validatorId);
         }
+
+        domains = domainService.sortDomainsByDate(domains);
 
         model.addAttribute("validators", validators);
         model.addAttribute("contractors", contractors);

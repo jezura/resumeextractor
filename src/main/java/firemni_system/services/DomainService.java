@@ -2,14 +2,10 @@ package firemni_system.services;
 
 import firemni_system.dao.DomainRepository;
 import firemni_system.models.Domain;
-import firemni_system.models.Validator;
-import firemni_system.models.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DomainService {
@@ -63,6 +59,15 @@ public class DomainService {
         }
     }
 
+    public Collection<Domain> sortDomainsByDate( Collection<Domain> domainsToSort){
+        List domains = new ArrayList(domainsToSort);
+        Collections.sort(domains, new Comparator<Domain>() {
+            public int compare(Domain d1, Domain d2) {
+                return d2.getDueDate().compareTo(d1.getDueDate());
+            }
+        });
+        return domains;
+    }
 
     public Collection<Domain> findDomainsByName(String string){
 

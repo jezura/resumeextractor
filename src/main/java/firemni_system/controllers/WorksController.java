@@ -45,6 +45,7 @@ public class WorksController {
             works = worksService.filterByMentorId(id, works);
         }
         double hoursMonthly = worksService.hoursByYearAndMonth(works,year, month);
+        works = worksService.sortWorksByDate(works);
         model.addAttribute("works", works);
         model.addAttribute("contractors", contractors);
         model.addAttribute("year", year);
@@ -95,6 +96,7 @@ public class WorksController {
         }
 
         double hoursMonthly = worksService.hoursByYearAndMonth(works,year, month);
+        works = worksService.sortWorksByDate(works);
         model.addAttribute("works", works);
         model.addAttribute("contractors", contractors);
         model.addAttribute("year", year);
@@ -111,8 +113,8 @@ public class WorksController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MyUser userDetails = MyUser.class.cast(principal);
         int id = userDetails.getUserId();
-
         Work work = new Work();
+
         model.addAttribute("work", work);
         popluateWithData(id, model);
         return "addWork";
@@ -127,6 +129,7 @@ public class WorksController {
         work.setContractor(contractor);
         if (bindingResult.getErrorCount()>1) {
                 popluateWithData(id, model);
+
                 return "addWork";
         }
         worksService.saveWork(work);
@@ -148,5 +151,6 @@ public class WorksController {
         model.addAttribute("teams",teams);
         model.addAttribute("workTypes", workTypes);
         model.addAttribute("domains", domains);
+        model.addAttribute("today", LocalDate.now());
     }
 }

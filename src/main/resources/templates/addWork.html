@@ -15,7 +15,7 @@
 <form action="#" th:action="@{/saveWork}" th:object="${work}" method="post">
   <div class="form-group">
     <label >Work date:</label>
-    <input type="date" th:field="*{workDate}" class="form-control" placeholder="Set date" >
+    <input type="date" th:field="*{workDate}" class="form-control" placeholder="Set date" th:attr="max=${today}" >
     <p  th:if="${#fields.hasErrors('workDate')}" th:errors="*{workDate}" class="alert alert-danger" role="alert">Date of work</p>
 
   </div>
