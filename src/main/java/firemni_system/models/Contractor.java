@@ -46,13 +46,13 @@ public class Contractor extends Person {
     @ManyToOne
     @NotNull(message = "Choose swimlane")
     @JoinColumn(name = "swimlane_id")
-    private SwimlaneType swimlane;
+    private Region swimlane;
 
     // constructors
     public Contractor() {
     }
 
-    public Contractor(@NotNull LocalDate hireDate, @NotEmpty(message = "Set contractors address") String address, @NotEmpty(message = "Set contractors address") String city, @Min(value = 100000000, message = "Set real phone number") @Max(value = 999999999, message = "Set real phone number") String telephone, @NotNull(message = "Choose validator") Validator mentor, @NotNull(message = "Choose team") Team team, @NotNull(message = "Choose swimlane") SwimlaneType swimlane) {
+    public Contractor(@NotNull LocalDate hireDate, @NotEmpty(message = "Set contractors address") String address, @NotEmpty(message = "Set contractors address") String city, @Min(value = 100000000, message = "Set real phone number") @Max(value = 999999999, message = "Set real phone number") String telephone, @NotNull(message = "Choose validator") Validator mentor, @NotNull(message = "Choose team") Team team, @NotNull(message = "Choose swimlane") Region swimlane) {
         this.hireDate = hireDate;
         this.address = address;
         this.city = city;
@@ -103,11 +103,11 @@ public class Contractor extends Person {
         this.mentor = mentor;
     }
 
-    public SwimlaneType getSwimlane() {
+    public Region getSwimlane() {
         return swimlane;
     }
 
-    public void setSwimlane(SwimlaneType swimlane) {
+    public void setSwimlane(Region swimlane) {
         this.swimlane = swimlane;
     }
 

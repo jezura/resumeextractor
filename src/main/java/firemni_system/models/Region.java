@@ -15,14 +15,20 @@
  */
 package firemni_system.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 /**
  *
  */
 @Entity
-@Table(name = "swimlanes")
-public class SwimlaneType extends NamedEntity {
+@Table(name = "regions")
+public class Region extends NamedEntity {
+
+    @Column(name = "code")
+    @Size(min = 2, max = 32, message = "Code must be between 2 and 32 characters long")
+    private String code;
 
 }

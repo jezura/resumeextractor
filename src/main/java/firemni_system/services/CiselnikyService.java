@@ -2,11 +2,9 @@ package firemni_system.services;
 
 import firemni_system.dao.SwimlaneRepository;
 import firemni_system.dao.TeamsRepository;
-import firemni_system.dao.WorksRepository;
 import firemni_system.dao.WorktypeRepository;
-import firemni_system.models.SwimlaneType;
+import firemni_system.models.Region;
 import firemni_system.models.Team;
-import firemni_system.models.Work;
 import firemni_system.models.WorkType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +42,9 @@ public class CiselnikyService {
         return teams;
     }
 
-    public Collection<SwimlaneType> findAllSwimlanes(){
-        List<SwimlaneType> swimlanes = new ArrayList<SwimlaneType>();
-        for (SwimlaneType swimlane :swimlaneRepository.findAll())
+    public Collection<Region> findAllSwimlanes(){
+        List<Region> swimlanes = new ArrayList<Region>();
+        for (Region swimlane :swimlaneRepository.findAll())
         {
             swimlanes.add(swimlane);
         }
