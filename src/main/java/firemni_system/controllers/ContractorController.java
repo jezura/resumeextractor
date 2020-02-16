@@ -123,7 +123,7 @@ public class ContractorController {
     private void populateWithData(Model model){
         Collection<Validator> validators = personService.findAllValidators();
         Collection<Team> teams = ciselnikyService.findAllTeams();
-        Collection<Region> swimlanes = ciselnikyService.findAllSwimlanes();
+        Collection<SwimlaneType> swimlanes = ciselnikyService.findAllSwimlanes();
         model.addAttribute("teams",teams);
         model.addAttribute("swimlanes", swimlanes);
         model.addAttribute("validators", validators);
@@ -132,7 +132,7 @@ public class ContractorController {
     private void populateWithDataEdit(ModelAndView mav){
         Collection<Validator> validators = personService.findAllValidators();
         Collection<Team> teams = ciselnikyService.findAllTeams();
-        Collection<Region> swimlanes = ciselnikyService.findAllSwimlanes();
+        Collection<SwimlaneType> swimlanes = ciselnikyService.findAllSwimlanes();
         mav.addObject("teams",teams);
         mav.addObject("swimlanes", swimlanes);
         mav.addObject("validators", validators);

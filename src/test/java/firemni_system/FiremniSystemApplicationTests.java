@@ -124,8 +124,8 @@ public class FiremniSystemApplicationTests {
         return team;
     }
 
-    private Region getSwimlane() {
-        Region swimlane = new Region();
+    private SwimlaneType getSwimlane() {
+        SwimlaneType swimlane = new SwimlaneType();
         swimlane.setId(1);
         swimlane.setName("Skilled");
         return swimlane;
