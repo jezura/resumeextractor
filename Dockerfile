@@ -33,4 +33,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /idea/lib
 COPY --from=build ${DEPENDENCY}/META-INF /idea/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /idea
 
-ENTRYPOINT ["java","-cp","idea:idea/lib/*","firemni_system.FiremniSystemApplication"]
+ENTRYPOINT ["java","-cp","idea:idea/lib/*","jobportal.FiremniSystemApplication"]

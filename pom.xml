@@ -11,7 +11,7 @@
     <groupId>com.uhk</groupId>
     <artifactId>firemni_system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>firemni_system</name>
+    <name>jobportal</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
