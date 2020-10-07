@@ -14,33 +14,19 @@
  * limitations under the License.
  */
 package jobportal.models;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 /**
- * Simple JavaBean domain object with an id property. Used as a base class for objects
- * needing this property.
  *
- * @author Ken Krebs
- * @author Juergen Hoeller
  */
-@MappedSuperclass
-public class BaseEntity implements Serializable {
-    @Id
-    private Integer id;
+@Entity
+@Table(name = "skills")
+public class Skill extends CodedEntity {
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public boolean isNew() {
-        return this.id == null;
+    public Skill() {
     }
 }

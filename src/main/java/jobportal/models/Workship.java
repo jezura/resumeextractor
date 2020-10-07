@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 package jobportal.models;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Simple JavaBean domain object with an id property. Used as a base class for objects
- * needing this property.
  *
- * @author Ken Krebs
- * @author Juergen Hoeller
  */
-@MappedSuperclass
-public class BaseEntity implements Serializable {
-    @Id
-    private Integer id;
+@Entity
+@Table(name = "workships")
+public class Workship extends CodedEntity {
 
-    public Integer getId() {
-        return id;
+    @ManyToMany(mappedBy = "workships")
+    private Set<Offer> offers = new HashSet<>();
+
+    public Workship() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Workship(Set<Offer> offers) {
+        this.offers = offers;
     }
 
-    public boolean isNew() {
-        return this.id == null;
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
     }
 }

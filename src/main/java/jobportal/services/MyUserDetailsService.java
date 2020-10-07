@@ -1,9 +1,8 @@
 package jobportal.services;
 
 
-import jobportal.models.Contractor;
-import jobportal.models.Manager;
-import jobportal.models.Validator;
+import jobportal.models.Administrator;
+import jobportal.models.RegisteredUser;
 import jobportal.security.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,17 +21,13 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-      Optional <Validator> optionalValidator = Optional.ofNullable(personService.findValidatorByLogin(userName));
-        if(optionalValidator.isPresent()) {
-            return new  MyUser(optionalValidator.get().getLogin(), optionalValidator.get().getPassword(), optionalValidator.get().getRole(), optionalValidator.get().getId());
+        Optional <RegisteredUser> optionalRegisteredUser = Optional.ofNullable(personService.findRegisteredUserByLogin(userName));
+        if(optionalRegisteredUser.isPresent()) {
+            return new  MyUser(optionalRegisteredUser.get().getLogin(), optionalRegisteredUser.get().getPassword(), optionalRegisteredUser.get().getRole() ,optionalRegisteredUser.get().getId());
         }
-        Optional <Contractor> optionalContractor = Optional.ofNullable(personService.findContractorByLogin(userName));
-        if(optionalContractor.isPresent()) {
-            return new  MyUser(optionalContractor.get().getLogin(), optionalContractor.get().getPassword(), optionalContractor.get().getRole() ,optionalContractor.get().getId());
-        }
-        Optional <Manager> optionalManager = Optional.ofNullable(personService.findManagerByLogin(userName));
-        if(optionalManager.isPresent()) {
-            return new  MyUser(optionalManager.get().getLogin(), optionalManager.get().getPassword(), optionalManager.get().getRole() ,optionalManager.get().getId());
+        Optional <Administrator> optionalAdministrator = Optional.ofNullable(personService.findAdministratorByLogin(userName));
+        if(optionalAdministrator.isPresent()) {
+            return new  MyUser(optionalAdministrator.get().getLogin(), optionalAdministrator.get().getPassword(), optionalAdministrator.get().getRole() ,optionalAdministrator.get().getId());
         }
         return null;
     }

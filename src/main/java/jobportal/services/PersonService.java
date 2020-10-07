@@ -1,12 +1,9 @@
 package jobportal.services;
 
-
-import jobportal.dao.ContractorRepository;
-import jobportal.dao.ManagerRepository;
-import jobportal.dao.ValidatorRepository;
-import jobportal.models.Manager;
-import jobportal.models.Validator;
-import jobportal.models.Contractor;
+import jobportal.dao.RegisteredUserRepository;
+import jobportal.dao.AdministratorRepository;
+import jobportal.models.Administrator;
+import jobportal.models.RegisteredUser;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -19,109 +16,60 @@ import java.util.List;
 @Service
 public class PersonService {
     @Autowired
-    private ContractorRepository contractorRepository;
+    private RegisteredUserRepository registeredUserRepository;
     @Autowired
-    private ValidatorRepository validatorRepository;
-    @Autowired
-    private ManagerRepository managerRepository;
+    private AdministratorRepository administratorRepository;
 
-    public Collection<Contractor> findAllContractors(){
-        List<Contractor> contractors = new ArrayList<Contractor>();
-        for (Contractor contractor :contractorRepository.findAll())
+    public Collection<RegisteredUser> findAllRegisteredUsers(){
+        List<RegisteredUser> registeredUsers = new ArrayList<RegisteredUser>();
+        for (RegisteredUser registeredUser :registeredUserRepository.findAll())
         {
-            contractors.add(contractor);
+            registeredUsers.add(registeredUser);
         }
-        return contractors;
+        return registeredUsers;
     }
 
-    public Collection<Contractor> findContractorsByFirstNameLastName(String name){
-        List<Contractor> contractors = new ArrayList<Contractor>();
-        for (Contractor contractor :contractorRepository.findContractorsByName(name))
+    public Collection<RegisteredUser> findRegisteredUsersByFirstNameLastName(String name){
+        List<RegisteredUser> registeredUsers = new ArrayList<RegisteredUser>();
+        for (RegisteredUser registeredUser :registeredUserRepository.findRegisteredUsersByFirstNameLastName(name))
         {
-            contractors.add(contractor);
+            registeredUsers.add(registeredUser);
         }
-        return contractors;
-    }
-    public Collection<Validator> findValidatorsByFirstNameLastName(String name){
-        List<Validator> validators = new ArrayList<Validator>();
-        for (Validator validator :validatorRepository.findValidatorsByName(name))
-        {
-            validators.add(validator);
-        }
-        return validators;
+        return registeredUsers;
     }
 
 
-    public Collection<Validator> findAllValidators(){
-        List<Validator> validators = new ArrayList<Validator>();
-        for (Validator validator :validatorRepository.findAll())
-        {
-            validators.add(validator);
-        }
-        return validators;
+    public RegisteredUser findRegisteredUserByLogin(String login){
+        RegisteredUser registeredUser = registeredUserRepository.findRegisteredUserByLogin(login);
+        return registeredUser;
     }
 
-    public Collection<Contractor> findContractorsByMentor(int id){
-        List<Contractor> contractors = new ArrayList<Contractor>();
-        for (Contractor contractor :contractorRepository.findContractorsByMentor_Id(id))
-        {
-            contractors.add(contractor);
-        }
-        return contractors;
-    }
-
-
-
-    public Validator findValidatorByLogin(String login){
-        Validator validator = validatorRepository.findValidatorByLogin(login);
-        return validator;
-    }
-    public Contractor findContractorByLogin(String login){
-       Contractor contractor = contractorRepository.findContractorByLogin(login);
-       return contractor;
-    }
-    public Manager findManagerByLogin(String login){
-        Manager manager = managerRepository.findManagerByLogin(login);
-        return manager;
+    public Administrator findAdministratorByLogin(String login){
+        Administrator administrator = administratorRepository.findAdministratorByLogin(login);
+        return administrator;
     }
 
     public boolean isUnique(String login){
         boolean unique = true;
 
-        if(findContractorByLogin(login) != null)
+        if(findRegisteredUserByLogin(login) != null)
             unique = false;
 
-        if(findValidatorByLogin(login) != null)
+        if(findAdministratorByLogin(login) != null)
             unique = false;
 
-        if(findManagerByLogin(login) != null)
-            unique = false;
-
-return unique;
-
+        return unique;
     }
 
-    public void deleteContractor(int id){
-        contractorRepository.deleteById(id);
+    public void deleteRegisteredUser(int id){
+        registeredUserRepository.deleteById(id);
     }
 
-    public void deleteValidator(int id){
-        validatorRepository.deleteById(id);
+    public void saveRegisteredUser(RegisteredUser ru){
+        registeredUserRepository.save(ru);
     }
 
-    public void saveContractor(Contractor c){
-        contractorRepository.save(c);
-    }
-
-    public void saveValidator(Validator v){
-        validatorRepository.save(v);
-    }
-
-    public Contractor getContractor(int id){
-        return contractorRepository.findById(id).get();
-    }
-
-    public Validator getValidator(int id){
-        return validatorRepository.findById(id).get();
+    public RegisteredUser getRegisteredUser(int id){
+        return registeredUserRepository.findById(id).get();
     }
 }
