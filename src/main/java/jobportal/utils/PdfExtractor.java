@@ -6,7 +6,6 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class PdfExtractor {
     private String extractedText;
@@ -15,8 +14,6 @@ public class PdfExtractor {
 
         try
         {
-            Scanner scan = new Scanner(System.in);
-
             File file = new ClassPathResource("cv.pdf").getFile();
             PDDocument document = PDDocument.load(file);
             //PDDocument document = PDDocument.load(new File("C:\\Users\\robber_hadi\\Desktop\\UUM STUDY\\SEM 5\\STIW3054 KUMP A REAL-TIME PROGRAMMING\\ASSIGNMENT 2\\A182 Draft Stud.pdf"));

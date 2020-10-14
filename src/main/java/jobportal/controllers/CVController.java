@@ -3,6 +3,7 @@ package jobportal.controllers;
 import jobportal.models.*;
 import jobportal.services.*;
 import jobportal.utils.PdfExtractor;
+import jobportal.utils.WordExtractor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,5 +28,11 @@ public class CVController {
     public void extractCV() throws IOException {
         PdfExtractor pdfExtractor = new PdfExtractor();
         System.out.print(pdfExtractor.getPdfTextData());
+    }
+
+    @GetMapping(value = "/admin/extract-word-cv")
+    public void extractWordCV() throws IOException {
+        WordExtractor wordExtractor = new WordExtractor();
+        System.out.print(wordExtractor.getWordTextData());
     }
 }
