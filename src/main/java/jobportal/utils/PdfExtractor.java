@@ -10,13 +10,12 @@ import java.io.IOException;
 public class PdfExtractor {
     private String extractedText;
 
-    public String getPdfTextData() {
+    public String getPdfTextData(File file) {
 
         try
         {
-            File file = new ClassPathResource("cv.pdf").getFile();
+            //File file = new ClassPathResource("cv.pdf").getFile();
             PDDocument document = PDDocument.load(file);
-            //PDDocument document = PDDocument.load(new File("C:\\Users\\robber_hadi\\Desktop\\UUM STUDY\\SEM 5\\STIW3054 KUMP A REAL-TIME PROGRAMMING\\ASSIGNMENT 2\\A182 Draft Stud.pdf"));
             document.getClass();
 
             if (!document.isEncrypted())
