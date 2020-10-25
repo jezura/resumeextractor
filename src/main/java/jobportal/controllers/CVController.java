@@ -1,6 +1,11 @@
 package jobportal.controllers;
+import jobportal.dao.CzechNameRepository;
+import jobportal.models.CzechName;
+import jobportal.services.CzechNameService;
+import jobportal.services.OfferLanguageService;
 import jobportal.utils.PdfExtractor;
 import jobportal.utils.WordExtractor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,16 +15,18 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
 public class CVController {
+    @Autowired
+    private CzechNameService czechNameService;
 
     @RequestMapping(value = "/loadCvFile")
-    public String showLoadCvFileForm(Model model) {
-       // CVFile cvFile = new CVFile();
-        //model.addAttribute("cvFile", cvFile);
+    public String showLoadCvFileForm() {
         return "loadCvFile";
     }
 
@@ -49,7 +56,12 @@ public class CVController {
                 System.out.print("Found email: " + matcher.group());
             }
 
-        }else
+
+            for (CzechName name : czechNameService.findAllCzechNames()) {
+                System.out.println(name.getName() + "  gender: " + name.getGender());
+            }
+
+        } else
             if ((fileName.endsWith(".docx")) || (fileName.endsWith(".doc"))) {
                 WordExtractor wordExtractor = new WordExtractor();
                 System.out.println("Vypisuji word cv");
