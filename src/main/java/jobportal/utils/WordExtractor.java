@@ -16,11 +16,10 @@ import java.util.Scanner;
 public class WordExtractor {
     private String extractedText;
 
-    public String getWordTextData() {
+    public String getWordTextData(File file) {
 
         try
         {
-            File file = new ClassPathResource("cv.docx").getFile();
             XWPFDocument docx = new XWPFDocument(OPCPackage.openOrCreate(file));
             XWPFWordExtractor wordExtractor = new XWPFWordExtractor(docx);
             extractedText = wordExtractor.getText();

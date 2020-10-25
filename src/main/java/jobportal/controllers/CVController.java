@@ -1,9 +1,6 @@
 package jobportal.controllers;
-import jobportal.models.CVFile;
 import jobportal.utils.PdfExtractor;
 import jobportal.utils.WordExtractor;
-import org.aspectj.apache.bcel.util.ClassPath;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +10,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class CVController {
@@ -26,36 +25,38 @@ public class CVController {
 
     @RequestMapping(value = "/processCv", method = RequestMethod.POST)
     public String processCV(Model model, @RequestParam("file") MultipartFile[] files) throws IOException {
-
-        StringBuilder fileNames = new StringBuilder();
-        for (MultipartFile file : files) {
-            Path fileNameAndPath = Paths.get("D:\\",file.getOriginalFilename());
-            fileNames.append(file.getOriginalFilename());
-            try {
-                Files.write(fileNameAndPath,file.getBytes());
-            } catch (IOException e) {
+        String fileName = files[0].getOriginalFilename();
+        Path fileNameAndPath = Paths.get("D:\\",fileName);
+        try {
+            Files.write(fileNameAndPath,files[0].getBytes());
+        } catch (IOException e) {
                 e.printStackTrace();
-            }
         }
-        PdfExtractor pdfExtractor = new PdfExtractor();
-        //File file = new ClassPathResource("D:\\" + files[0].getOriginalFilename()).getFile();
-        File file = new File("D:\\" + files[0].getOriginalFilename());
-        System.out.print(pdfExtractor.getPdfTextData(file));
-        //Path fileNameAndPath = Paths.get("D:\\",file.getName());
-        //Files.write(fileNameAndPath,file.)
+
+        File savedFile = new File("D:\\" + files[0].getOriginalFilename());
+        if (fileName.endsWith(".pdf"))
+        {
+            PdfExtractor pdfExtractor = new PdfExtractor();
+            System.out.print(pdfExtractor.getPdfTextData(savedFile));
+            System.out.println("Vypisuji PDF cv");
+
+            String regexEmail = "(\\s?[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-z]+\\s?)";
+            Pattern pattern = Pattern.compile(regexEmail);
+            Matcher matcher = pattern.matcher(pdfExtractor.getPdfTextData(savedFile));
+
+            while (matcher.find())
+            {
+                System.out.print("Found email: " + matcher.group());
+            }
+
+        }else
+            if ((fileName.endsWith(".docx")) || (fileName.endsWith(".doc"))) {
+                WordExtractor wordExtractor = new WordExtractor();
+                System.out.println("Vypisuji word cv");
+                System.out.print(wordExtractor.getWordTextData(savedFile));
+            }
+
 
         return "redirect:/";
-    }
-
-    @GetMapping(value = "/admin/extract-cv")
-    public void extractCV() throws IOException {
-        PdfExtractor pdfExtractor = new PdfExtractor();
-        //System.out.print(pdfExtractor.getPdfTextData());
-    }
-
-    @GetMapping(value = "/admin/extract-word-cv")
-    public void extractWordCV() throws IOException {
-        WordExtractor wordExtractor = new WordExtractor();
-        System.out.print(wordExtractor.getWordTextData());
     }
 }
