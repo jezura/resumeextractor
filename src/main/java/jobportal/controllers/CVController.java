@@ -1,24 +1,15 @@
 package jobportal.controllers;
-import jobportal.dao.CzechNameRepository;
-import jobportal.models.CzechName;
 import jobportal.services.CzechNameService;
-import jobportal.services.OfferLanguageService;
-import jobportal.utils.PdfExtractor;
-import jobportal.utils.WordExtractor;
+import jobportal.utils.CVExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 public class CVController {
@@ -32,6 +23,8 @@ public class CVController {
 
     @RequestMapping(value = "/processCv", method = RequestMethod.POST)
     public String processCV(Model model, @RequestParam("file") MultipartFile[] files) throws IOException {
+        CVExtractor cvExtractor = new CVExtractor();
+
         String fileName = files[0].getOriginalFilename();
         Path fileNameAndPath = Paths.get("D:\\",fileName);
         try {
@@ -41,20 +34,23 @@ public class CVController {
         }
 
         File savedFile = new File("D:\\" + files[0].getOriginalFilename());
-        if (fileName.endsWith(".pdf"))
+
+        String extractedText = cvExtractor.getCvTextData(savedFile, fileName);
+        System.out.print(extractedText);
+        String extractedEmail = cvExtractor.extractEmail(extractedText);
+        System.out.println(extractedEmail);
+        String extractedFirstName = cvExtractor.extractFirstName(extractedText, czechNameService.findAllCzechNames());
+        System.out.println(extractedFirstName);
+        String extractedLastName = cvExtractor.extractLastName(extractedText, extractedFirstName);
+        System.out.println(extractedLastName);
+
+        /*if (fileName.endsWith(".pdf"))
         {
-            PdfExtractor pdfExtractor = new PdfExtractor();
-            System.out.print(pdfExtractor.getPdfTextData(savedFile));
+
+            System.out.print(cvExtractor.getPdfTextData(savedFile));
             System.out.println("Vypisuji PDF cv");
 
-            String regexEmail = "(\\s?[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-z]+\\s?)";
-            Pattern pattern = Pattern.compile(regexEmail);
-            Matcher matcher = pattern.matcher(pdfExtractor.getPdfTextData(savedFile));
 
-            while (matcher.find())
-            {
-                System.out.print("Found email: " + matcher.group());
-            }
 
 
             for (CzechName name : czechNameService.findAllCzechNames()) {
@@ -63,10 +59,9 @@ public class CVController {
 
         } else
             if ((fileName.endsWith(".docx")) || (fileName.endsWith(".doc"))) {
-                WordExtractor wordExtractor = new WordExtractor();
                 System.out.println("Vypisuji word cv");
-                System.out.print(wordExtractor.getWordTextData(savedFile));
-            }
+                System.out.print(cvExtractor.getWordTextData(savedFile));
+            }*/
 
 
         return "redirect:/";

@@ -1,4 +1,4 @@
-package jobportal.models;
+package jobportal.models.cv_support;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
