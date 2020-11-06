@@ -1,5 +1,9 @@
 package jobportal.controllers;
+import jobportal.models.cv_support.CzechName;
+import jobportal.models.cv_support.MaxEdu;
+import jobportal.models.cv_support.Title;
 import jobportal.services.CzechNameService;
+import jobportal.services.TitleService;
 import jobportal.utils.CVExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +14,18 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.Year;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Controller
 public class CVController {
     @Autowired
     private CzechNameService czechNameService;
+    @Autowired
+    private TitleService titleService;
 
     @RequestMapping(value = "/loadCvFile")
     public String showLoadCvFileForm() {
@@ -37,32 +48,49 @@ public class CVController {
 
         String extractedText = cvExtractor.getCvTextData(savedFile, fileName);
         System.out.print(extractedText);
+
         String extractedEmail = cvExtractor.extractEmail(extractedText);
-        System.out.println(extractedEmail);
-        String extractedFirstName = cvExtractor.extractFirstName(extractedText, czechNameService.findAllCzechNames());
-        System.out.println(extractedFirstName);
-        String extractedLastName = cvExtractor.extractLastName(extractedText, extractedFirstName);
-        System.out.println(extractedLastName);
 
-        /*if (fileName.endsWith(".pdf"))
-        {
+        String extractedMobile = cvExtractor.extractMobile(extractedText);
 
-            System.out.print(cvExtractor.getPdfTextData(savedFile));
-            System.out.println("Vypisuji PDF cv");
+        LocalDate extractedBirthDate = cvExtractor.extractBirthDate(extractedText);
+
+        CzechName extractedFirstName = cvExtractor.extractFirstName(extractedText, czechNameService.findAllCzechNames());
+
+        String extractedLastName = cvExtractor.extractLastName(extractedText, extractedFirstName.getName());
+
+        List<Title> extractedTitleList = cvExtractor.extractTitle(extractedText, titleService.findAllTitles());
+
+        MaxEdu maxEdu = cvExtractor.extractMaxEducationAndGeneralField(extractedText, extractedTitleList);
 
 
-
-
-            for (CzechName name : czechNameService.findAllCzechNames()) {
-                System.out.println(name.getName() + "  gender: " + name.getGender());
+        System.out.println("Email: " + extractedEmail);
+        System.out.println("Mobile: " + extractedMobile);
+        if (extractedBirthDate != null) {
+            long years;
+            if(extractedBirthDate.getYear() < 1950)
+            {
+                extractedBirthDate = extractedBirthDate.plusYears(100);
+                System.out.println("Birth year: " + extractedBirthDate.getYear());
+                years = ChronoUnit.YEARS.between(extractedBirthDate, LocalDate.now());
+                System.out.println("Age: " + years);
+            } else {
+                System.out.println("Birth date: " + extractedBirthDate.toString());
+                years = ChronoUnit.YEARS.between(extractedBirthDate, LocalDate.now());
+                System.out.println("Age: " + years);
             }
+        } else {
+            System.out.println("Birth date and age not found");
+        }
 
-        } else
-            if ((fileName.endsWith(".docx")) || (fileName.endsWith(".doc"))) {
-                System.out.println("Vypisuji word cv");
-                System.out.print(cvExtractor.getWordTextData(savedFile));
-            }*/
-
+        System.out.println("First name: " + extractedFirstName.getName());
+        System.out.println("Last name: " + extractedLastName);
+        System.out.println("Gender: " + extractedFirstName.getGender());
+        for (Title title:extractedTitleList) {
+            System.out.println("Titul: " + title.getOfficialVersion());
+        }
+        //System.out.println("Nejvyšší dosažený stupeň vzdělání: " + maxEdu.getMaxEduLvl());
+        //System.out.println("Obecný obor studia nejvyššího dosaženého vzdělání: " + maxEdu.getGeneralEduField());
 
         return "redirect:/";
     }
