@@ -53,6 +53,8 @@ public class CVController {
         //Deleting of saved file
         if(savedFile.delete()) {
             System.out.println("Saved CV file was immediately deleted after all text extracted.");
+        } else {
+            System.out.println("NOT POSSIBLE TO DELETE SAVED FILE");
         }
 
         String extractedEmail = cvExtractor.extractEmail(extractedText);
