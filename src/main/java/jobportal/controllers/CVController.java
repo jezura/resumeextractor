@@ -50,6 +50,11 @@ public class CVController {
         String extractedText = cvExtractor.getCvTextData(savedFile, fileName);
         System.out.print(extractedText);
 
+        //Deleting of saved file
+        if(savedFile.delete()) {
+            System.out.println("Saved CV file was immediately deleted after all text extracted.");
+        }
+
         String extractedEmail = cvExtractor.extractEmail(extractedText);
 
         String extractedMobile = cvExtractor.extractMobile(extractedText);
