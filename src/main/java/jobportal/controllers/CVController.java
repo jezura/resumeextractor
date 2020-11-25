@@ -6,6 +6,7 @@ import jobportal.services.CzechNameService;
 import jobportal.services.TitleService;
 import jobportal.utils.CVExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +36,16 @@ public class CVController {
         CVExtractor cvExtractor = new CVExtractor();
 
         String fileName = files[0].getOriginalFilename();
-        Path fileNameAndPath = Paths.get("D:\\",fileName);
+        //Path fileNameAndPath = Paths.get("D:\\",fileName);
+        Path fileNameAndPath = Paths.get(new ClassPathResource("filename").getPath());
         try {
             Files.write(fileNameAndPath,files[0].getBytes());
         } catch (IOException e) {
                 e.printStackTrace();
         }
 
-        File savedFile = new File("D:\\" + files[0].getOriginalFilename());
+        //File savedFile = new File("D:\\" + files[0].getOriginalFilename());
+        File savedFile = new File(String.valueOf(fileNameAndPath));
 
         String extractedText = cvExtractor.getCvTextData(savedFile, fileName);
         System.out.print(extractedText);
