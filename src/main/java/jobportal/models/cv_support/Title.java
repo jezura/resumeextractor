@@ -23,18 +23,20 @@ public class Title {
     @Column(name = "degree")
     private String degree;
 
-    @Column(name = "school_type")
-    private String schoolType;
+    @Column(name = "title_edu_field")
+    private String titleEduField;
 
     public Title() {
     }
 
-    public Title(int id, @NotNull(message = "Choose academic title") String titleVariant, @NotNull(message = "Choose academic title") String officialVersion, @NotNull(message = "Choose academic degree") String degree, String schoolType) {
+    public Title(int id, @NotNull(message = "Choose academic title") String titleVariant,
+                 @NotNull(message = "Choose academic title") String officialVersion,
+                 @NotNull(message = "Choose academic degree") String degree, String titleEduField) {
         this.id = id;
         this.titleVariant = titleVariant;
         this.officialVersion = officialVersion;
         this.degree = degree;
-        this.schoolType = schoolType;
+        this.titleEduField = titleEduField;
     }
 
     public int getId() {
@@ -69,11 +71,11 @@ public class Title {
         this.degree = degree;
     }
 
-    public String getSchoolType() {
-        return schoolType;
+    public String getTitleEduField() {
+        return titleEduField;
     }
 
-    public void setSchoolType(String schoolType) {
-        this.schoolType = schoolType;
+    public void setTitleEduField(String titleEduField) {
+        this.titleEduField = titleEduField;
     }
 }

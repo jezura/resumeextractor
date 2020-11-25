@@ -1,6 +1,6 @@
 package jobportal.controllers;
 import jobportal.models.cv_support.CzechName;
-import jobportal.models.cv_support.MaxEdu;
+import jobportal.models.cv_support.MaxEducation;
 import jobportal.models.cv_support.Title;
 import jobportal.services.CzechNameService;
 import jobportal.services.TitleService;
@@ -15,8 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -55,13 +53,13 @@ public class CVController {
 
         LocalDate extractedBirthDate = cvExtractor.extractBirthDate(extractedText);
 
-        CzechName extractedFirstName = cvExtractor.extractFirstName(extractedText, czechNameService.findAllCzechNames());
+        CzechName extractedFirstName = cvExtractor.extractFirstName(extractedText, czechNameService.findAllCzechNames(), 40);
 
         String extractedLastName = cvExtractor.extractLastName(extractedText, extractedFirstName.getName());
 
         List<Title> extractedTitleList = cvExtractor.extractTitle(extractedText, titleService.findAllTitles());
 
-        MaxEdu maxEdu = cvExtractor.extractMaxEducationAndGeneralField(extractedText, extractedTitleList);
+        MaxEducation maxEdu = cvExtractor.extractMaxEducationAndGeneralEduField(extractedText, extractedTitleList);
 
 
         System.out.println("Email: " + extractedEmail);
@@ -89,8 +87,10 @@ public class CVController {
         for (Title title:extractedTitleList) {
             System.out.println("Titul: " + title.getOfficialVersion());
         }
-        //System.out.println("Nejvyšší dosažený stupeň vzdělání: " + maxEdu.getMaxEduLvl());
-        //System.out.println("Obecný obor studia nejvyššího dosaženého vzdělání: " + maxEdu.getGeneralEduField());
+        System.out.println("Nejvyšší dosažený stupeň vzdělání: " + maxEdu.getMaxEduLvl().getMaxEduLvlName());
+        System.out.println("Obecný obor studia nejvyššího dosaženého vzdělání: " + maxEdu.getGeneralEduField());
+
+        cvExtractor.getPredictions();
 
         return "redirect:/";
     }
