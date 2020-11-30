@@ -92,15 +92,29 @@ public class CVExtractor {
     }
 
     public List<Title> extractTitle (String extractedText, Collection<Title> titles) {
+        String regexTitle;
+        Boolean unique;
         List<Title> titlesList = new ArrayList<Title>();
         for (Title title : titles) {
-            String regexTitle = "\\s?(" + title.getTitleVariant() + "\\.\\s)";
+            if(title.getOfficialVersion().equals("Dr")) {
+                regexTitle = "(\\s|\\n)(" + title.getTitleVariant() + "\\.\\s)";
+            }else{
+                regexTitle = "\\s?(" + title.getTitleVariant() + "\\.\\s)";
+            }
             Pattern pattern = Pattern.compile(regexTitle);
             Matcher matcher = pattern.matcher(extractedText);
 
             if (matcher.find())
             {
-                if(!titlesList.contains(title)){
+                // checking if extracted title is not already stored in titlesList
+                unique = true;
+                for (Title extractedTitle: titlesList) {
+                    if(extractedTitle.getOfficialVersion().equals(title.getOfficialVersion())) {
+                        unique = false;
+                    }
+                }
+
+                if(unique) {
                     titlesList.add(title);
                 }
             }
@@ -887,27 +901,15 @@ public class CVExtractor {
     }*/
 
    public void getPredictions() throws IOException {
-       // Make a URL to the web page
        URL url = new URL("https://fieldpredictor.herokuapp.com/prediction");
 
        // Get the input stream through URL Connection
-       URLConnection con = url.openConnection();
-       InputStream is =con.getInputStream();
-
-       // Once you have the Input Stream, it's just plain old Java IO stuff.
-
-       // For this case, since you are interested in getting plain-text web page
-       // I'll use a reader and output the text content to System.out.
-
-       // For binary content, it's better to directly read the bytes from stream and write
-       // to the target file.
-
+       URLConnection connection = url.openConnection();
+       InputStream is = connection.getInputStream();
 
        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
        String line = null;
-
-       // read each line and write to System.out
        while ((line = br.readLine()) != null) {
            System.out.println(line);
        }
