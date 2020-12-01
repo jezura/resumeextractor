@@ -100,7 +100,7 @@ public class CVController {
         System.out.println("Nejvyšší dosažený stupeň vzdělání: " + maxEdu.getMaxEduLvl().getMaxEduLvlName());
         System.out.println("Obecný obor studia nejvyššího dosaženého vzdělání: " + maxEdu.getGeneralEduField());
 
-        cvExtractor.getPredictions();
+        //cvExtractor.getPredictions();
 
         return "redirect:/";
     }

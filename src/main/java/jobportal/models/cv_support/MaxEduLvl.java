@@ -56,22 +56,22 @@ public class MaxEduLvl {
                 regex = "([Dd]oktorské\\s|[Dd]oktorát\\s)";
                 break;
             case "Vysokoskolske_magisterske":
-                regex = "([Mm]agisterské|[Mm]agisterský|[Mm]agistr(a)?" +
-                        "|[Ii]nženýr|ING\\s|[Nn]avazující)";
+                regex = "([Mm]agisterské|[Mm]agisterský|[Mm]agistr(a)?\\s|\\sMGR\\.?\\s|\\sMgr\\.?\\s" +
+                        "|[Ii]nženýr|[Ii]nženýrské|\\sING\\.?\\s|\\sIng\\.?\\s|[Nn]avazující)";
                 break;
             case "Vysokoskolske_bakalarske":
-                regex = "([Bb]akalář|[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
-                        "|[Vv]ysokoškol|[Ff]akult[aě]|UHK\\s|UPCE\\s|AMU\\s|AVU\\s|ČZU\\s|ČVUT\\s" +
-                        "|JAMU\\s|JU\\s|MU\\s|MUNI\\s|MENDELU\\s|OU\\s|SU\\s|TUL\\s|UJEP\\s|UK\\s" +
-                        "|UP\\s|UPa\\s|UTB\\s|VFU\\s|VŠB\\s|VŠE\\s|VŠCHT\\s|VŠPJ\\s|VŠTE\\s|UMPRUM\\s" +
-                        "|VUT\\s|ZČU\\s)";
+                regex = "([Bb]akalář|\\s[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
+                        "|[Vv]ysokoškol|[Ff]akult[aě]|\\sUHK\\s|\\sUPCE\\s|\\sAMU\\s|\\sAVU\\s|\\sČZU\\s" +
+                        "|ČVUT\\s|JAMU\\s|\\sJU\\s|\\sMU\\s|MUNI\\s|MENDELU\\s|\\sOU\\s|\\sSU\\s|\\sTUL\\s" +
+                        "|UJEP\\s|\\sUK\\s|\\sUP\\s|UPa\\s|\\sUTB\\s|\\sVFU\\s|\\sVŠB\\s|\\sVŠE\\s|VŠCHT\\s" +
+                        "|\\sVŠPJ\\s|\\sVŠTE\\s|UMPRUM\\s|\\sVUT\\s|\\sZČU\\s)";
                 break;
             default:
-                regex = "([Bb]akalář|[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
-                        "|[Vv]ysokoškol|[Ff]akult[aě]|UHK\\s|UPCE\\s|AMU\\s|AVU\\s|ČZU\\s|ČVUT\\s" +
-                        "|JAMU\\s|JU\\s|MU\\s|MUNI\\s|MENDELU\\s|OU\\s|SU\\s|TUL\\s|UJEP\\s|UK\\s" +
-                        "|UP\\s|UPa\\s|UTB\\s|VFU\\s|VŠB\\s|VŠE\\s|VŠCHT\\s|VŠPJ\\s|VŠTE\\s|UMPRUM\\s" +
-                        "|VUT\\s|ZČU\\s)";
+                regex = "([Bb]akalář|\\s[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
+                        "|[Vv]ysokoškol|[Ff]akult[aě]|\\sUHK\\s|\\sUPCE\\s|\\sAMU\\s|\\sAVU\\s|\\sČZU\\s" +
+                        "|ČVUT\\s|JAMU\\s|\\sJU\\s|\\sMU\\s|MUNI\\s|MENDELU\\s|\\sOU\\s|\\sSU\\s|\\sTUL\\s" +
+                        "|UJEP\\s|\\sUK\\s|\\sUP\\s|UPa\\s|\\sUTB\\s|\\sVFU\\s|\\sVŠB\\s|\\sVŠE\\s|VŠCHT\\s" +
+                        "|\\sVŠPJ\\s|\\sVŠTE\\s|UMPRUM\\s|\\sVUT\\s|\\sZČU\\s)";
                 break;
 
         }
@@ -80,6 +80,7 @@ public class MaxEduLvl {
         Matcher matcher = pattern.matcher(extractedText);
 
         while (matcher.find()) {
+            System.out.println("MaxEduLvl - findAreaIndexesForVSLevel: " + matcher.group());
             startIndexes.add(matcher.start());
             endIndexes.add(matcher.end());
         }
@@ -115,7 +116,17 @@ public class MaxEduLvl {
         System.out.println("MaxEduLvl-findAreaIndexesForVS: Nastavil jsem maxEndIndex na hodnotu: " + getEndPosIndex());
     }
 
-    public boolean findMaxEduLvl(String extractedText) {
+
+    public boolean findMaxEduLvl(String extractedText, int eduSectionStartIndex, int aroundArea) {
+        String textAreaSubstring;
+        if(eduSectionStartIndex > 0) {
+            textAreaSubstring = extractedText.substring(eduSectionStartIndex);
+            System.out.println("MaxEduLvl: Hledam nejprve v oblasti vzdelani - od eduSectionStartIndex");
+        }else{
+            textAreaSubstring = extractedText;
+            System.out.println("MaxEduLvl: Hledam opakovane jiz v celem extracted textu");
+        }
+
         String regex;
         Pattern pattern;
         Matcher matcher;
@@ -132,96 +143,144 @@ public class MaxEduLvl {
 
         regex = "([Dd]oktorské\\s|[Dd]oktorát\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[0]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
 
         regex = "([Mm]agisterské|[Mm]agisterský|[Mm]agistr(a)?" +
-                "|[Ii]nženýr|ING\\s|[Nn]avazující)";
+                "|[Ii]nženýr|\\sING\\s|[Nn]avazující\\s[Ss]tudi)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[1]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
 
-        regex = "([Bb]akalář|[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
+        regex = "([Bb]akalář|\\s[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
                 "|[Vv]ysokoškol|[Ff]akult[aě]|UHK\\s|UPCE\\s|AMU\\s|AVU\\s|ČZU\\s|ČVUT\\s" +
-                "|JAMU\\s|JU\\s|MU\\s|MUNI\\s|MENDELU\\s|OU\\s|SU\\s|TUL\\s|UJEP\\s|UK\\s" +
-                "|UP\\s|UPa\\s|UTB\\s|VFU\\s|VŠB\\s|VŠE\\s|VŠCHT\\s|VŠPJ\\s|VŠTE\\s|UMPRUM\\s" +
+                "|JAMU\\s|\\sJU\\s|\\sMU\\s|MUNI\\s|MENDELU\\s|\\sOU\\s|\\sSU\\s|\\sTUL\\s|UJEP\\s|\\sUK\\s" +
+                "|\\sUP\\s|\\sUPa\\s|UTB\\s|VFU\\s|VŠB\\s|VŠE\\s|VŠCHT\\s|VŠPJ\\s|VŠTE\\s|UMPRUM\\s" +
                 "|VUT\\s|ZČU\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[2]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);;
+
             return true;
         }
 
 
-        regex = "([Vv]yšší\\s[Oo]dborn|[Vv]oš|VOŠ|\\sVOV\\s)";
+        regex = "([Vv]yšší\\s[Oo]dborn|[Vv]oš\\s|VOŠ\\s|\\sVOV\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[3]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
 
         regex = "([Mm]aturit|[Gg]ymnázium|[Oo]bchodní\\s[Aa]kademie|[Úú]plné\\s[Ss]třední" +
-                "|[UÚ]SO|[ÚúUu][Ss][Oo]\\s|[UÚ]SV|[ÚúUu][Ss][Vv]\\s|4-leté|4leté|čtyřleté)";
+                "|[UÚ]SO\\s|[ÚúUu][Ss][Oo]\\s|[UÚ]SV\\s|[ÚúUu][Ss][Vv]\\s|(4-leté\\s[sSVv]|4leté\\s[sSVv]|čtyřleté\\s[sSVv]))";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[4]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
 
         regex = "([Ss]třední|[Ss]tředškolsk|SPŠ|SOU|SŠ|SOŠ|SOUe|SLŠ)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[5]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
 
         regex = "([Zz]ákladní|ZŠ\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubstring);
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[6]);
-            setStartPosIndex(matcher.start());
-            setEndPosIndex(matcher.end());
+
+            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            }else{
+                setStartPosIndex(0);
+            }
+            setEndPosIndex(matcher.end()+eduSectionStartIndex+aroundArea);
+
             return true;
         }
 
-        setMaxEduLvlName(maxEduLvls[6]);
-        setStartPosIndex(0);
-        setEndPosIndex(0);
+        // pokud se jiz jedna o pruchod celeho extracted textu
+        if(eduSectionStartIndex == 0) {
+            setMaxEduLvlName(maxEduLvls[6]);
+            setStartPosIndex(0);
+            setEndPosIndex(0);
+
+            return true;
+        }
+
         return false;
     }
 }

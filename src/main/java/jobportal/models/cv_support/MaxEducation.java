@@ -43,10 +43,14 @@ public class MaxEducation {
 
         if((maxEduLvl.getEndPosIndex() == 0)||(useAreaIndexes == false)) {
             textAreaSubString = extractedText;
-            System.out.println("MaxEducation-findFieldforVSLevel: Hledam pomoci original extractedTextu");
+            System.out.println("MaxEducation-findFieldforVSLevel: Hledam pomoci celeho original extractedTextu");
         } else {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
             System.out.println("MaxEducation-findFieldforVSLevel: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldForVSLevel: " +
+                    "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
+            System.out.println("MaxEducation-findFieldForVSLevel: " +
+                    "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
         }
 
         String[] VSFields = {
@@ -59,7 +63,6 @@ public class MaxEducation {
                 "Zemedelstvi_a_lesnictvi",
                 "Pedagogika,ucitelstvi_a_telovychova",
                 "Filosofie,politologie,zurnalistika,psychologie,sociologie,historie",
-                "Teologie",
                 "Umeni",
                 "Obrana_a_ochrana",
                 "Doprava",
@@ -67,9 +70,9 @@ public class MaxEducation {
                 "Lingvistika"
         };
 
-        regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Dd]at[ao]|FIM|FIT|\\sFI|FIS|FAI)";
+        regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Dd]at[ao]|\\sFIM\\s|\\sFIT\\s|\\sFI\\s|\\sFIS\\s|\\sFAI\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[0]);
@@ -77,9 +80,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Ee]lektrotechnik[ay]|[Ee]lektron|[Tt]elekomunika|[Aa]utomatizac|FEL|FEKT)";
+        regex = "([Ee]lektrotechnik[ay]|[Ee]lektron|[Tt]elekomunika|[Aa]utomatizac|\\sFEL|\\sFEKT)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[1]);
@@ -87,9 +90,10 @@ public class MaxEducation {
         }
 
 
-        regex = "([Oo]bchod|[Ff]inan|[Ee]konomi|\\sNF|FPH|ECON|FEK|FSE|FES|EKF|OPF|F[Aa]ME|PEF)";
+        regex = "([Oo]bchod|[Ff]inan|[Ee]konomi|\\sNF\\s|\\sFPH\\s|\\sECON\\s|\\sFEK\\s|\\sFSE\\s|\\sFES\\s|\\sEKF\\s|" +
+                "\\sOPF\\s|\\sF[Aa]ME\\s|\\sPEF\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[2]);
@@ -97,9 +101,10 @@ public class MaxEducation {
         }
 
 
-        regex = "([Zz]dravotn|[Ff]armac|[Ss]estra|[Zz]ubař|[Ll]ékař|[Mm]edicín|[Vv]eterin|[Ff]yzioterapie|FVZ|\\sLF|FVL|VFU|FZS)";
+        regex = "([Zz]dravotn|[Ff]armac|[Ss]estra|[Zz]ubař|[Ll]ékař|[Mm]edicín|[Vv]eterin|[Ff]yzioterapie|" +
+                "\\sFVZ\\s|\\sLF\\s|\\sFVL\\s|\\sVFU\\s|\\sFZS\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[3]);
@@ -107,9 +112,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]ráv[ao]|[Pp]rávní|[Pp]rávnic|P[Rr]F|FPR|\\sFP|\\sPF)";
+        regex = "([Pp]ráv[ao]|\\s[Pp]rávní|[Pp]rávnic|\\sP[Rr]F\\s|\\sFPR\\s|\\sFP\\s|\\sPF\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[4]);
@@ -117,9 +122,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Ss]tavebn[ií]|[Aa]rchitekt|FAST|FSv)";
+        regex = "([Ss]tavebn[ií]|[Aa]rchitekt|\\sFAST|\\sFSv)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[5]);
@@ -127,9 +132,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Zz]eměděls|[Aa]gro|[Ll]esnic|[Rr]ybářství|[Zz]ahradnic|FLD|LDF|FROV|FAPPZ|\\sZF|\\sAF)";
+        regex = "([Zz]eměděls|[Aa]gro|[Ll]esnic|[Rr]ybářství|[Zz]ahradnic|\\sFLD|\\sLDF|FROV|FAPPZ|\\sZF|\\sAF)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[6]);
@@ -137,9 +142,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]edagogi|[Uu]čitels|[Tt]ělových|[Tt]ělesné|[Ss]port|FTVS|FTK|FPE|P[Dd]F)";
+        regex = "([Pp]edagogi|[Uu]čitels|[Tt]ělových|[Tt]ělesné|[Ss]port|FTVS|\\sFTK|\\sFPE|\\sP[Dd]F)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[7]);
@@ -148,9 +153,11 @@ public class MaxEducation {
 
 
         regex = "([Ff]ilosofie|[Ff]ilosofick|[Pp]olitologie|[Pp]olitologick|[Pp]sychologie|[Pp]sychologic|" +
-                "[Ss]ociální|[Ss]ociolog|[Ss]tátní\\sspráv|[Hh]istorie|[Hh]istoric|[Žž]urnalist|\\sFF|FMV|ÚSP)";
+                "[Ss]ociální|[Ss]ociolog|[Ss]tátní\\sspráva|[Vv]eřejnosprávní\\s|[Ss]právní|[Hh]istorie|" +
+                "[Hh]istoric|[Žž]urnalist|\\sFF|\\sFMV|\\sÚSP|([Tt]eologi(e|cká))|\\sTS|\\sTF|\\sKTF|" +
+                "\\sETF|\\sHTF|CMTF)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[8]);
@@ -158,9 +165,10 @@ public class MaxEducation {
         }
 
 
-        regex = "(([Tt]eologi(e|cká))|\\sTS|\\sTF|KTF|ETF|HTF|CMTF|)";
+        regex = "([Uu]měleck|[Uu]mění|[Hh]udební|[Kk]onzerva|[Tt]aneční|[Ff]ilmová|[Gg]rafi|[Ff]otog" +
+                "|\\sFAMU|\\sDAMU|\\sHAMU|\\sJAMU|\\sFH|\\sFU|\\sDIFA|\\sF[Aa]VU|FUD|\\sFMK|FDULS|\\sUUD|\\sFUD)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[9]);
@@ -168,10 +176,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Uu]měleck|[Uu]mění|[Hh]udební|[Kk]onzerva|[Tt]aneční|[Ff]ilmová|[Gg]rafi|[Ff]otog" +
-                "|FAMU|DAMU|HAMU|JAMU|\\sFH|\\sFU|DIFA|F[Aa]VU|FUD|FMK|FDULS|UUD|FUD)";
+        regex = "([Bb]ezpečnost|[Vv]ojensk[ýéá]|[Oo]chran|[Pp]olicejní|\\sFVL|\\sFVT|\\sFBP|\\sFBI|\\sFBM)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[10]);
@@ -179,19 +186,22 @@ public class MaxEducation {
         }
 
 
-        regex = "([Bb]ezpečnost|[Vv]ojensk[ýéá]|[Oo]chran|[Pp]olicejní|FVL|FVT|FBP|FBI|FBM)";
+        regex = "([Dd]opravní|[Dd]oprava|\\sDFJP|\\sFD\\s)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
+            System.out.println("DOPRAVA: ->" + matcher.group());
             setGeneralEduField(VSFields[11]);
             return true;
         }
 
 
-        regex = "([Dd]opravní|[Dd]oprava|DFJP|\\sFD\\s|)";
+        regex = "([Pp]řírodověd|[Pp]řírodní(ch)?\\svěd|[Ee]kologi|[Cc]hemick|[Cc]hemie|[Ff]yzik|[Bb]iolog|[Jj]adern" +
+                "|[Mm]atemati|[Ss]tatisti|\\sP[Řř]F|\\sFJFI|\\sFCHI|\\sFCH|\\sFZP|\\sFPF|\\sFCHT|\\sHGF|\\sFAV|" +
+                "\\sFP|\\sMFF)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[12]);
@@ -199,23 +209,12 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]řírodověd|[Pp]řírodní(ch)?\\svěd|[Ee]kologi|[Cc]hemick|[Cc]hemie|[Ff]yzik|[Bb]iolog|[Jj]adern" +
-                "|[Mm]atemati|[Ss]tatisti|P[Řř]F|FJFI|FCHI|\\sFCH||FZP|FPF|FCHT|HGF|FAV|\\sFP|MFF)";
+        regex = "([Ll]ingvisti|[Jj]azyková)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VSFields[13]);
-            return true;
-        }
-
-
-        regex = "([Ll]ingvisti|[Jj]azyková)";
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
-
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[14]);
             return true;
         }
 
@@ -237,6 +236,10 @@ public class MaxEducation {
         } else {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
             System.out.println("MaxEducation-findFieldforVOSSSMatLevel: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: " +
+                    "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: " +
+                    "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
         }
 
         String[] VOSSSMatFields = {
@@ -251,7 +254,6 @@ public class MaxEducation {
                 "Pedagogika,ucitelstvi_a_telovychova",
                 "Filosofie,politologie,historie,zurnalistika,psychologie,sociologie,verejna_sprava",
                 "Hotelnictvi,cestovni_ruch,gastronomie,restauratorstvi",
-                "Teologie",
                 "Umeni",
                 "Obrana_a_ochrana",
                 "Doprava",
@@ -259,10 +261,10 @@ public class MaxEducation {
                 "Lingvistika"
         };
 
-        regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Pp]očítač|\\sIT\\s|ICT" +
+        regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Pp]očítač|\\sIT\\s|\\sICT\\s" +
                 "|[Kk]omunikač|[Kk]ybernet|[Vv]ýpočetní)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[0]);
@@ -271,9 +273,9 @@ public class MaxEducation {
 
 
         regex = "([Ee]lektrotechnik[ay]|[Ee]lektron|[Tt]elekomunika|[Aa]utomatizac|[Mm]echani|[Ss](ilno|labo)proud" +
-                "|[Ee]lektrik|[Ss]troj|[Tt]echni|[Rr]obot|tronik|[Aa]uto|SPŠ)";
+                "|[Ee]lektrik|[Ss]troj|[Tt]echni|[Rr]obot|tronik|[Aa]uto|\\sSPŠ)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[1]);
@@ -281,9 +283,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Oo]bchod|[Ff]inan|[Ee]konomi|[Úú]četnic|[Pp]odnikatel)";
+        regex = "([Oo]bchod|[Ff]inan|[Ee]konomi|[Úú]četnic)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[2]);
@@ -291,9 +293,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Zz]dravotn|[Ff]armac|[Ss]estra|[Zz]ubař|[Vv]eterin|SZS|[Zz]dravotnický [Aa]sistent|[Zz]áchraná)";
+        regex = "([Zz]dravotn|[Ff]armac|[Ss]estra|[Zz]ubař|[Vv]eterin|\\sSZS|[Zz]dravotnický [Aa]sistent|[Zz]áchraná)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[3]);
@@ -301,9 +303,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]rávní)";
+        regex = "(\\s[Pp]rávní|\\s[Pp]rávo)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[4]);
@@ -313,7 +315,7 @@ public class MaxEducation {
 
         regex = "([Gg]ymn[aá]zium)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[5]);
@@ -323,7 +325,7 @@ public class MaxEducation {
 
         regex = "([Ss]tavebn[ií]|[Aa]rchitekt|[Gg]eod)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[6]);
@@ -333,7 +335,7 @@ public class MaxEducation {
 
         regex = "([Zz]eměděls|[Aa]gro|[Ll]esnic|[Rr]ybářství|[Zz]ahradn)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[7]);
@@ -343,7 +345,7 @@ public class MaxEducation {
 
         regex = "([Pp]edagogi|[Uu]čitels|[Tt]ělových|[Tt]ělesné|[Ss]port|SPgŠ)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[8]);
@@ -351,10 +353,11 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]sychologie|[Pp]sychologic|[Ss]ociáln[ěí]|[Ss]ociolog|[Ss]tátní\\sspráv" +
-                "|[Hh]istorie|[Hh]istoric|[Dd]ějin|[Žž]urnalist)";
+        regex = "([Pp]sychologie|[Pp]sychologic|[Ss]ociáln[ěí]|[Ss]ociolog|[Ss]tátní\\sspráva" +
+                "|[Vv]eřejnosprávní\\s|[Ss]právní|[Hh]istorie|[Hh]istoric|[Dd]ějin|[Žž]urnalist|" +
+                "([Tt]eologi(e|cká)))";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[9]);
@@ -362,9 +365,11 @@ public class MaxEducation {
         }
 
 
-        regex = "([Hh]otel[no]|[Rr]estaurat|[Gg]astro|[Cc]estovní|[Ss]lužeb)";
+        regex = "([Hh]otel[no]|[Rr]estaurat|[Gg]astro|[Cc]estovní|[Ss]lužeb|[Pp]odnik[aá]|[Aa]ranžér|" +
+                "[Cc]ukrář|[Čč]aloun[ií]|[Ii]nstalatér|[Kk]adeřn[ií]|[Kk]rejč[oí]|[Kk]uchař|[Mm]alíř|" +
+                "[Pp]ekař|[Pp]otravin|[Pp]rodavač|[Mm]asér|[Řř]ezník|[Uu]zenář|[Tt]extil|[Mm]askér|[Zz]ahradn)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[10]);
@@ -372,9 +377,10 @@ public class MaxEducation {
         }
 
 
-        regex = "(([Tt]eologi(e|cká)))";
+        regex = "([Uu]měleck|[Uu]mění|[Hh]udební|[Kk]onzervat|[Tt]aneční|[Ff]ilmová|[Gg]rafi" +
+                "|[Ff]otograf|[Mm]ediální|[Pp]olygraf)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[11]);
@@ -382,10 +388,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Uu]měleck|[Uu]mění|[Hh]udební|[Kk]onzerva|[Tt]aneční|[Ff]ilmová|[Gg]rafi" +
-                "|[Ff]otograf|[Mm]ediální|[Pp]olygraf)";
+        regex = "([Bb]ezpečnost|[Vv]ojensk[ýéá]|[Oo]chran|[Pp]olicejní|[Hh]asič)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[12]);
@@ -393,9 +398,9 @@ public class MaxEducation {
         }
 
 
-        regex = "([Bb]ezpečnost|[Vv]ojensk[ýéá]|[Oo]chran|[Pp]olicejní|[Hh]asič)";
+        regex = "([Dd]opravní|[Dd]oprava|[Ii]nfrastruktur|[Ll]ogisti)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[13]);
@@ -403,9 +408,10 @@ public class MaxEducation {
         }
 
 
-        regex = "([Dd]opravní|[Dd]oprava|[Ii]nfrastruktur)";
+        regex = "([Pp]řírodověd|[Pp]řírodní(ch)?\\svěd|[Ee]kologi|[Cc]hemick|[Cc]hemie|[Ff]yzik|" +
+                "[Bb]iolog|[Jj]adern|[Mm]atemati|[Ss]tatisti)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[14]);
@@ -413,23 +419,12 @@ public class MaxEducation {
         }
 
 
-        regex = "([Pp]řírodověd|[Pp]řírodní(ch)?\\svěd|[Ee]kologi|[Cc]hemick|[Cc]hemie|[Ff]yzik|" +
-                "[Bb]iolog|[Jj]adern|[Mm]atemati|[Ss]tatisti)";
+        regex = "([Ll]ingvisti|[Jj]azyková)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(VOSSSMatFields[15]);
-            return true;
-        }
-
-
-        regex = "([Ll]ingvisti|[Jj]azyková)";
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
-
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[16]);
             return true;
         }
 
@@ -451,6 +446,10 @@ public class MaxEducation {
         } else {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
             System.out.println("MaxEducation-findFieldforSSLevel: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldforSSLevel: " +
+                    "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
+            System.out.println("MaxEducation-findFieldforSSLevel: " +
+                    "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
         }
 
         String[] SSFields = {
@@ -465,9 +464,9 @@ public class MaxEducation {
         };
 
         regex = "([Ee]lektrotech|[Ee]lektronik|[Mm]echani[ck]|[Aa]utomatiz|[Rr]oboti|[Ss](ilno|labo)proud" +
-                "|[Ee]lektrik|[Tt]echni|[Rr]obot|tronik|[Aa]uto|[Oo]pravář|[Mm]ontér|SPŠ)";
+                "|[Ee]lektrik|[Tt]echni|[Rr]obot|tronik|[Aa]uto|[Oo]pravář|[Mm]ontér|\\sSPŠ)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[0]);
@@ -477,7 +476,7 @@ public class MaxEducation {
 
         regex = "([Zz]dravot|[Oo]šetřov|[Pp]ečovat|[Ss]estra)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[1]);
@@ -487,7 +486,7 @@ public class MaxEducation {
 
         regex = "([Zz]edn[ií]|[Kk]onstru|[Ss]tavebn|[Pp]okrývač|[Gg]eod|[Zz]eměměřič)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[2]);
@@ -497,7 +496,7 @@ public class MaxEducation {
 
         regex = "([Zz]eměděl|[Dd]řevo|[Zz]pracovatel|[Vv]odař|[Ll]esn[ií])";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[3]);
@@ -511,7 +510,7 @@ public class MaxEducation {
                 "|[Pp]rodavač|[Pp]rovozní|[Mm]asér|[Řř]ezník|[Uu]zenář|[Šš]i(tí|čka)|[Tt]extil" +
                 "|[Mm]askér|[Zz]ahradn)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[4]);
@@ -519,7 +518,7 @@ public class MaxEducation {
 
         regex = "([Uu]měleck[áý]|[Uu]mění|[Gg]rafi[ck]|[Bb]ižuter)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[5]);
@@ -527,7 +526,7 @@ public class MaxEducation {
 
         regex = "([Oo]bran[ay]|[Oo]chran[ay]|[Hh]lídač|[Ss]trážný)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[6]);
@@ -541,7 +540,7 @@ public class MaxEducation {
                 "|[Pp]odlahář|[Pp]uškař|[Ss]klář|[Ss]klenář|[Ss]lévač|[Tt]esař|[Tt]iskař|[Tt]ruhlář|[Vv]čelař" +
                 "|[Žž]elezničář)";
         pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(extractedText);
+        matcher = pattern.matcher(textAreaSubString);
 
         if (matcher.find()) {
             setGeneralEduField(SSFields[7]);
