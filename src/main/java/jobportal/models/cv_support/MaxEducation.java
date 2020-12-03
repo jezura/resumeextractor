@@ -9,13 +9,16 @@ public class MaxEducation {
 
     private MaxEduLvl maxEduLvl;
     private String generalEduField;
+    private int eduSectionStartIndex;
+    private static int searchAreaLength = 300;
 
     public MaxEducation() {
     }
 
-    public MaxEducation(MaxEduLvl maxEduLvl, String generalEduField) {
+    public MaxEducation(MaxEduLvl maxEduLvl, String generalEduField, int eduSectionStartIndex) {
         this.maxEduLvl = maxEduLvl;
         this.generalEduField = generalEduField;
+        this.eduSectionStartIndex = eduSectionStartIndex;
     }
 
     public MaxEduLvl getMaxEduLvl() {
@@ -34,24 +37,64 @@ public class MaxEducation {
         this.generalEduField = generalEduField;
     }
 
-    public boolean findFieldForVSLevel(String extractedText, Boolean useAreaIndexes) {
+    public int getEduSectionStartIndex() {
+        return eduSectionStartIndex;
+    }
+
+    public void setEduSectionStartIndex(int eduSectionStartIndex) {
+        this.eduSectionStartIndex = eduSectionStartIndex;
+    }
+
+    // Method returns the start index of education section in CV (Vzdělání: ...). If not found, returns 0.
+    public boolean findEduSectionStartIndex(String extractedText) {
+        String regex = "(\\s[Vv]zdělání|\\sVZDĚLÁNÍ|\\s[Ss]tudium|\\sSTUDIUM)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(extractedText);
+
+        if (matcher.find()) {
+            System.out.println("MaxEducation-findEduSectionStartIndex :: Našel jsem keyword >>" +
+                    matcher.group().replaceAll("\\s+", "") + "<< na indexu: " +
+                    matcher.end() + ", nastavuji jej jako eduSectionStartIndex..");
+            setEduSectionStartIndex(matcher.end());
+            return true;
+        }else{
+            System.out.println("MaxEducation-findEduSectionStartIndex :: Nepodařilo se najít oblast vzdělání..");
+            return false;
+        }
+    }
+
+    public boolean findFieldForVSLevel(String extractedText, Boolean useAreaIndexes, Boolean useEduSectionStartIndex) {
         String textAreaSubString;
 
         String regex;
         Pattern pattern;
         Matcher matcher;
 
-        if((maxEduLvl.getEndPosIndex() == 0)||(useAreaIndexes == false)) {
-            textAreaSubString = extractedText;
-            System.out.println("MaxEducation-findFieldforVSLevel: Hledam pomoci celeho original extractedTextu");
-        } else {
+        if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() > 0))) {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
-            System.out.println("MaxEducation-findFieldforVSLevel: Hledam pomoci substringu jen v okolni oblasti");
-            System.out.println("MaxEducation-findFieldForVSLevel: " +
+            System.out.println("MaxEducation-findFieldforVSLevel:: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldforVSLevel:: " +
                     "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
-            System.out.println("MaxEducation-findFieldForVSLevel: " +
+            System.out.println("MaxEducation-findFieldforVSLevel:: " +
                     "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
+        } else if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() == 0))) {
+            //nespoustim hledani v rezimu useAreaIndexes => indexy nebyly spravne nalezeny a neohranicuji zadnou oblast
+            System.out.println("MaxEducation-findFieldforVSLevel:: Nespoustim hledani v rezimu useAreaIndexes," +
+                    " indexy nebyly spravne nalezeny a neohranicuji zadnou oblast");
+            return false;
+        } else if ((!useAreaIndexes) && (useEduSectionStartIndex)) {
+            textAreaSubString = extractedText.substring(eduSectionStartIndex, eduSectionStartIndex + searchAreaLength);
+            System.out.println("MaxEducation-findFieldforVSLevel:: Hledam pomoci substringu pouze" +
+                    " v uvodni oblasti s popisem vzdelani");
+            System.out.println("MaxEducation-findFieldforVSLevel:: " +
+                    "Hledam od indexu s hodnotou: " + eduSectionStartIndex);
+            System.out.println("MaxEducation-findFieldforVSLevel:: " +
+                    "Hledam po index s hodnotou: " + (eduSectionStartIndex + searchAreaLength));
+        } else {
+            textAreaSubString = extractedText;
+            System.out.println("MaxEducation-findFieldforVSLevel:: Hledam v celem original extractedTextu");
         }
+        
 
         String[] VSFields = {
                 "Informatika_a_management",
@@ -70,13 +113,16 @@ public class MaxEducation {
                 "Lingvistika"
         };
 
+        int[] VSFieldsMatches = new int[VSFields.length];
+        System.out.println("Nalezl jsem nasledujici oborova klicova slova:");
+
         regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Dd]at[ao]|\\sFIM\\s|\\sFIT\\s|\\sFI\\s|\\sFIS\\s|\\sFAI\\s)";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[0]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[0] += 1;
         }
 
 
@@ -84,9 +130,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[1]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[1] += 1;
         }
 
 
@@ -95,9 +141,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[2]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[2] += 1;
         }
 
 
@@ -106,9 +152,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[3]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[3] += 1;
         }
 
 
@@ -116,9 +162,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[4]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[4] += 1;
         }
 
 
@@ -126,9 +172,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[5]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[5] += 1;
         }
 
 
@@ -136,9 +182,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[6]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[6] += 1;
         }
 
 
@@ -146,9 +192,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[7]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[7] += 1;
         }
 
 
@@ -159,9 +205,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[8]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[8] += 1;
         }
 
 
@@ -170,9 +216,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[9]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[9] += 1;
         }
 
 
@@ -180,9 +226,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[10]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[10] += 1;
         }
 
 
@@ -190,10 +236,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            System.out.println("DOPRAVA: ->" + matcher.group());
-            setGeneralEduField(VSFields[11]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[11] += 1;
         }
 
 
@@ -203,9 +248,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[12]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[12] += 1;
         }
 
 
@@ -213,34 +258,66 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VSFields[13]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VSFieldsMatches[13] += 1;
         }
 
-        //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
-        System.out.println("Nenalezl jsem obor");
-        return false;
+        System.out.print("\n");
+        int maxMatches = 0;
+        int j = -1;
+        for(int i=0;i<VSFields.length;i++) {
+            System.out.println("Matches pro obor: " + VSFields[i] + " je: " + VSFieldsMatches[i]);
+            if(VSFieldsMatches[i] > maxMatches) {
+                maxMatches = VSFieldsMatches[i];
+                j=i;
+            }
+        }
+
+        if(j > -1) {
+            System.out.println("Nejvíce shod jsem našel na indexu: " + j);
+            System.out.println("Jedná se o obor: " + VSFields[j]);
+            setGeneralEduField(VSFields[j]);
+            return true;
+        }else{
+            //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
+            System.out.println("Nenalezl jsem obor");
+            return false;
+        }
     }
 
-    public boolean findFieldForVOSSSMatLevel(String extractedText, Boolean useAreaIndexes) {
+    public boolean findFieldForVOSSSMatLevel(String extractedText, Boolean useAreaIndexes, Boolean useEduSectionStartIndex) {
         String textAreaSubString;
 
         String regex;
         Pattern pattern;
         Matcher matcher;
 
-        if((maxEduLvl.getEndPosIndex() == 0)||(useAreaIndexes == false)) {
-            textAreaSubString = extractedText;
-            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: Hledam pomoci original extractedTextu");
-        } else {
+        if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() > 0))) {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
-            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: Hledam pomoci substringu jen v okolni oblasti");
-            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: " +
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: " +
                     "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
-            System.out.println("MaxEducation-findFieldforVOSSSMatLevel: " +
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: " +
                     "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
+        } else if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() == 0))) {
+            //nespoustim hledani v rezimu useAreaIndexes => indexy nebyly spravne nalezeny a neohranicuji zadnou oblast
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: Nespoustim hledani v rezimu useAreaIndexes," +
+                    " indexy nebyly spravne nalezeny a neohranicuji zadnou oblast");
+            return false;
+        } else if ((!useAreaIndexes) && (useEduSectionStartIndex)) {
+            textAreaSubString = extractedText.substring(eduSectionStartIndex, eduSectionStartIndex + searchAreaLength);
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: Hledam pomoci substringu pouze" +
+                    " v uvodni oblasti s popisem vzdelani");
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: " +
+                    "Hledam od indexu s hodnotou: " + eduSectionStartIndex);
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: " +
+                    "Hledam po index s hodnotou: " + (eduSectionStartIndex + searchAreaLength));
+        } else {
+            textAreaSubString = extractedText;
+            System.out.println("MaxEducation-findFieldforVOSSSMatLevel:: Hledam v celem original extractedTextu");
         }
+
 
         String[] VOSSSMatFields = {
                 "Informatika_a_management",
@@ -261,14 +338,17 @@ public class MaxEducation {
                 "Lingvistika"
         };
 
+        int[] VOSSSMatFieldsMatches = new int[VOSSSMatFields.length];
+        System.out.println("Nalezl jsem nasledujici oborova klicova slova:");
+
         regex = "([Ii]nformatik[ay]|[Ii]nformační|[Mm]anagement|[Pp]očítač|\\sIT\\s|\\sICT\\s" +
                 "|[Kk]omunikač|[Kk]ybernet|[Vv]ýpočetní)";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[0]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[0] += 1;
         }
 
 
@@ -277,9 +357,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[1]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[1] += 1;
         }
 
 
@@ -287,9 +367,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[2]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[2] += 1;
         }
 
 
@@ -297,9 +377,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[3]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[3] += 1;
         }
 
 
@@ -307,9 +387,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[4]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[4] += 1;
         }
 
 
@@ -317,9 +397,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[5]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[5] += 1;
         }
 
 
@@ -327,9 +407,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[6]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[6] += 1;
         }
 
 
@@ -337,9 +417,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[7]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[7] += 1;
         }
 
 
@@ -347,9 +427,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[8]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[8] += 1;
         }
 
 
@@ -359,9 +439,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[9]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[9] += 1;
         }
 
 
@@ -371,9 +451,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[10]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[10] += 1;
         }
 
 
@@ -382,9 +462,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[11]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[11] += 1;
         }
 
 
@@ -392,9 +472,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[12]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[12] += 1;
         }
 
 
@@ -402,9 +482,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[13]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[13] += 1;
         }
 
 
@@ -413,9 +493,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[14]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[14] += 1;
         }
 
 
@@ -423,33 +503,64 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(VOSSSMatFields[15]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            VOSSSMatFieldsMatches[15] += 1;
         }
 
-        //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
-        System.out.println("Nenalezl jsem obor");
-        return false;
+        System.out.print("\n");
+        int maxMatches = 0;
+        int j = -1;
+        for(int i=0;i<VOSSSMatFields.length;i++) {
+            System.out.println("Matches pro obor: " + VOSSSMatFields[i] + " je: " + VOSSSMatFieldsMatches[i]);
+            if(VOSSSMatFieldsMatches[i] > maxMatches) {
+                maxMatches = VOSSSMatFieldsMatches[i];
+                j=i;
+            }
+        }
+
+        if(j > -1) {
+            System.out.println("Nejvíce shod jsem našel na indexu: " + j);
+            System.out.println("Jedná se o obor: " + VOSSSMatFields[j]);
+            setGeneralEduField(VOSSSMatFields[j]);
+            return true;
+        }else{
+            //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
+            System.out.println("Nenalezl jsem obor");
+            return false;
+        }
     }
 
-    public boolean findFieldForSSLevel(String extractedText, Boolean useAreaIndexes) {
+    public boolean findFieldForSSLevel(String extractedText, Boolean useAreaIndexes, Boolean useEduSectionStartIndex) {
         String textAreaSubString;
 
         String regex;
         Pattern pattern;
         Matcher matcher;
 
-        if((maxEduLvl.getEndPosIndex() == 0)||(useAreaIndexes == false)) {
-            textAreaSubString = extractedText;
-            System.out.println("MaxEducation-findFieldforSSLevel: Hledam pomoci original extractedTextu");
-        } else {
+        if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() > 0))) {
             textAreaSubString = extractedText.substring(maxEduLvl.getStartPosIndex(), maxEduLvl.getEndPosIndex());
-            System.out.println("MaxEducation-findFieldforSSLevel: Hledam pomoci substringu jen v okolni oblasti");
-            System.out.println("MaxEducation-findFieldforSSLevel: " +
+            System.out.println("MaxEducation-findFieldforSSLevel:: Hledam pomoci substringu jen v okolni oblasti");
+            System.out.println("MaxEducation-findFieldforSSLevel:: " +
                     "Hledam pomoci minStartIndex s hodnotou: " + maxEduLvl.getStartPosIndex());
-            System.out.println("MaxEducation-findFieldforSSLevel: " +
+            System.out.println("MaxEducation-findFieldforSSLevel:: " +
                     "Hledam pomoci maxEndIndex s hodnotou: " + maxEduLvl.getEndPosIndex());
+        } else if ((useAreaIndexes) && ((maxEduLvl.getEndPosIndex() == 0))) {
+            //nespoustim hledani v rezimu useAreaIndexes => indexy nebyly spravne nalezeny a neohranicuji zadnou oblast
+            System.out.println("MaxEducation-findFieldforSSLevel:: Nespoustim hledani v rezimu useAreaIndexes," +
+                    " indexy nebyly spravne nalezeny a neohranicuji zadnou oblast");
+            return false;
+        } else if ((!useAreaIndexes) && (useEduSectionStartIndex)) {
+            textAreaSubString = extractedText.substring(eduSectionStartIndex, eduSectionStartIndex + searchAreaLength);
+            System.out.println("MaxEducation-findFieldforSSLevel:: Hledam pomoci substringu pouze" +
+                    " v uvodni oblasti s popisem vzdelani");
+            System.out.println("MaxEducation-findFieldforSSLevel:: " +
+                    "Hledam od indexu s hodnotou: " + eduSectionStartIndex);
+            System.out.println("MaxEducation-findFieldforSSLevel:: " +
+                    "Hledam po index s hodnotou: " + (eduSectionStartIndex + searchAreaLength));
+        } else {
+            textAreaSubString = extractedText;
+            System.out.println("MaxEducation-findFieldforSSLevel:: Hledam v celem original extractedTextu");
         }
 
         String[] SSFields = {
@@ -463,14 +574,17 @@ public class MaxEducation {
                 "Remeslna_vyroba"
         };
 
+        int[] SSFieldsMatches = new int[SSFields.length];
+        System.out.println("Nalezl jsem nasledujici oborova klicova slova:");
+
         regex = "([Ee]lektrotech|[Ee]lektronik|[Mm]echani[ck]|[Aa]utomatiz|[Rr]oboti|[Ss](ilno|labo)proud" +
                 "|[Ee]lektrik|[Tt]echni|[Rr]obot|tronik|[Aa]uto|[Oo]pravář|[Mm]ontér|\\sSPŠ)";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[0]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[0] += 1;
         }
 
 
@@ -478,9 +592,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[1]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[1] += 1;
         }
 
 
@@ -488,9 +602,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[2]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[2] += 1;
         }
 
 
@@ -498,9 +612,9 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[3]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[3] += 1;
         }
 
 
@@ -512,25 +626,27 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[4]);
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[4] += 1;
         }
 
         regex = "([Uu]měleck[áý]|[Uu]mění|[Gg]rafi[ck]|[Bb]ižuter)";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[5]);
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[5] += 1;
         }
 
         regex = "([Oo]bran[ay]|[Oo]chran[ay]|[Hh]lídač|[Ss]trážný)";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[6]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[6] += 1;
         }
 
 
@@ -542,19 +658,38 @@ public class MaxEducation {
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(textAreaSubString);
 
-        if (matcher.find()) {
-            setGeneralEduField(SSFields[7]);
-            return true;
+        while (matcher.find()) {
+            System.out.print(matcher.group().replaceAll("\\s", "") + " ; ");
+            SSFieldsMatches[7] += 1;
         }
 
-        if(useAreaIndexes) {
-            //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
-            System.out.println("Nenalezl jsem obor");
-            return false;
-        }else{ //pokud se jedna uz o druhy pokus s plosnym hledanim v celem textu
-            //natvrdo nastavit "Remeslna_vyroba"
-            setGeneralEduField(SSFields[7]);
+        System.out.print("\n");
+        int maxMatches = 0;
+        int j = -1;
+        for(int i=0;i<SSFields.length;i++) {
+            System.out.println("Matches pro obor: " + SSFields[i] + " je: " + SSFieldsMatches[i]);
+            if(SSFieldsMatches[i] > maxMatches) {
+                maxMatches = SSFieldsMatches[i];
+                j=i;
+            }
+        }
+
+        if(j > -1) {
+            System.out.println("Nejvíce shod jsem našel na indexu: " + j);
+            System.out.println("Jedná se o obor: " + SSFields[j]);
+            setGeneralEduField(SSFields[j]);
             return true;
+        }else{
+            if(useAreaIndexes || useEduSectionStartIndex) {
+                //nepodarilo se najit zadnou shodu => zadny obecny obor nebyl identifikovan
+                System.out.println("Nenalezl jsem obor");
+                return false;
+            }else{ //pokud se jedna uz o druhy pokus s plosnym hledanim v celem textu
+                //natvrdo nastavit "Remeslna_vyroba"
+                setGeneralEduField(SSFields[7]);
+                System.out.println("Nenalezen obor - natvrdo nastaven obor Řemeslná výroba..");
+                return true;
+            }
         }
     }
 }

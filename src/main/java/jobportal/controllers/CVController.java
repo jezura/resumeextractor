@@ -80,13 +80,11 @@ public class CVController {
             {
                 extractedBirthDate = extractedBirthDate.plusYears(100);
                 System.out.println("Birth year: " + extractedBirthDate.getYear());
-                years = ChronoUnit.YEARS.between(extractedBirthDate, LocalDate.now());
-                System.out.println("Age: " + years);
             } else {
                 System.out.println("Birth date: " + extractedBirthDate.toString());
-                years = ChronoUnit.YEARS.between(extractedBirthDate, LocalDate.now());
-                System.out.println("Age: " + years);
             }
+            years = ChronoUnit.YEARS.between(extractedBirthDate, LocalDate.now());
+            System.out.println("Age: " + years);
         } else {
             System.out.println("Birth date and age not found");
         }

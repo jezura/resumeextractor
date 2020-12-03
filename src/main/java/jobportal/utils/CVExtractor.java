@@ -1,5 +1,12 @@
 package jobportal.utils;
 
+import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jobportal.models.cv_support.CzechName;
 import jobportal.models.cv_support.MaxEduLvl;
 import jobportal.models.cv_support.MaxEducation;
@@ -10,20 +17,10 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CVExtractor {
     private String extractedText;
-    private int aroundArea = 50;
+    private int aroundArea = 70;
 
     public String getCvTextData(File file, String fileName) {
         if (fileName.endsWith(".pdf")) {
@@ -66,7 +63,7 @@ public class CVExtractor {
     }
 
     public String extractEmail (String extractedText) {
-        String regexEmail = "(\\s?[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]+\\s?)";
+        String regexEmail = "(\\s?[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,5}\\s?)";
         Pattern pattern = Pattern.compile(regexEmail);
         Matcher matcher = pattern.matcher(extractedText);
 
@@ -264,7 +261,6 @@ public class CVExtractor {
     public MaxEducation extractMaxEducationAndGeneralEduField (String extractedText, Collection<Title> titles) {
         MaxEduLvl maxEduLvl = new MaxEduLvl();
         MaxEducation maxEducation = new MaxEducation();
-        int eduSectionStartIndex = findEduSectionStartIndex(extractedText);
 
         if(!titles.isEmpty()) {
             for (Title title : titles) {
@@ -301,19 +297,19 @@ public class CVExtractor {
             } else {
                 maxEduLvl.findAreaIndexesForVSLevel(extractedText, aroundArea);
                 maxEducation.setMaxEduLvl(maxEduLvl);
-                if(maxEducation.findFieldForVSLevel(extractedText, true)) {
+                if (maxEducation.findFieldForVSLevel(extractedText, true, false)) {
+                    return maxEducation;
+                } else if (maxEducation.findFieldForVSLevel(extractedText, false, true)) {
+                    return maxEducation;
+                } else if (maxEducation.findFieldForVSLevel(extractedText, false, false)) {
                     return maxEducation;
                 } else {
-                    if(maxEducation.findFieldForVSLevel(extractedText, false)) {
-                        return maxEducation;
-                    } else {
-                        return null;
-                    }
+                    return null;
                 }
             }
         } else {
-            if(eduSectionStartIndex > 0) {
-                boolean success = maxEduLvl.findMaxEduLvl(extractedText, eduSectionStartIndex, aroundArea);
+            if(maxEducation.findEduSectionStartIndex(extractedText)) {
+                boolean success = maxEduLvl.findMaxEduLvl(extractedText, maxEducation.getEduSectionStartIndex(), aroundArea);
                 if(!success) {
                     maxEduLvl.findMaxEduLvl(extractedText, 0, aroundArea);
                 }
@@ -323,34 +319,34 @@ public class CVExtractor {
             maxEducation.setMaxEduLvl(maxEduLvl);
             switch (maxEduLvl.getMaxEduLvlName()) {
                 case "Vysokoskolske_doktorske": case "Vysokoskolske_magisterske": case "Vysokoskolske_bakalarske":
-                    if(maxEducation.findFieldForVSLevel(extractedText, true)) {
+                    if (maxEducation.findFieldForVSLevel(extractedText, true, false)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForVSLevel(extractedText, false, true)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForVSLevel(extractedText, false, false)) {
                         return maxEducation;
                     } else {
-                        if(maxEducation.findFieldForVSLevel(extractedText, false)) {
-                            return maxEducation;
-                        } else {
-                            return null;
-                        }
+                        return null;
                     }
                 case "Vyssi_odborne": case "Stredoskolske_s_maturitou":
-                    if(maxEducation.findFieldForVOSSSMatLevel(extractedText, true)) {
+                    if (maxEducation.findFieldForVOSSSMatLevel(extractedText, true, false)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForVOSSSMatLevel(extractedText, false, true)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForVOSSSMatLevel(extractedText, false, false)) {
                         return maxEducation;
                     } else {
-                        if(maxEducation.findFieldForVOSSSMatLevel(extractedText, false)) {
-                            return maxEducation;
-                        } else {
-                            return null;
-                        }
+                        return null;
                     }
                 case "Vyuceni_nebo_Stredoskolske_bez_maturity":
-                    if(maxEducation.findFieldForSSLevel(extractedText, true)) {
+                    if (maxEducation.findFieldForSSLevel(extractedText, true, false)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForSSLevel(extractedText, false, true)) {
+                        return maxEducation;
+                    } else if (maxEducation.findFieldForSSLevel(extractedText, false, false)) {
                         return maxEducation;
                     } else {
-                        if(maxEducation.findFieldForSSLevel(extractedText, false)) {
-                            return maxEducation;
-                        } else {
-                            return null;
-                        }
+                        return null;
                     }
                 case "Zakladni":
                     maxEducation.setGeneralEduField("Zakladni_skola");
@@ -359,19 +355,6 @@ public class CVExtractor {
         }
 
         return null;
-    }
-
-    // Method return the start index of education section in CV (Vzdělání: ...). If not found, returns 0.
-    public int findEduSectionStartIndex(String extractedText) {
-        String regex = "(\\s[Vv]zdělání|\\sVZDĚLÁNÍ|\\s[Ss]tudium|\\sSTUDIUM)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(extractedText);
-
-        if (matcher.find()) {
-            return matcher.end();
-        }else{
-            return 0;
-        }
     }
 
     /*public void getPredictions() throws IOException {

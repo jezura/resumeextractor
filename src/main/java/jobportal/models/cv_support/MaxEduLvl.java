@@ -10,6 +10,7 @@ public class MaxEduLvl {
     private String maxEduLvlName;
     private int startPosIndex;
     private int endPosIndex;
+    private static double startIndexDistanceMultiplicator = 2;
 
     public MaxEduLvl() {
     }
@@ -67,11 +68,7 @@ public class MaxEduLvl {
                         "|\\sVŠPJ\\s|\\sVŠTE\\s|UMPRUM\\s|\\sVUT\\s|\\sZČU\\s)";
                 break;
             default:
-                regex = "([Bb]akalář|\\s[Bb][Cc]\\s|[Bb]atchelor|[Uu]niver[zs]it|[Vv]ysok[áé]\\s[Šš]kol" +
-                        "|[Vv]ysokoškol|[Ff]akult[aě]|\\sUHK\\s|\\sUPCE\\s|\\sAMU\\s|\\sAVU\\s|\\sČZU\\s" +
-                        "|ČVUT\\s|JAMU\\s|\\sJU\\s|\\sMU\\s|MUNI\\s|MENDELU\\s|\\sOU\\s|\\sSU\\s|\\sTUL\\s" +
-                        "|UJEP\\s|\\sUK\\s|\\sUP\\s|UPa\\s|\\sUTB\\s|\\sVFU\\s|\\sVŠB\\s|\\sVŠE\\s|VŠCHT\\s" +
-                        "|\\sVŠPJ\\s|\\sVŠTE\\s|UMPRUM\\s|\\sVUT\\s|\\sZČU\\s)";
+                regex = ".*";
                 break;
 
         }
@@ -79,8 +76,10 @@ public class MaxEduLvl {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(extractedText);
 
+        System.out.println("Pro urceni indexu oblasti s popisem vysokoskolskeho vzdelani jsem nasel nasledujici" +
+                " klicova slova: ");
         while (matcher.find()) {
-            System.out.println("MaxEduLvl - findAreaIndexesForVSLevel: " + matcher.group());
+            System.out.println(matcher.group().replaceAll("\\s", ""));
             startIndexes.add(matcher.start());
             endIndexes.add(matcher.end());
         }
@@ -103,7 +102,7 @@ public class MaxEduLvl {
                 }
             }
 
-            minStartIndex = minStartIndex - aroundArea;
+            minStartIndex = minStartIndex - (int)(aroundArea*startIndexDistanceMultiplicator);
             if(minStartIndex <0) {
                 minStartIndex = 0;
             }
@@ -112,8 +111,8 @@ public class MaxEduLvl {
             setStartPosIndex(minStartIndex);
             setEndPosIndex(maxEndIndex);
         }
-        System.out.println("MaxEduLvl-findAreaIndexesForVS: Nastavil jsem minStartIndex na hodnotu: " + getStartPosIndex());
-        System.out.println("MaxEduLvl-findAreaIndexesForVS: Nastavil jsem maxEndIndex na hodnotu: " + getEndPosIndex());
+        System.out.println("MaxEduLvl-findAreaIndexesForVSLevel:: Nastavil jsem minStartIndex na hodnotu: " + getStartPosIndex());
+        System.out.println("MaxEduLvl-findAreaIndexesForVSLevel:: Nastavil jsem maxEndIndex na hodnotu: " + getEndPosIndex());
     }
 
 
@@ -121,10 +120,10 @@ public class MaxEduLvl {
         String textAreaSubstring;
         if(eduSectionStartIndex > 0) {
             textAreaSubstring = extractedText.substring(eduSectionStartIndex);
-            System.out.println("MaxEduLvl: Hledam nejprve v oblasti vzdelani - od eduSectionStartIndex");
+            System.out.println("MaxEduLvl-findMaxEduLvl:: Hledam nejprve v oblasti vzdelani - od eduSectionStartIndex");
         }else{
             textAreaSubstring = extractedText;
-            System.out.println("MaxEduLvl: Hledam opakovane jiz v celem extracted textu");
+            System.out.println("MaxEduLvl-findMaxEduLvl:: Hledam opakovane jiz v celem extracted textu");
         }
 
         String regex;
@@ -147,9 +146,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[0]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -166,9 +166,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[1]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -188,9 +189,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[2]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -206,9 +208,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[3]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -225,9 +228,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[4]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -243,9 +247,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[5]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -261,9 +266,10 @@ public class MaxEduLvl {
 
         if (matcher.find()) {
             setMaxEduLvlName(maxEduLvls[6]);
-
-            if((matcher.start()+eduSectionStartIndex-aroundArea) >= 0) {
-                setStartPosIndex(matcher.start()+eduSectionStartIndex-aroundArea);
+            System.out.println("Nasel jsem keyword >> " + matcher.group().replaceAll("\\s","") +
+                    " << a nastavuji maxEduLvlName na: " + getMaxEduLvlName());
+            if((matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator)) >= 0) {
+                setStartPosIndex(matcher.start()+eduSectionStartIndex-(int)(aroundArea*startIndexDistanceMultiplicator));
             }else{
                 setStartPosIndex(0);
             }
@@ -275,6 +281,7 @@ public class MaxEduLvl {
         // pokud se jiz jedna o pruchod celeho extracted textu
         if(eduSectionStartIndex == 0) {
             setMaxEduLvlName(maxEduLvls[6]);
+            System.out.println("Nenasel jsem keyword, nastavuji maxEduLvlName na: " + getMaxEduLvlName());
             setStartPosIndex(0);
             setEndPosIndex(0);
 
