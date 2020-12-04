@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.uhk</groupId>
-    <artifactId>firemni_system</artifactId>
+    <artifactId>resumeextractor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jobportal</name>
+    <name>resumeextractor</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
