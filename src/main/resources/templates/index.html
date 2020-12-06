@@ -2,47 +2,57 @@
 
 <html  layout:decorate="~{main_layout}"
        xmlns:th="https://www.thymeleaf.org"
-       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
-       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+       xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>Firemni system</title>
 </head>
 
 <body>
 <div layout:fragment="content">
-    <img style="max-width: 100%; height: auto" class="img-responsive" src="../static/resources/images/icon.jpg" th:src="@{/resources/images/icon.jpg}"/>
+    <img style="max-width: 100%; height: auto; margin-top: -1em;" class="img-responsive" src="../static/resources/images/icon.jpg" th:src="@{/resources/images/icon.jpg}"/>
 <p></p>
-<h2 class="text-center">Vítejte v aplikaci firemní systém</h2>
-<p></p>
-    <p class="text-center" id="datetime"></p>
+    <h2 class="text-center">Vítejte v aplikaci Resume Extractor</h2>
+    <p></p>
+    <!--<ul style="width:30%; margin: 0 auto" class="text-center list-group">
+        <li class="text center list-group-item list-group-item-success" id="date"></li>
+    </ul>
     <script>
         var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date+' '+time;
-        document.getElementById("datetime").innerHTML = "Dnes je: " + dateTime;
-    </script>
+        var date = today.getDate() + '-' + (today.getMonth()+1) + '-' +  today.getFullYear();
+        document.getElementById("date").innerHTML = "Dnes je: " + date;
+    </script> -->
     <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><p><i style="color:blue" class="far fa-user"></i> Správa zaměstnaneckých účtů</p></div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><i style="color:blue" class="far fa-calendar-alt"></i> Přehled o pracovních plánech</div>
-        <div class="col-sm-2"></div>
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10" style="color:#1A3346">
+    <p style="font-size:0.85em">Webová aplikace Resume Extractor byla vytvořena jako ukázka praktického řešení v rámci seminární práce na téma
+        Text Mining v rámci předmětu STMOD. Účelem webové aplikace je extrakce několika základních
+    informací z nestrukturovaného, případně polostrukturovaného textového dokumentu ve formátu PDF a DOCX, ze životopisu
+        (CV) uchazeče o práci. V aplikaci je tedy uplatňována disciplína <b>Text Mining</b> v konkrétní oblasti
+        <b>Information Extraction (IE).</b> Mezi hlavní použité metody extrakce patří: <b>Regular expression (REGEX)
+            a Pattern matching</b> v občasné kombinaci s <b>matching database records</b>
+        (např: křestní jména, akademické tituly..). Přesnost extrakčního procesu je zvyšována např. díky práci s postupným
+        rozšiřováním vyhledávacích oblastí v textu. Zpočátku se hledá pouze v úzké oblasti pravděpodobného výskytu dané informace,
+        v případě neúspěchu se tato oblast rozšiřuje.</p>
+        <p>Aplikace extrahuje následující informace:<br><b>
+            jméno, příjmení, akademické tituly, pohlaví, datum nebo rok narození, věk, email, mobil,
+            stupeň nejvyššího dosaženého vzdělání, obecný obor nejvyššího dosaženého vzdělání.</b></p>
+        <p></p>
     </div>
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><p><i style="color:blue" class="far fa-plus-square"></i> Management a přidělování domén</p></div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><i style="color:blue" class="fas fa-star-half-alt"></i> Management hodnocení dokončené práce</div>
-        <div class="col-sm-2"></div>
+    <div class="col-lg-1"></div>
+        <div class="container">
+            <h4 class="text-center">Extrahovat informace</h4>
+            <p></p>
+            <p></p>
+            <form action="#" th:action="@{/processCv}"  method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label >Vyberte nebo přetáhněte PDF/DOCX soubor se životopisem:</label>
+                    <input type="file" name="file" class="btn btn-info">
+                    <button type="submit" class="btn btn-success">Spustit extrakci!</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><p><i style="color:blue" class="fas fa-business-time"></i> Vedení pracovních výkazů</p></div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3"><i style="color:blue" class="fab fa-font-awesome-flag"></i> Správa a management priorit</div>
-        <div class="col-sm-2"></div>
-    </div>
+
 </div>
 </body>
 </html>

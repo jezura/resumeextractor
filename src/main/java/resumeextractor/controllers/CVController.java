@@ -1,6 +1,8 @@
 package resumeextractor.controllers;
+import org.springframework.core.io.ClassPathResource;
 import resumeextractor.models.cv_support.CVProfile;
 import resumeextractor.models.cv_support.CzechName;
+import resumeextractor.models.cv_support.EduLog;
 import resumeextractor.models.cv_support.Title;
 import resumeextractor.services.CzechNameService;
 import resumeextractor.services.TitleService;
@@ -16,6 +18,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 @Controller
 public class CVController {
@@ -31,20 +36,21 @@ public class CVController {
 
     @RequestMapping(value = "/processCv", method = RequestMethod.POST)
     public String processCV(Model model, @RequestParam("file") MultipartFile[] files) throws IOException {
-        CVExtractor cvExtractor = new CVExtractor();
+        EduLog eduLog = new EduLog();
+        CVExtractor cvExtractor = new CVExtractor(eduLog);
         CVProfile cvProfile = new CVProfile();
 
         String fileName = files[0].getOriginalFilename();
-        Path fileNameAndPath = Paths.get("D:\\",fileName);
-        //Path fileNameAndPath = Paths.get(new ClassPathResource("filename").getPath());
+        //Path fileNameAndPath = Paths.get("D:\\",fileName);
+        Path fileNameAndPath = Paths.get(new ClassPathResource("filename").getPath());
         try {
             Files.write(fileNameAndPath,files[0].getBytes());
         } catch (IOException e) {
                 e.printStackTrace();
         }
 
-        File savedFile = new File("D:\\" + files[0].getOriginalFilename());
-        //File savedFile = new File(String.valueOf(fileNameAndPath));
+        //File savedFile = new File("D:\\" + files[0].getOriginalFilename());
+        File savedFile = new File(String.valueOf(fileNameAndPath));
 
         String extractedText = cvExtractor.getCvTextData(savedFile, fileName);
         System.out.print(extractedText);
@@ -111,9 +117,9 @@ public class CVController {
         System.out.println("Nejvyssi dosazeny stupen vzdelani: " + cvProfile.getMaxEducation().getMaxEduLvl().getMaxEduLvlName());
         System.out.println("Obecny obor vzdelani: " + cvProfile.getMaxEducation().getGeneralEduField());
 
+        model.addAttribute("cvProfile", cvProfile);
+        model.addAttribute("eduLog", cvExtractor.getEduLog());
 
-        //cvExtractor.getPredictions();
-
-        return "redirect:/";
+        return "extractedCVProfile";
     }
 }
